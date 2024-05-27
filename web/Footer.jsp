@@ -26,7 +26,6 @@
                 <div class="box">
                     <h3>quick links</h3>
                     <a href="Home.jsp">home</a>
-                    <a href="Category.jsp">category</a>
                     <a href="About.jsp">about</a>
                     <a href="Contact.jsp">Contact</a>
                 </div>

@@ -24,6 +24,39 @@
     </head>
 
     <body>
+
+        <!-- header section starts      -->
+
+        <header>
+            <a href="home" class="logo"><i class="fas fa-utensils"></i>GrubHub</a>
+
+            <nav class="navbar">
+                <a class="active" href="home">home</a>
+                <a href="About.jsp">about</a>
+                <a href="Foodlove.jsp">menu</a>
+                <a href="Contact.jsp">contact</a>
+            </nav>
+
+            <div class="icons">
+                <i class="fas fa-bars" id="menu-bars"></i>
+                <i class="fas fa-search" id="search-icon"></i>
+                <a href="#" class="fas fa-shopping-cart"></a>
+                <a href="#login" class="login-btn">login</a>
+
+            </div> 
+
+        </header>
+
+        <!-- header section ends-->
+
+        <!-- search form  -->
+
+        <form action="" id="search-form">
+            <input type="search" placeholder="search here..." name="" id="search-box">
+            <label for="search-box" class="fas fa-search"></label>
+            <i class="fas fa-times" id="close"></i>
+        </form>
+
         <section class="order" id="contact">
 
             <!--        <h3 class="sub-heading"> order now </h3>-->
@@ -61,5 +94,6 @@
             </form>
 
         </section>
+        <jsp:include page="Footer.jsp"></jsp:include>
     </body>
 </html>
