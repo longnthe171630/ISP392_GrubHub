@@ -28,10 +28,10 @@
         <!-- header section starts      -->
 
         <header>
-            <a href="Home.jsp" class="logo"><i class="fas fa-utensils"></i>GrubHub</a>
+            <a href="home" class="logo"><i class="fas fa-utensils"></i>GrubHub</a>
 
             <nav class="navbar">
-                <a class="active" href="Home.jsp">home</a>
+                <a class="active" href="home">home</a>
                 <a href="About.jsp">about</a>
                 <a href="Foodlove.jsp">menu</a>
                 <a href="Contact.jsp">contact</a>
