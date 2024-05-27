@@ -32,7 +32,6 @@
 
             <nav class="navbar">
                 <a class="active" href="Home.jsp">home</a>
-                <a href="Category.jsp">category</a>
                 <a href="About.jsp">about</a>
                 <a href="Foodlove.jsp">menu</a>
                 <a href="Contact.jsp">contact</a>
@@ -74,7 +73,7 @@
                             <a href="#" class="btn">order now</a>
                         </div>
                         <div class="image">
-                            <img src="images/home-img-1.jpg" alt="">
+                            <img src="images/home-img-4.jpg" alt="">
                         </div>
                     </div>
 
@@ -86,7 +85,7 @@
                             <a href="#" class="btn">order now</a>
                         </div>
                         <div class="image">
-                            <img src="images/home-img-7.jpg" alt="">
+                            <img src="images/home-img-5.jpg" alt="">
                         </div>
                     </div>
 
@@ -111,7 +110,7 @@
                             <a href="#" class="btn">order now</a>
                         </div>
                         <div class="image">
-                            <img src="images/home-img-4.png" alt="">
+                            <img src="images/home-img-6.jpg" alt="">
 
                         </div>
                     </div>
@@ -124,7 +123,7 @@
                             <a href="#" class="btn">order now</a>
                         </div>
                         <div class="image">
-                            <img src="images/home-img-5.png" alt="">
+                            <img src="images/home-img-7.jpg" alt="">
                         </div>
                     </div>
 
@@ -147,111 +146,37 @@
     <!-- dishes section starts  -->
 
     <section class="dishes" id="dishes">
-
-        <!--        <h3 class="sub-heading"> our dishes </h3>-->
-        <h1 class="heading"> Sản phẩm nổi bật </h1>
-
-        <div class="box-container">
-
-            <div class="box">
-                <a href="#" class="fas fa-heart"></a>
-                <a href="#" class="fas fa-eye"></a>
-                <img src="images/dish-1.png" alt="">
-                <h3>Humberger</h3>
-                <div class="stars">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star-half-alt"></i>
+        <div class="container">
+            <div class="row">
+                <!-- Category Section -->
+                <jsp:include page="Category.jsp"></jsp:include>
+                    <!-- Product Section -->
+                    <div class="col-sm-9">
+                        <div class="box-container">
+                        <c:forEach items="${requestScope.listP}" var="o">
+                            <div class="box">
+                                <a href="#" class="fas fa-heart"></a>
+                                <a href="detail?id=${o.id}" class="fas fa-eye"></a>
+                                <img src="images/Product/${o.image}" alt="${o.name}">
+                                <h3>${o.name}</h3>
+                                <div class="stars">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                </div>
+                                <span>${o.price} đ</span>
+                                <a href="#" class="btn">add to cart</a>
+                            </div>
+                        </c:forEach>
+                    </div>
                 </div>
-                <span>35.000đ</span>
-                <a href="#" class="btn">add to cart</a>
             </div>
-
-            <div class="box">
-                <a href="#" class="fas fa-heart"></a>
-                <a href="#" class="fas fa-eye"></a>
-                <img src="images/dish-2.png" alt="">
-                <h3>Bánh gà</h3>
-                <div class="stars">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star-half-alt"></i>
-                </div>
-                <span>100.000đ</span>
-                <a href="#" class="btn">add to cart</a>
-            </div>
-
-            <div class="box">
-                <a href="#" class="fas fa-heart"></a>
-                <a href="#" class="fas fa-eye"></a>
-                <img src="images/dish-3.png" alt="">
-                <h3>Gà nướng</h3>
-                <div class="stars">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star-half-alt"></i>
-                </div>
-                <span>150.000đ</span>
-                <a href="#" class="btn">add to cart</a>
-            </div>
-
-            <div class="box">
-                <a href="#" class="fas fa-heart"></a>
-                <a href="#" class="fas fa-eye"></a>
-                <img src="images/dish-4.png" alt="">
-                <h3>Pizza</h3>
-                <div class="stars">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star-half-alt"></i>
-                </div>
-                <span>150.000đ</span>
-                <a href="#" class="btn">add to cart</a>
-            </div>
-
-            <div class="box">
-                <a href="#" class="fas fa-heart"></a>
-                <a href="#" class="fas fa-eye"></a>
-                <img src="images/dish-5.png" alt="">
-                <h3>Bánh ngọt</h3>
-                <div class="stars">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star-half-alt"></i>
-                </div>
-                <span>50.000đ</span>
-                <a href="#" class="btn">add to cart</a>
-            </div>
-
-            <div class="box">
-                <a href="#" class="fas fa-heart"></a>
-                <a href="#" class="fas fa-eye"></a>
-                <img src="images/dish-6.png" alt="">
-                <h3>Gà rán</h3>
-                <div class="stars">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star-half-alt"></i>
-                </div>
-                <span>100.000đ</span>
-                <a href="#" class="btn">add to cart</a>
-            </div>
-
         </div>
-
     </section>
+
+
 
     <!-- dishes section ends -->
 
@@ -448,15 +373,15 @@
         </div>
 
     </section>
-    
-  
+
+
 
     <section id="map-section">
         <h1 class="heading"> Our Location </h1>
         <div class="map-container">
             <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3724.506341458941!2d105.52528919999999!3d21.012416699999996!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135abc60e7d3f19%3A0x2be9d7d0b5abcbf4!2sFPT%20University!5e0!3m2!1sen!2s!4v1716697336875!5m2!1sen!2s" width="800" height="450" display: flex
-    align-items: center
-    justify-content: center style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    align-items: center
+                    justify-content: center style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
     </section>
 
