@@ -10,11 +10,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
-/**
- *
- * @author Long1
- */
+
 public class Mail {
+    
     public boolean sendEmail(String to, String subject, String text) {
         // URL to which the request will be sent
         String url = "https://mail-sender-service.vercel.app/send-email";
@@ -57,4 +55,5 @@ public class Mail {
             return false;
         }
     }
+    
 }

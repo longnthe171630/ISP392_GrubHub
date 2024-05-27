@@ -7,11 +7,9 @@ package utils;
 import java.security.SecureRandom;
 import java.util.Base64;
 
-/**
- *
- * @author Long1
- */
+
 public class Token {
+    
     public String generateRandomToken(int length) {
         if (length <= 0) {
             throw new IllegalArgumentException("Token length must be greater than 0");
@@ -24,4 +22,5 @@ public class Token {
         // Convert the byte array to a base64-encoded string
         return Base64.getUrlEncoder().withoutPadding().encodeToString(randomBytes);
     }
+    
 }
