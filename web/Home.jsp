@@ -41,7 +41,7 @@
                 <i class="fas fa-bars" id="menu-bars"></i>
                 <i class="fas fa-search" id="search-icon"></i>
                 <a href="#" class="fas fa-shopping-cart"></a>
-                <a href="#login" class="login-btn">login</a>
+                <a href="Login.jsp" class="login-btn">login</a>
 
             </div> 
 

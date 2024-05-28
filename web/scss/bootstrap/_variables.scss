@@ -558,7 +558,8 @@ $custom-radio-indicator-icon-checked:           str-replace(url("data:image/svg+
 
 $custom-switch-width:                           $custom-control-indicator-size * 1.75 !default;
 $custom-switch-indicator-border-radius:         $custom-control-indicator-size / 2 !default;
-$custom-switch-indicator-size:                  calc(#{$custom-control-indicator-size} - #{$custom-control-indicator-border-width * 4}) !default;
+$custom-switch-indicator-size: calc(#{$custom-control-indicator-size} - #{$custom-control-indicator-border-width * 4}) !default;
+
 
 $custom-select-padding-y:           $input-padding-y !default;
 $custom-select-padding-x:           $input-padding-x !default;
@@ -1120,4 +1121,4 @@ $positions: static, relative, absolute, fixed, sticky !default;
 // Printing
 
 $print-page-size:                   a3 !default;
-$print-body-min-width:              map-get($grid-breakpoints, "lg") !default;
+$print-body-min-width:              map-get($grid-breakpoints, "lg") !default

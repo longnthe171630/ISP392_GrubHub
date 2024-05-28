@@ -23,7 +23,7 @@ public class ResetPasswordServlet extends HttpServlet {
         request.setAttribute("email", email);
         request.setAttribute("token", token);
         
-        request.getRequestDispatcher("client/resetpassword.jsp").forward(request, response);
+        request.getRequestDispatcher("resetpassword.jsp").forward(request, response);
     }
 
     @Override
@@ -53,19 +53,19 @@ public class ResetPasswordServlet extends HttpServlet {
                     // Đặt lại token
                     new AccountDAO().ResetToken(account.getId());
                     alert = "Reset password success";
-                    url = "client/login.jsp";
+                    url = "Login.jsp";
                 } else {
                     alert = "Invalid token!";
-                    url = "client/resetpassword.jsp";
+                    url = "resetpassword.jsp";
                 }
             }
         } else {
             alert = "Passwords don't match!";
-            url = "client/resetpassword.jsp";
+            url = "resetpassword.jsp";
         }
     } else {
         alert = "Password must contain at least 8 characters, including lowercase letters, uppercase letters, numbers, and special characters";
-        url = "client/resetpassword.jsp";
+        url = "resetpassword.jsp";
     }
         request.setAttribute("alert", alert);
         request.setAttribute("token", token);

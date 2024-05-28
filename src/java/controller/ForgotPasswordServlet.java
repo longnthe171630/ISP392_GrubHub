@@ -23,7 +23,7 @@ public class ForgotPasswordServlet extends HttpServlet {
         String token = request.getParameter("token");
 
         if (token == null) {
-            request.getRequestDispatcher("client/forgotpassword.jsp").forward(request, response);
+            request.getRequestDispatcher("forgotpassword.jsp").forward(request, response);
             return;
         }
     }
@@ -59,15 +59,15 @@ public class ForgotPasswordServlet extends HttpServlet {
                     String url = "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/resetpassword?email=" + email + "&token=" + token;
                     accountDAO.insertToken(account.getId(), token);
                     new Mail().sendEmail(email, "Reset Password", "Click here to reset password: " + url);
-                    url1 = "/client/login.jsp";
+                    url1 = "Login.jsp";
                     alert = "An email was sent. Please check your email!";
 
                 } else {
-                    url1 = "/client/forgotpassword.jsp";
+                    url1 = "forgotpassword.jsp";
                     alert = "Email is invalid";
                 }
             } else {
-                url1 = "/client/forgotpassword.jsp";
+                url1 = "forgotpassword.jsp";
                 alert = "Captcha don't matches!";
             }
 

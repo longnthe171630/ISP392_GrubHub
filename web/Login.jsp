@@ -67,7 +67,7 @@
                                             </label>
                                         </div>
                                         <div class="w-50 text-md-right">
-                                            <a href="forgotpass.jsp">Forgot Password</a>
+                                            <a href="forgotpassword.jsp">Forgot Password</a>
                                         </div>
                                     </div>
                                 </form>

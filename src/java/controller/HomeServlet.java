@@ -22,7 +22,7 @@ import java.util.List;
  *
  * @author manh0
  */
-@WebServlet(name="HomeServlet", urlPatterns={"/home"})
+//@WebServlet(name="HomeServlet", urlPatterns={"/home"})
 public class HomeServlet extends HttpServlet {
    
     /** 

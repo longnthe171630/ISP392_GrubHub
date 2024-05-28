@@ -85,7 +85,7 @@ public class LoginServlet extends HttpServlet {
         LoginDAO LoginDAO = new LoginDAO();
         Account a = LoginDAO.checkLogin(user, pass);
         if (a == null) {
-            request.setAttribute("mess", "wrong user or password!");
+            request.setAttribute("mess", "Wrong user or password!");
             request.getRequestDispatcher("Login.jsp").forward(request, response);
         } else {
             HttpSession session = request.getSession();
