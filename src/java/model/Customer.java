@@ -8,22 +8,52 @@ package model;
  *
  * @author Long1
  */
+import java.util.*;
+
+/**
+ *
+ * @author Long1
+ */
 public class Customer {
+
     private int id;
-    private String name, dob;
+    private String name, userName, passWord, email, phoneNumber;
     private boolean gender;
-    private int address_id, account_id;
+    private int address_id;
+    private Date createDate, dob;
 
     public Customer() {
     }
 
-    public Customer(int id, String name, String dob, boolean gender, int address_id, int account_id) {
+    public Customer(String userName, String passWord) {
+        this.userName = userName;
+        this.passWord = passWord;
+    }
+    
+
+    public Customer(int id, String name, String userName, String passWord, String email, String phoneNumber, boolean gender, int address_id, Date createDate, Date dob) {
         this.id = id;
         this.name = name;
-        this.dob = dob;
+        this.userName = userName;
+        this.passWord = passWord;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
         this.gender = gender;
         this.address_id = address_id;
-        this.account_id = account_id;
+        this.createDate = createDate;
+        this.dob = dob;
+    }
+
+    public Customer(String name, String userName, String passWord, String email, String phoneNumber, boolean gender, int address_id, Date createDate, Date dob) {
+        this.name = name;
+        this.userName = userName;
+        this.passWord = passWord;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.gender = gender;
+        this.address_id = address_id;
+        this.createDate = createDate;
+        this.dob = dob;
     }
 
     public int getId() {
@@ -42,12 +72,36 @@ public class Customer {
         this.name = name;
     }
 
-    public String getDob() {
-        return dob;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setDob(String dob) {
-        this.dob = dob;
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getPassWord() {
+        return passWord;
+    }
+
+    public void setPassWord(String passWord) {
+        this.passWord = passWord;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public boolean isGender() {
@@ -66,13 +120,21 @@ public class Customer {
         this.address_id = address_id;
     }
 
-    public int getAccount_id() {
-        return account_id;
+    public Date getCreateDate() {
+        return createDate;
     }
 
-    public void setAccount_id(int account_id) {
-        this.account_id = account_id;
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
     }
-    
+
+    public Date getDob() {
+        return dob;
+    }
+
+    public void setDob(Date dob) {
+        this.dob = dob;
+    }
+
     
 }
