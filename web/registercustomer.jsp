@@ -47,8 +47,16 @@
                             <input type="date" name="dob" required>
                         </div>
                         <div class="input-box">
-                            <span class="details">Address</span>
-                            <input type="text" name="address" placeholder="Enter your address" required>
+                            <span class="details">State</span>
+                            <input type="text" name="state" placeholder="Enter your state" required>
+                        </div>
+                        <div class="input-box">
+                            <span class="details">Street</span>
+                            <input type="text" name="street" placeholder="Enter your street" required>
+                        </div>
+                        <div class="input-box">
+                            <span class="details">Detail Address</span>
+                            <input type="text" name="detailaddress" placeholder="Enter your detail address" required>
                         </div>
                     </div>
                     <div class="gender-details">
