@@ -4,7 +4,7 @@
  */
 package controller;
 
-import dao.LoginDAO;
+import dao.AccountDAO;
 import model.Account;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -33,7 +33,7 @@ public class LoginServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-       
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -64,7 +64,7 @@ public class LoginServlet extends HttpServlet {
 
         //b2 set user and pass vao login form
         request.getRequestDispatcher("Login.jsp").forward(request, response);
-        
+
     }
 
     /**
@@ -82,8 +82,8 @@ public class LoginServlet extends HttpServlet {
         String user = request.getParameter("username");
         String pass = request.getParameter("password");
         String remember = request.getParameter("remember");
-        LoginDAO LoginDAO = new LoginDAO();
-        Account a = LoginDAO.checkLogin(user, pass);
+        AccountDAO accountDAO = new AccountDAO();
+        Account a = accountDAO.checkAccount(user, pass);
         if (a == null) {
             request.setAttribute("alert", "Wrong user or password!");
             request.getRequestDispatcher("Login.jsp").forward(request, response);
@@ -101,9 +101,27 @@ public class LoginServlet extends HttpServlet {
             }
             response.addCookie(u);//luu len trinh duyet
             response.addCookie(p);
-            
-            response.sendRedirect("Home.jsp");
-            
+
+            switch (a.getRole()) {
+                case 0: // Admin
+                    response.sendRedirect("AdminDashboard.jsp");
+                    break;
+                case 1: // Manager
+                    response.sendRedirect("ManagerDashboard.jsp");
+                    break;
+                case 2: // Customer
+                    response.sendRedirect("CustomerDashboard.jsp");
+                    break;
+                case 3: // Restaurant
+                    response.sendRedirect("RestaurantDashboard.jsp");
+                    break;
+                case 4: // Shipper
+                    response.sendRedirect("ShipperDashboard.jsp");
+                    break;
+                default:
+                    response.sendRedirect("Home.jsp");
+                    break;
+            }
         }
     }
 

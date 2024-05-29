@@ -4,7 +4,7 @@
     <!doctype html>
     <html lang="en">
         <head>
-            <title>Login</title>
+            <title>Reset Password</title>
             <meta charset="utf-8">
             <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -68,5 +68,6 @@
             <script src="js/popper.js"></script>
             <script src="js/bootstrap.min.js"></script>
             <script src="js/main.js"></script>
+            <script src="js/script.js"></script>
         </body>
     </html>

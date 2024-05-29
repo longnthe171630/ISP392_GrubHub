@@ -17,20 +17,14 @@ import model.Account;
  * @author Long1
  */
 public class AccountDAO extends MyDAO {
-
+    
     //kiểm tra tài khoản
     public Account checkAccount(String username, String password) {
-        String sql = "SELECT [id]\n"
-                + "      ,[username]\n"
-                + "      ,[password]\n"
-                + "      ,[email]\n"
-                + "      ,[phonenumber]\n"
-                + "      ,[role]\n"
-                + "  FROM [dbo].[Account] where username = ? and password = ?";
+        String sql = "SELECT * FROM Account where username = ? and password = ?";
         //String fullname = null;
 
         try {
-            ps = con.prepareStatement(xSql);
+            ps = con.prepareStatement(sql);
             ps.setString(1, username);
             ps.setString(2, password);
 

@@ -13,28 +13,22 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>GrubHub</title>
-
         <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
-
         <!-- font awesome cdn link  -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-
         <!-- custom css file link  -->
         <link rel="stylesheet" href="css/style.css">
         <script src="https://maps.googleapis.com/maps/api/js?key=your_actual_api_key_here&callback=initMap" async defer></script>
     </head>
     <body>
-
-
         <!-- header section starts      -->
-
         <header>
             <a href="home" class="logo"><i class="fas fa-utensils"></i>GrubHub</a>
 
             <nav class="navbar">
-                <a class="active" href="home">home</a>
-                <a href="About.jsp">about</a>
-                <a href="Contact.jsp">contact</a>
+                <a class="active" href="home">Home</a>
+                <a href="About.jsp">About</a>
+                <a href="Contact.jsp">Contact</a>
             </nav>
 
             <div class="icons">
@@ -44,15 +38,12 @@
                 <a href="login" class="login-btn">login</a>
 
             </div> 
-
         </header>
-
         <!-- header section ends-->
 
         <!-- search form  -->
-
         <form action="search" method="post" id="search-form">
-            <input value="${txtS}" name="txt" type="search" placeholder="search here..." id="search-box">
+            <input value="${txtS}" name="txt" type="search" placeholder="What do you want?" id="search-box">
             <label for="search-box" class="fas fa-search"></label>
             <i class="fas fa-times" id="close"></i>
         </form>

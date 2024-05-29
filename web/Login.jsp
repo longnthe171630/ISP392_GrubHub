@@ -5,17 +5,17 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!doctype html>
 <html lang="en">
     <head>
         <title>Login</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-        <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
-
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        
+        <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-
         <link rel="stylesheet" href="css/style_1.css">
         <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
@@ -24,24 +24,32 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     </head>
     <body>
+        <!-- header section starts      -->
         <header>
             <a href="home" class="logo"><i class="fas fa-utensils"></i>GrubHub</a>
 
             <nav class="navbar">
-                <a class="active" href="home">home</a>
-                <a href="About.jsp">about</a>
-                <a href="Contact.jsp">contact</a>
+                <a class="active" href="home">Home</a>
+                <a href="About.jsp">About</a>
+                <a href="Contact.jsp">Contact</a>
             </nav>
 
             <div class="icons">
                 <i class="fas fa-bars" id="menu-bars"></i>
                 <i class="fas fa-search" id="search-icon"></i>
                 <a href="#" class="fas fa-shopping-cart"></a>
-                <a href="Login.jsp" class="login-btn">login</a>
+                <a href="Login.jsp" class="login-btn">Login</a>
 
             </div> 
-
         </header>
+        <!-- header section ends-->
+        <!-- search form  -->
+        <form action="search" method="post" id="search-form">
+            <input value="${txtS}" name="txt" type="search" placeholder="What do you want?" id="search-box">
+            <label for="search-box" class="fas fa-search"></label>
+            <i class="fas fa-times" id="close"></i>
+        </form>
+            
         <section class="ftco-section">
             <div class="container">
                 <div class="row justify-content-center">
@@ -98,10 +106,11 @@
         <script src="js/popper.js"></script>
         <script src="js/bootstrap.min.js"></script>
         <script src="js/main.js"></script>
+        <script src="js/script.js"></script>
         <jsp:include page="Footer.jsp"></jsp:include>
-    </body>
+        </body>
 
-</web-app>
+    </web-app>
 
 </html>
 
