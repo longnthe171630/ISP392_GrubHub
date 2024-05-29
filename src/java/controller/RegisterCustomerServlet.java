@@ -64,38 +64,57 @@ public class RegisterCustomerServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         Validate v = new Validate();
-        CustomerDAO cd =  new CustomerDAO();
+        CustomerDAO cd = new CustomerDAO();
+
         String name = request.getParameter("name");
+
         String userName = request.getParameter("username");
+
         String email = request.getParameter("email");
+
         String phoneNumber = request.getParameter("phonenumber");
+
         String passWord = request.getParameter("password");
+
         String cPassWord = request.getParameter("cpassword");
+
         String gender = request.getParameter("gender");
+
         String dob = request.getParameter("dob");
+
         String address = request.getParameter("address");
 
         boolean genderValue = gender != null && gender.equals("male");
-        java.sql.Date dobDate = null;
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        if (v.isValidEmail(email)) {
-            String msg = "Your email is not right";
-            request.setAttribute("msg", msg);
-            request.getRequestDispatcher("registercustomer.jsp").forward(request, response);
-        }
-        if (v.isValidPhone(phoneNumber)) {
-            String msg = "Your phone number is not right";
-            request.setAttribute("msg", msg);
-            request.getRequestDispatcher("registercustomer.jsp").forward(request, response);
-        }
+//        java.sql.Date dobDate = null;
+//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        // checck email
+//        if (v.isValidEmail(email)) {
+//            String msg = "Your email is not right";
+//            request.setAttribute("msg", msg);
+//            request.getRequestDispatcher("registercustomer.jsp").forward(request, response);
+//        }
+        //check phoneNumber
+//        if (v.isValidPhone(phoneNumber)) {
+//            String msg = "Your phone number is not right";
+//            request.setAttribute("msg", msg);
+//            request.getRequestDispatcher("registercustomer.jsp").forward(request, response);
+//        }
         Customer cus = new Customer();
         cus = cd.checkCustomer(userName, passWord);
-        if (cus== null && passWord.equals(cPassWord)) {
-            cus = new Customer(name, userName, passWord, email, phoneNumber, genderValue, 0, dobDate, dobDate);
-            cd.insertCustomer(cus);
+        if (cus == null && passWord.equals(cPassWord)) {
+            cus = new Customer(name, userName, passWord, email, phoneNumber, dob, genderValue, 1);
+            try {
+                cd.insertCustomer(cus);
+            } catch (Exception e) {
+                String msg = "Complete";
+                request.setAttribute("msg", msg);
+                request.getRequestDispatcher("registercustomer.jsp").forward(request, response);
+                return;
+            }
             String msg = "Complete";
             request.setAttribute("msg", msg);
             request.getRequestDispatcher("registercustomer.jsp").forward(request, response);
+            response.sendRedirect("registercustomer.jsp");
         }
 
     }
@@ -109,10 +128,57 @@ public class RegisterCustomerServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        CustomerDAO cd = new CustomerDAO();
+
+        String name = request.getParameter("name");
+        String userName = request.getParameter("username");
+        String email = request.getParameter("email");
+        String phoneNumber = request.getParameter("phonenumber");
+        String passWord = request.getParameter("password");
+        String cPassWord = request.getParameter("cpassword");
+        String gender = request.getParameter("gender");
+        String dob = request.getParameter("dob");
+        String address = request.getParameter("address");
+
+        boolean genderValue = "male".equalsIgnoreCase(gender);
+
+        if (name == null || userName == null || email == null || phoneNumber == null || passWord == null || cPassWord == null || gender == null || dob == null || address == null) {
+            String msg = "All fields are required.";
+            request.setAttribute("msg", msg);
+            request.getRequestDispatcher("registercustomer.jsp").forward(request, response);
+            return;
+        }
+
+        if (!passWord.equals(cPassWord)) {
+            String msg = "Passwords do not match.";
+            request.setAttribute("msg", msg);
+            request.getRequestDispatcher("registercustomer.jsp").forward(request, response);
+            return;
+        }
+
+        Customer cus = cd.checkCustomer(userName, passWord);
+        if (cus == null) {
+            Customer newCus = new Customer(name, userName, passWord, email, phoneNumber, dob, genderValue, 1);
+            try {
+                cd.insertCustomer(newCus);
+                String msg = "Registration successful.";
+                request.setAttribute("msg", msg);
+                request.getRequestDispatcher("registercustomer.jsp").forward(request, response);
+            } catch (Exception e) {
+                e.printStackTrace();  // Log the exception for debugging
+                String msg = "Error during registration.";
+                request.setAttribute("msg", msg);
+                request.getRequestDispatcher("registercustomer.jsp").forward(request, response);
+            }
+        } else {
+            String msg = "User already exists.";
+            request.setAttribute("msg", msg);
+            request.getRequestDispatcher("registercustomer.jsp").forward(request, response);
+        }
     }
+
+    
 
     /**
      * Returns a short description of the servlet.

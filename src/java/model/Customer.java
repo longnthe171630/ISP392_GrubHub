@@ -19,10 +19,10 @@ import java.util.*;
 public class Customer {
 
     private int id;
-    private String name, userName, passWord, email, phoneNumber;
+    private String name, userName, passWord, email, phoneNumber,dob;
     private boolean gender;
     private int address_id;
-    private Date createDate, dob;
+    private Date createDate;
 
     public Customer() {
     }
@@ -31,31 +31,29 @@ public class Customer {
         this.userName = userName;
         this.passWord = passWord;
     }
-    
 
-    public Customer(int id, String name, String userName, String passWord, String email, String phoneNumber, boolean gender, int address_id, Date createDate, Date dob) {
+    public Customer(int id, String name, String userName, String passWord, String email, String phoneNumber, String dob, boolean gender, int address_id, Date createDate) {
         this.id = id;
         this.name = name;
         this.userName = userName;
         this.passWord = passWord;
         this.email = email;
         this.phoneNumber = phoneNumber;
+        this.dob = dob;
         this.gender = gender;
         this.address_id = address_id;
         this.createDate = createDate;
-        this.dob = dob;
     }
 
-    public Customer(String name, String userName, String passWord, String email, String phoneNumber, boolean gender, int address_id, Date createDate, Date dob) {
+    public Customer(String name, String userName, String passWord, String email, String phoneNumber, String dob, boolean gender, int address_id) {
         this.name = name;
         this.userName = userName;
         this.passWord = passWord;
         this.email = email;
         this.phoneNumber = phoneNumber;
+        this.dob = dob;
         this.gender = gender;
         this.address_id = address_id;
-        this.createDate = createDate;
-        this.dob = dob;
     }
 
     public int getId() {
@@ -106,6 +104,14 @@ public class Customer {
         this.phoneNumber = phoneNumber;
     }
 
+    public String getDob() {
+        return dob;
+    }
+
+    public void setDob(String dob) {
+        this.dob = dob;
+    }
+
     public boolean isGender() {
         return gender;
     }
@@ -130,13 +136,10 @@ public class Customer {
         this.createDate = createDate;
     }
 
-    public Date getDob() {
-        return dob;
+    @Override
+    public String toString() {
+        return "Customer{" + "id=" + id + ", name=" + name + ", userName=" + userName + ", passWord=" + passWord + ", email=" + email + ", phoneNumber=" + phoneNumber + ", dob=" + dob + ", gender=" + gender + ", address_id=" + address_id + ", createDate=" + createDate + '}';
     }
-
-    public void setDob(Date dob) {
-        this.dob = dob;
-    }
-
+    
     
 }
