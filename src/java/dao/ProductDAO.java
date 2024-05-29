@@ -85,7 +85,7 @@ public class ProductDAO extends MyDAO{
 
     public List<Product> getProductByCID(String cproduct_id) {
         List<Product> t = new ArrayList<>();
-        xSql = "SELECT * FROM Product WHERE category_product_id = ?";
+        xSql = "SELECT * FROM Product WHERE category_id = ?";
         try {
             ps = con.prepareStatement(xSql);
             ps.setString(1, cproduct_id);
@@ -98,7 +98,7 @@ public class ProductDAO extends MyDAO{
                 String xImage = rs.getString("image");
                 boolean xStatus = rs.getBoolean("status");
                 Date xCreate_date = rs.getDate("create_date");
-                int xCategory_product_id = rs.getInt("categoryID");
+                int xCategory_product_id = rs.getInt("category_id");
 
                 Product x = new Product(xProductId, xName, xPrice, xDescription, xImage, xStatus, xCreate_date, xCategory_product_id);
                 t.add(x);

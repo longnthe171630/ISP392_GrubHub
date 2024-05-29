@@ -17,16 +17,33 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
         <link rel="stylesheet" href="css/style_1.css">
+        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
 
+        <!-- font awesome cdn link  -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     </head>
     <body>
+        <header>
+            <a href="home" class="logo"><i class="fas fa-utensils"></i>GrubHub</a>
+
+            <nav class="navbar">
+                <a class="active" href="home">home</a>
+                <a href="About.jsp">about</a>
+                <a href="Contact.jsp">contact</a>
+            </nav>
+
+            <div class="icons">
+                <i class="fas fa-bars" id="menu-bars"></i>
+                <i class="fas fa-search" id="search-icon"></i>
+                <a href="#" class="fas fa-shopping-cart"></a>
+                <a href="Login.jsp" class="login-btn">login</a>
+
+            </div> 
+
+        </header>
         <section class="ftco-section">
             <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-md-6 text-center mb-5">
-                        <h2 class="heading-section">Grubhub</h2>
-                    </div>
-                </div>
                 <div class="row justify-content-center">
                     <div class="col-md-12 col-lg-10">
                         <div class="wrap d-md-flex">
@@ -84,6 +101,15 @@
         <script src="js/bootstrap.min.js"></script>
         <script src="js/main.js"></script>
     </body>
+    <div class="loader-container">
+        <img src="images/loader.gif" alt="">
+    </div>
+
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
+    <!-- custom js file link  -->
+    <script src="js/script.js"></script>
+
 </html>
 
 

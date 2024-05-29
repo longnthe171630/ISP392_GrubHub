@@ -33,7 +33,6 @@
             <nav class="navbar">
                 <a class="active" href="home">home</a>
                 <a href="About.jsp">about</a>
-                <a href="Foodlove.jsp">menu</a>
                 <a href="Contact.jsp">contact</a>
             </nav>
 
@@ -41,7 +40,7 @@
                 <i class="fas fa-bars" id="menu-bars"></i>
                 <i class="fas fa-search" id="search-icon"></i>
                 <a href="#" class="fas fa-shopping-cart"></a>
-                <a href="#login" class="login-btn">login</a>
+                <a href="login" class="login-btn">login</a>
 
             </div> 
 
@@ -95,5 +94,13 @@
 
         </section>
         <jsp:include page="Footer.jsp"></jsp:include>
+        <div class="loader-container">
+            <img src="images/loader.gif" alt="">
+        </div>
+
+        <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
+        <!-- custom js file link  -->
+        <script src="js/script.js"></script>
     </body>
 </html>

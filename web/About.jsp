@@ -6,7 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html>
+<html lang="vi">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
@@ -19,13 +19,11 @@
     </head>
     <body>
         <header>
-            <a href="Home.jsp" class="logo"><i class="fas fa-utensils"></i>GrubHub</a>
+            <a href="home" class="logo"><i class="fas fa-utensils"></i>GrubHub</a>
 
             <nav class="navbar">
-                <a class="active" href="Home.jsp">home</a>
-                <a href="#dishes">dishes</a>
+                <a class="active" href="home">home</a>
                 <a href="About.jsp">about</a>
-                <a href="#menu">menu</a>
                 <a href="Contact.jsp">contact</a>
             </nav>
 
@@ -34,7 +32,7 @@
                 <i class="fas fa-search" id="search-icon"></i>
                 <a href="#" class="fas fa-heart"></a>
                 <a href="#" class="fas fa-shopping-cart"></a>
-                <a href="#login" class="login-btn">login</a>
+                <a href="login" class="login-btn">login</a>
 
             </div> 
 

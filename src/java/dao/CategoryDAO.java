@@ -75,7 +75,7 @@ public class CategoryDAO extends MyDAO {
     }
 
     public void update(String xRollno, Category x) {
-        xSql = "update Student set Category where id=?";
+        xSql = "update Product set Category where id=?";
         try {
             ps = con.prepareStatement(xSql);
             ps.setString(1, x.getName());
@@ -131,7 +131,7 @@ public class CategoryDAO extends MyDAO {
             ps.setInt(1, xxBookId);
             rs = ps.executeQuery();
             while (rs.next()) {
-                xCategoryName = rs.getString("CategoryName");
+                xCategoryName = rs.getString("name");
             }
             rs.close();
             ps.close();
@@ -142,7 +142,7 @@ public class CategoryDAO extends MyDAO {
     }
 
     public int getBookCategoryId(String xxCategoryName) {
-        xSql = "select CategoryID  from category where CategoryName  = ?";
+        xSql = "select id from category where name  = ?";
 
         int xCategoryId = 0;
         try {
@@ -150,7 +150,7 @@ public class CategoryDAO extends MyDAO {
             ps.setString(1, xxCategoryName);
             rs = ps.executeQuery();
             while (rs.next()) {
-                xCategoryId = rs.getInt("CategoryID");
+                xCategoryId = rs.getInt("id");
             }
             rs.close();
             ps.close();
