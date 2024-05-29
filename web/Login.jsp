@@ -17,16 +17,33 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
         <link rel="stylesheet" href="css/style_1.css">
+        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
 
+        <!-- font awesome cdn link  -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     </head>
     <body>
+        <header>
+            <a href="home" class="logo"><i class="fas fa-utensils"></i>GrubHub</a>
+
+            <nav class="navbar">
+                <a class="active" href="home">home</a>
+                <a href="About.jsp">about</a>
+                <a href="Contact.jsp">contact</a>
+            </nav>
+
+            <div class="icons">
+                <i class="fas fa-bars" id="menu-bars"></i>
+                <i class="fas fa-search" id="search-icon"></i>
+                <a href="#" class="fas fa-shopping-cart"></a>
+                <a href="Login.jsp" class="login-btn">login</a>
+
+            </div> 
+
+        </header>
         <section class="ftco-section">
             <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-md-6 text-center mb-5">
-                        <h2 class="heading-section">Grubhub</h2>
-                    </div>
-                </div>
                 <div class="row justify-content-center">
                     <div class="col-md-12 col-lg-10">
                         <div class="wrap d-md-flex">
@@ -35,7 +52,7 @@
                             <div class="login-wrap p-4 p-md-5">
                                 <div class="d-flex">
                                     <div class="w-100">
-                                        <h3 class="mb-4">Sign-in</h3>
+                                        <h3 class="mb-4" style="font-size: 1.5em;">Sign In</h3>
                                     </div>
                                     <div class="w-100">
                                         </p>
@@ -81,7 +98,11 @@
         <script src="js/popper.js"></script>
         <script src="js/bootstrap.min.js"></script>
         <script src="js/main.js"></script>
+        <jsp:include page="Footer.jsp"></jsp:include>
     </body>
+
+</web-app>
+
 </html>
 
 

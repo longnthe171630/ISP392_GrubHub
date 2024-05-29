@@ -77,13 +77,20 @@ var swiper = new Swiper(".review-slider", {
     },
   },
 });
+var isFirstLoad = true; // Biến cờ để kiểm tra lần tải trang đầu tiên
 
 function loader(){
-  document.querySelector('.loader-container').classList.add('fade-out');
+    document.querySelector('.loader-container').classList.add('fade-out');
 }
 
 function fadeOut(){
-  setInterval(loader, 3000);
+    // Kiểm tra chỉ chạy loader khi trang được tải lần đầu tiên
+    if (isFirstLoad) {
+        loader();
+        isFirstLoad = false; // Đặt lại biến cờ thành false để không chạy loader nữa
+    }
 }
 
-window.onload = fadeOut;
+window.addEventListener("DOMContentLoaded", function() {
+    fadeOut(); // Gọi hàm fadeOut() khi tất cả các nội dung đã được tải xong
+});

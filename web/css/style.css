@@ -50,33 +50,65 @@ section:nth-child(even){
 .category_block {
     display: flex;
     flex-direction: column;
-    background-color: #fff; /* White background color */
-    border-top: 0.1rem solid rgba(0, 0, 0, 0.2); /* Add top border */
-    border-bottom: 0.1rem solid rgba(0, 0, 0, 0.2); /* Add bottom border */
-    padding: 1rem; /* Adjust padding */
+    background-color: #fff;
+    border-top: 0.1rem solid rgba(0, 0, 0, 0.2);
+    border-bottom: 0.1rem solid rgba(0, 0, 0, 0.2);
+    padding: 1rem;
 }
 
-.category_row {
+.category_items {
     display: flex;
-    justify-content: space-evenly;
-    margin-bottom: 1rem;
+    flex-direction: row;
+    gap: 1rem;
 }
 
 .category_item {
-    font-size: 2rem; /* Set font size */
-    border-radius: 0.5rem; /* Set border radius */
-    padding: 1.5rem; /* Set padding */
-    color: var(--light-color); /* Set text color */
-    background-color: #fff; /* White background color */
-    border: 0.1rem solid #4CAF50; /* Add border */
-    min-width: 150px; /* Set minimum width for each category item */
-    text-align: center; /* Center-align text */
+    font-size: 1.5rem;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    color: #343a40;
+    background-color: #fff;
+    border: 0.1rem solid #4CAF50;
+    text-align: center;
 }
 
 .category_item.active,
 .category_item:hover {
-    color: #fff; /* Change text color on hover or when active */
-    background: var(--green); /* Change background color on hover or when active */
+    color: #fff;
+    background: #4CAF50;
+}
+
+.box-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.box {
+    flex: 1 1 calc(33.333% - 2rem);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+    border-radius: 0.5rem;
+    text-align: center;
+    background-color: #fff;
+}
+
+.box img {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 1rem;
+}
+
+.box .btn {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    color: #fff;
+    border-radius: 0.5rem;
+    text-decoration: none;
+}
+
+.box .btn:hover {
+    background-color: darkgreen;
 }
 
 
@@ -763,4 +795,8 @@ header .icons #menu-bars {
     }
 
 }
-
+.loader-container.fade-out {
+    opacity: 0;
+    transition: opacity 1s ease;
+    visibility: hidden;
+}

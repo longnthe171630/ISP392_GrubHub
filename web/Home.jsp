@@ -25,6 +25,7 @@
     </head>
     <body>
 
+
         <!-- header section starts      -->
 
         <header>
@@ -33,7 +34,6 @@
             <nav class="navbar">
                 <a class="active" href="home">home</a>
                 <a href="About.jsp">about</a>
-                <a href="Foodlove.jsp">menu</a>
                 <a href="Contact.jsp">contact</a>
             </nav>
 
@@ -41,7 +41,7 @@
                 <i class="fas fa-bars" id="menu-bars"></i>
                 <i class="fas fa-search" id="search-icon"></i>
                 <a href="#" class="fas fa-shopping-cart"></a>
-                <a href="Login.jsp" class="login-btn">login</a>
+                <a href="login" class="login-btn">login</a>
 
             </div> 
 
@@ -51,8 +51,8 @@
 
         <!-- search form  -->
 
-        <form action="" id="search-form">
-            <input type="search" placeholder="search here..." name="" id="search-box">
+        <form action="search" method="post" id="search-form">
+            <input value="${txtS}" name="txt" type="search" placeholder="search here..." id="search-box">
             <label for="search-box" class="fas fa-search"></label>
             <i class="fas fa-times" id="close"></i>
         </form>
@@ -146,6 +146,7 @@
     <!-- dishes section starts  -->
 
     <section class="dishes" id="dishes">
+        <h1 class="heading"> Categories </h1>
         <div class="container">
             <div class="row">
                 <!-- Category Section -->
@@ -166,7 +167,7 @@
                                     <i class="fas fa-star"></i>
                                     <i class="fas fa-star-half-alt"></i>
                                 </div>
-                                <span>${o.price} đ</span>
+                                <p><span>${o.price} đ</span></p>
                                 <a href="#" class="btn">add to cart</a>
                             </div>
                         </c:forEach>
@@ -204,9 +205,10 @@
                         <i class="fas fa-star-half-alt"></i>
                     </div>
                     <h3>Pizza</h3>
-                    <p>just come here and enjoy our food the test is so good.</p>
+                    <!--                    <p>just come here and enjoy our food the test is so good.</p>-->
+                    <p><span class="price">150000đ</span></p>
                     <a href="#" class="btn">add to cart</a>
-                    <span class="price">150.000đ</span>
+
                 </div>
             </div>
 
@@ -224,9 +226,9 @@
                         <i class="fas fa-star-half-alt"></i>
                     </div>
                     <h3>Hamberger</h3>
-                    <p>quality of the food is best in the city</p>
+                    <!--                    <p>quality of the food is best in the city</p>-->
+                    <p><span class="price">50000đ</span></p>
                     <a href="#" class="btn">add to cart</a>
-                    <span class="price">35.000đ</span>
                 </div>
             </div>
 
@@ -244,9 +246,9 @@
                         <i class="fas fa-star-half-alt"></i>
                     </div>
                     <h3>Crep</h3>
-                    <p>a delicous food with a very good test.</p>
+                    <!--                    <p>a delicous food with a very good test.</p>-->
+                    <p><span class="price">35000đ</span></p>
                     <a href="#" class="btn">add to cart</a>
-                    <span class="price">35.000đ</span>
                 </div>
             </div>
 
@@ -264,9 +266,9 @@
                         <i class="fas fa-star-half-alt"></i>
                     </div>
                     <h3>Crep</h3>
-                    <p>test of best mumma and our food</p>
+                    <!--                    <p>test of best mumma and our food</p>-->
+                    <p><span class="price">35000đ</span></p>
                     <a href="#" class="btn">add to cart</a>
-                    <span class="price">35.000đ</span>
                 </div>
             </div>
 
@@ -284,9 +286,9 @@
                         <i class="fas fa-star-half-alt"></i>
                     </div>
                     <h3>delicious food</h3>
-                    <p>test is best mumma and our restorent</p>
+                    <!--                    <p>test is best mumma and our restorent</p>-->
+                    <p><span class="price">35000đ</span></p>
                     <a href="#" class="btn">add to cart</a>
-                    <span class="price">99/-</span>
                 </div>
             </div>
 
@@ -304,9 +306,9 @@
                         <i class="fas fa-star-half-alt"></i>
                     </div>
                     <h3>delicious food</h3>
-                    <p>sweet testy and yummy food </p>
+                    <!--                    <p>sweet testy and yummy food </p>-->
+                    <p><span class="price">35000đ</span></p>
                     <a href="#" class="btn">add to cart</a>
-                    <span class="price">299/-</span>
                 </div>
             </div>
 
@@ -324,9 +326,9 @@
                         <i class="fas fa-star-half-alt"></i>
                     </div>
                     <h3>delicious food</h3>
-                    <p>The food is  very good, with a great variety of everyone!</p>
+                    <!--                    <p>The food is  very good, with a great variety of everyone!</p>-->
+                    <p><span class="price">35000đ</span></p>
                     <a href="#" class="btn">add to cart</a>
-                    <span class="price">149/- </span>
                 </div>
             </div>
 
@@ -344,9 +346,9 @@
                         <i class="fas fa-star-half-alt"></i>
                     </div>
                     <h3>delicious food</h3>
-                    <p>dont be hurry just give your time to test our serviece</p>
+                    <!--                    <p>dont be hurry just give your time to test our serviece</p>-->
+                    <p><span class="price">100000đ</span></p>
                     <a href="#" class="btn">add to cart</a>
-                    <span class="price">169/- </span>
                 </div>
             </div>
 
@@ -364,9 +366,9 @@
                         <i class="fas fa-star-half-alt"></i>
                     </div>
                     <h3>delicious food</h3>
-                    <p>we serve the bestever our dish which is the best </p>
+                    <!--                    <p>we serve the bestever our dish which is the best </p>-->
+                    <p><span class="price">50000đ</span></p>
                     <a href="#" class="btn">add to cart</a>
-                    <span class="price">299/- </span>
                 </div>
             </div>
 
@@ -400,7 +402,6 @@
     <div class="loader-container">
         <img src="images/loader.gif" alt="">
     </div>
-
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 
     <!-- custom js file link  -->
