@@ -8341,3 +8341,40 @@ h1, h2, h3, h4, h5,
         border: 1px solid transparent;
         background: #e3b04b;
         color: #fff; }
+      .captcha-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.captcha-container .form-control {
+    flex: 1;
+    margin-right: 10px; /* Khoảng cách giữa input và captcha-box */
+}
+.captcha-elements {
+    display: flex;
+    align-items: center;
+}
+.captcha-box {
+    display: flex;
+    align-items: center;
+    border: 5px solid #ccc;
+    padding: 5px;
+    border-radius: 5px;
+    white-space: nowrap; /* Đảm bảo nội dung không bị xuống dòng */
+    margin-right: 5px; /* Khoảng cách giữa captcha-box và button */
+}
+
+.captcha-refresh-btn {
+    margin-left: 0px;
+}
+
+
+        
+/*.captcha-box {
+    display: flex;
+    align-items: center;
+    border: 5px solid #ccc;
+    padding: 5px;
+    border-radius: 5px;
+}*/

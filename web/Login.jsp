@@ -44,7 +44,7 @@
 
                                 <form action="login" method="POST" class="signin-form">
                                     <p class="text-danger " >
-                                        ${mess}
+                                        ${requestScope.alert}
                                     </p>
                                     <div class="form-group mb-3">
                                         <label class="label" for="name">Username</label>
@@ -53,9 +53,7 @@
                                     <div class="form-group mb-3">
                                         <label class="label" for="password">Password</label>
                                         <input id="pass" type="password" name="password" value="${password}" class="form-control" placeholder="Password" required >
-
                                     </div>
-
                                     <div class="form-group">
                                         <button type="submit"  class="form-control btn btn-primary rounded submit px-3">Sign In</button>
                                     </div>
@@ -67,7 +65,7 @@
                                             </label>
                                         </div>
                                         <div class="w-50 text-md-right">
-                                            <a href="forgotpassword.jsp">Forgot Password</a>
+                                            <a href="forgotpassword.jsp">Forgot Password?</a>
                                         </div>
                                     </div>
                                 </form>
