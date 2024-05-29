@@ -94,7 +94,7 @@
                                         </div>
                                     </div>
                                 </form>
-                                <p class="text-center">Don't have a account? <a href="signup.jsp">Sign Up</a></p>
+                                <p class="text-center">Don't have a account? <a href="registercustomer.jsp">Sign Up</a></p>
                             </div>
                         </div>
                     </div>
