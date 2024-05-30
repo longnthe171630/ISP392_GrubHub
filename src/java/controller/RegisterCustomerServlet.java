@@ -12,9 +12,6 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import model.*;
 import utils.Validate;
 
@@ -51,82 +48,7 @@ public class RegisterCustomerServlet extends HttpServlet {
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        Validate v = new Validate();
-        CustomerDAO cd = new CustomerDAO();
 
-        String name = request.getParameter("name");
-
-        String userName = request.getParameter("username");
-
-        String email = request.getParameter("email");
-
-        String phoneNumber = request.getParameter("phonenumber");
-
-        String passWord = request.getParameter("password");
-
-        String cPassWord = request.getParameter("cpassword");
-
-        String gender = request.getParameter("gender");
-
-        String dob = request.getParameter("dob");
-
-        String address = request.getParameter("address");
-
-        boolean genderValue = gender != null && gender.equals("male");
-//        java.sql.Date dobDate = null;
-//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        // checck email
-//        if (v.isValidEmail(email)) {
-//            String msg = "Your email is not right";
-//            request.setAttribute("msg", msg);
-//            request.getRequestDispatcher("registercustomer.jsp").forward(request, response);
-//        }
-        //check phoneNumber
-//        if (v.isValidPhone(phoneNumber)) {
-//            String msg = "Your phone number is not right";
-//            request.setAttribute("msg", msg);
-//            request.getRequestDispatcher("registercustomer.jsp").forward(request, response);
-//        }
-        Customer cus = new Customer();
-        cus = cd.checkCustomer(userName, passWord);
-        if (cus == null && passWord.equals(cPassWord)) {
-            cus = new Customer(name, userName, passWord, email, phoneNumber, dob, genderValue, 1);
-            try {
-                cd.insertCustomer(cus);
-            } catch (Exception e) {
-                String msg = "Complete";
-                request.setAttribute("msg", msg);
-                request.getRequestDispatcher("registercustomer.jsp").forward(request, response);
-                return;
-            }
-            String msg = "Complete";
-            request.setAttribute("msg", msg);
-            request.getRequestDispatcher("registercustomer.jsp").forward(request, response);
-            response.sendRedirect("registercustomer.jsp");
-        }
-
-    }
-
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Validate v = new Validate();
@@ -191,8 +113,8 @@ public class RegisterCustomerServlet extends HttpServlet {
             idAddress = existingAddress.getId();
         }
 
-        Customer cus = cd.checkCustomer(userName, passWord);
-        if (cus.getEmail() != null) {
+        Customer cus = cd.checkCustomer(userName, passWord, email);
+        if (cd.checkEmail(email) == true) {
             String msg = "Your email account is already in use.";
             request.setAttribute("msg", msg);
             request.getRequestDispatcher("registercustomer.jsp").forward(request, response);
@@ -203,7 +125,7 @@ public class RegisterCustomerServlet extends HttpServlet {
                 cd.insertCustomer(newCus);
                 String msg = "Registration successfully.";
                 request.setAttribute("msg", msg);
-                request.getRequestDispatcher("registercustomer.jsp").forward(request, response);
+                request.getRequestDispatcher("Login.jsp").forward(request, response);
             } catch (Exception e) {
                 e.printStackTrace();  // Log the exception for debugging
                 String msg = "Error during registration.";

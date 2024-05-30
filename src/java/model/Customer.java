@@ -19,7 +19,7 @@ import java.util.*;
 public class Customer {
 
     private int id;
-    private String name, userName, passWord, email, phoneNumber,dob;
+    private String name, userName, passWord, email, phoneNumber, dob;
     private boolean gender;
     private int address_id;
     private Date createDate;
@@ -27,9 +27,10 @@ public class Customer {
     public Customer() {
     }
 
-    public Customer(String userName, String passWord) {
+    public Customer(String userName, String passWord, String email) {
         this.userName = userName;
         this.passWord = passWord;
+        this.email = email;
     }
 
     public Customer(int id, String name, String userName, String passWord, String email, String phoneNumber, String dob, boolean gender, int address_id, Date createDate) {
@@ -140,6 +141,5 @@ public class Customer {
     public String toString() {
         return "Customer{" + "id=" + id + ", name=" + name + ", userName=" + userName + ", passWord=" + passWord + ", email=" + email + ", phoneNumber=" + phoneNumber + ", dob=" + dob + ", gender=" + gender + ", address_id=" + address_id + ", createDate=" + createDate + '}';
     }
-    
-    
+
 }

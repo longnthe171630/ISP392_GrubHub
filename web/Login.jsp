@@ -13,7 +13,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        
+
         <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="css/style_1.css">
@@ -49,7 +49,7 @@
             <label for="search-box" class="fas fa-search"></label>
             <i class="fas fa-times" id="close"></i>
         </form>
-            
+
         <section class="ftco-section">
             <div class="container">
                 <div class="row justify-content-center">
@@ -109,8 +109,18 @@
         <script src="js/script.js"></script>
         <jsp:include page="Footer.jsp"></jsp:include>
         </body>
+        <script type="text/javascript">
+            window.onload = function () {
+                // Lấy thông điệp từ biến JavaScript
+                var msg = "<%= request.getAttribute("msg") != null ? request.getAttribute("msg") : "" %>";
+                if (msg) {
+                    // Hiển thị thông điệp bằng alert hoặc bạn có thể tùy chỉnh cách hiển thị
+                    alert(msg);
+                }
+            };
+    </script>
 
-    </web-app>
+</web-app>
 
 </html>
 
