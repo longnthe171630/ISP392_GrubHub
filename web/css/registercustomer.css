@@ -70,11 +70,12 @@ form .gender-details .gender-title{
     font-size: 20px;
     font-weight: 500;
 }
-form .category{
+form .category {
     display: flex;
     width: 80%;
     margin: 14px 0;
-    justify-content: space-between;
+    justify-content: flex-start;
+    gap: 100px;
 }
 form .category label{
     display: flex;
