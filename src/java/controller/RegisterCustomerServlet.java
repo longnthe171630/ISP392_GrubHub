@@ -129,7 +129,7 @@ public class RegisterCustomerServlet extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        Validate v = new Validate();
         CustomerDAO cd = new CustomerDAO();
         AddressDAO ad = new AddressDAO();
 
@@ -146,13 +146,25 @@ public class RegisterCustomerServlet extends HttpServlet {
         String detailAddress = request.getParameter("detailaddress");
         int idAddress = 0;
 
-        boolean genderValue = "male".equalsIgnoreCase(gender);
+        boolean genderValue = !"male".equalsIgnoreCase(gender);
 
         if (name == null || userName == null || email == null
                 || phoneNumber == null || passWord == null || cPassWord == null
                 || gender == null || dob == null || state == null || street == null
                 || detailAddress == null) {
-            String msg = "All fields are required.";
+            String msg = "All fields must be filled out completely";
+            request.setAttribute("msg", msg);
+            request.getRequestDispatcher("registercustomer.jsp").forward(request, response);
+            return;
+        }
+        if (!v.isValidEmail(email)) {
+            String msg = "Email address has not been entered correctly";
+            request.setAttribute("msg", msg);
+            request.getRequestDispatcher("registercustomer.jsp").forward(request, response);
+            return;
+        }
+        if (!v.isValidPhone(phoneNumber)) {
+            String msg = "Phone number must be number with 10 charactors";
             request.setAttribute("msg", msg);
             request.getRequestDispatcher("registercustomer.jsp").forward(request, response);
             return;
@@ -180,11 +192,16 @@ public class RegisterCustomerServlet extends HttpServlet {
         }
 
         Customer cus = cd.checkCustomer(userName, passWord);
+        if (cus.getEmail() != null) {
+            String msg = "Your email account is already in use.";
+            request.setAttribute("msg", msg);
+            request.getRequestDispatcher("registercustomer.jsp").forward(request, response);
+        }
         if (cus == null) {
             Customer newCus = new Customer(name, userName, passWord, email, phoneNumber, dob, genderValue, idAddress);
             try {
                 cd.insertCustomer(newCus);
-                String msg = "Registration successful.";
+                String msg = "Registration successfully.";
                 request.setAttribute("msg", msg);
                 request.getRequestDispatcher("registercustomer.jsp").forward(request, response);
             } catch (Exception e) {
