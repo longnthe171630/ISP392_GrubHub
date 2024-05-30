@@ -46,7 +46,7 @@
                                     </div>
                                 </div>
 
-                                <form id="login-form" action="login" method="POST" class="signin-form">
+                                <form id="login-form" action="cuslogin" method="POST" class="signin-form">
                                     <p class="text-danger " >
                                         ${mess}
                                     </p>
