@@ -35,7 +35,12 @@
                 <i class="fas fa-bars" id="menu-bars"></i>
                 <i class="fas fa-search" id="search-icon"></i>
                 <a href="#" class="fas fa-shopping-cart"></a>
-                <a href="login" class="login-btn">login</a>
+                <c:if test="${sessionScope.acc == null}">
+                    <a href="login" class="login-btn">login</a>
+                </c:if>               
+                <c:if test="${sessionScope.acc != null}">
+                    <a href="logout" class="login-btn">logout</a>
+                </c:if>
 
             </div> 
         </header>
