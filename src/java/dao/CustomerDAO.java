@@ -1,7 +1,9 @@
 package dao;
 
 import java.sql.Date;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -11,25 +13,44 @@ import model.Customer;
 public class CustomerDAO extends MyDAO {
 
     //kiểm tra tài khoản, mật khẩu có trong db customer không.
-    public Customer checkCustomer(String username, String password) {
-        xSql = "SELECT [username]\n"
-                + "      ,[password]\n"
-                + "  FROM [dbo].[Customer] where username = ? and password = ?";
-        //String fullname = null;
+    public Customer checkCustomer(String username, String password, String email) {
+
+        xSql = "SELECT [username], [password], [email]\n"
+                + "FROM [dbo].[Customer]\n"
+                + "WHERE [username] = ? AND [password] = ?";
 
         try {
             ps = con.prepareStatement(xSql);
             ps.setString(1, username);
             ps.setString(2, password);
+            ps.setString(3, email);
 
             rs = ps.executeQuery();
             if (rs.next()) {
-                return new Customer(username, password);
+                return new Customer(username, password, email);
             }
         } catch (SQLException e) {
             System.out.println(e);
         }
         return null;
+    }
+    public boolean checkEmail(String email) {
+
+        xSql = "SELECT [email]\n"
+                + "FROM [dbo].[Customer]\n"
+                + "WHERE [email]= ?";
+
+        try {
+            ps = con.prepareStatement(xSql);
+            ps.setString(1, email);
+
+
+            rs = ps.executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return false;
     }
 
     // thêm một tài khoản người mua mới vào db
@@ -81,6 +102,8 @@ public class CustomerDAO extends MyDAO {
         }
 
     }
+
+   
 // test function
 
     public static void main(String[] args) {
@@ -94,16 +117,6 @@ public class CustomerDAO extends MyDAO {
         Boolean gender = true;
         int address_id = 1;
         String dobStr = "11/01/2003";
-
-        // Định dạng của chuỗi ngày tháng
-        // In ra kết quả
-        Customer c = new Customer(name, userName, passWord, email, phoneNumber, dobStr, gender, address_id);
-        try {
-            cd.insertCustomer(c);
-        } catch (Exception e) {
-            return;
-        }
-        System.out.println("DOne");
 
     }
 }
