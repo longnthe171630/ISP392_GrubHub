@@ -4,7 +4,7 @@
  */
 package controller;
 
-import dao.CustomerDAO;
+import dao.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -15,7 +15,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import model.Customer;
+import model.*;
 import utils.Validate;
 
 /**
@@ -129,7 +129,9 @@ public class RegisterCustomerServlet extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
         CustomerDAO cd = new CustomerDAO();
+        AddressDAO ad = new AddressDAO();
 
         String name = request.getParameter("name");
         String userName = request.getParameter("username");
@@ -139,11 +141,17 @@ public class RegisterCustomerServlet extends HttpServlet {
         String cPassWord = request.getParameter("cpassword");
         String gender = request.getParameter("gender");
         String dob = request.getParameter("dob");
-        String address = request.getParameter("address");
+        String state = request.getParameter("state");
+        String street = request.getParameter("street");
+        String detailAddress = request.getParameter("detailaddress");
+        int idAddress = 0;
 
         boolean genderValue = "male".equalsIgnoreCase(gender);
 
-        if (name == null || userName == null || email == null || phoneNumber == null || passWord == null || cPassWord == null || gender == null || dob == null || address == null) {
+        if (name == null || userName == null || email == null
+                || phoneNumber == null || passWord == null || cPassWord == null
+                || gender == null || dob == null || state == null || street == null
+                || detailAddress == null) {
             String msg = "All fields are required.";
             request.setAttribute("msg", msg);
             request.getRequestDispatcher("registercustomer.jsp").forward(request, response);
@@ -157,9 +165,23 @@ public class RegisterCustomerServlet extends HttpServlet {
             return;
         }
 
+        Address add = new Address(detailAddress, state, street);
+
+// Kiểm tra xem địa chỉ đã tồn tại trong cơ sở dữ liệu chưa
+        Address existingAddress = ad.getAddress(add);
+
+        if (existingAddress == null) {
+            // Nếu địa chỉ chưa tồn tại, tạo nó trong cơ sở dữ liệu
+            ad.createAddress(add);
+            idAddress = ad.getAddress(add).getId(); // Lấy ID của địa chỉ vừa tạo
+        } else {
+            // Nếu địa chỉ đã tồn tại, sử dụng ID hiện tại của nó
+            idAddress = existingAddress.getId();
+        }
+
         Customer cus = cd.checkCustomer(userName, passWord);
         if (cus == null) {
-            Customer newCus = new Customer(name, userName, passWord, email, phoneNumber, dob, genderValue, 1);
+            Customer newCus = new Customer(name, userName, passWord, email, phoneNumber, dob, genderValue, idAddress);
             try {
                 cd.insertCustomer(newCus);
                 String msg = "Registration successful.";
@@ -177,8 +199,6 @@ public class RegisterCustomerServlet extends HttpServlet {
             request.getRequestDispatcher("registercustomer.jsp").forward(request, response);
         }
     }
-
-    
 
     /**
      * Returns a short description of the servlet.
