@@ -49,7 +49,7 @@
             <label for="search-box" class="fas fa-search"></label>
             <i class="fas fa-times" id="close"></i>
         </form>
-            
+
         <section class="ftco-section">
             <div class="container">
                 <div class="row justify-content-center">
@@ -97,11 +97,11 @@
                                             </label>
                                         </div>
                                         <div class="w-50 text-md-right">
-                                            <a href="forgotpass.jsp">Forgot Password</a>
+                                            <a href="forgotpassword.jsp">Forgot Password</a>
                                         </div>
                                     </div>
                                 </form>
-                                <p class="text-center">Don't have a account? <a href="signup.jsp">Sign Up</a></p>
+                                <p class="text-center">Don't have a account? <a href="registercustomer.jsp">Sign Up</a></p>
                                 <div class="g-recaptcha" data-sitekey="6LclNuwpAAAAAJ15fzuD-_YURoq0-XxvEub_ZkDF"></div>
                                 <div style="color: red" id="error"></div>
                             </div>
@@ -117,7 +117,7 @@
         <script src="js/main.js"></script>
         <script src="https://www.google.com/recaptcha/api.js" async defer></script>
         <jsp:include page="Footer.jsp"></jsp:include>
-        <script type="text/javascript">
+            <script type="text/javascript">
                                             function checkCaptcha() {
                                                 var form = document.getElementById("login-form");
                                                 var error = document.getElementById("error");
@@ -128,6 +128,16 @@
                                                     error.textContent = "Please verify that you not a robot!";
                                                 }
                                             }
+            </script>
+            <script type="text/javascript">
+                window.onload = function () {
+                    // Lấy thông điệp từ biến JavaScript
+                    var msg = "<%= request.getAttribute("msg") != null ? request.getAttribute("msg") : "" %>";
+                    if (msg) {
+                        // Hiển thị thông điệp bằng alert hoặc bạn có thể tùy chỉnh cách hiển thị
+                        alert(msg);
+                    }
+                };
         </script>
     </body>
 </html>

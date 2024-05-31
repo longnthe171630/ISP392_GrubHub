@@ -125,7 +125,7 @@ public class RegisterCustomerServlet extends HttpServlet {
                 cd.insertCustomer(newCus);
                 String msg = "Registration successfully.";
                 request.setAttribute("msg", msg);
-                request.getRequestDispatcher("Login.jsp").forward(request, response);
+                request.getRequestDispatcher("cuslogin").forward(request, response);
             } catch (Exception e) {
                 e.printStackTrace();  // Log the exception for debugging
                 String msg = "Error during registration.";
