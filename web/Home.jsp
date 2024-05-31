@@ -29,6 +29,9 @@
                 <a class="active" href="home">Home</a>
                 <a href="About.jsp">About</a>
                 <a href="Contact.jsp">Contact</a>
+                <c:if test="${sessionScope.acc != null}">
+                    <a class="" href="" >Hello ${sessionScope.acc.userName}</a>
+                </c:if>
             </nav>
 
             <div class="icons">
@@ -36,7 +39,7 @@
                 <i class="fas fa-search" id="search-icon"></i>
                 <a href="#" class="fas fa-shopping-cart"></a>
                 <c:if test="${sessionScope.acc == null}">
-                    <a href="login" class="login-btn">login</a>
+                    <a href="cuslogin" class="login-btn">login</a>
                 </c:if>               
                 <c:if test="${sessionScope.acc != null}">
                     <a href="logout" class="login-btn">logout</a>
