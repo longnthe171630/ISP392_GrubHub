@@ -13,9 +13,9 @@ import model.Customer;
 public class CustomerDAO extends MyDAO {
 
     //kiểm tra tài khoản, mật khẩu có trong db customer không.
-    public Customer checkCustomer(String username, String password, String email) {
+    public Customer checkCustomer(String username, String password) {
 
-        xSql = "SELECT [username], [password], [email]\n"
+        xSql = "SELECT [username], [password]\n"
                 + "FROM [dbo].[Customer]\n"
                 + "WHERE [username] = ? AND [password] = ?";
 
@@ -23,11 +23,10 @@ public class CustomerDAO extends MyDAO {
             ps = con.prepareStatement(xSql);
             ps.setString(1, username);
             ps.setString(2, password);
-            ps.setString(3, email);
 
             rs = ps.executeQuery();
             if (rs.next()) {
-                return new Customer(username, password, email);
+                return new Customer(username, password);
             }
         } catch (SQLException e) {
             System.out.println(e);

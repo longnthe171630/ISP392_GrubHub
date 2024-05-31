@@ -113,7 +113,7 @@ public class RegisterCustomerServlet extends HttpServlet {
             idAddress = existingAddress.getId();
         }
 
-        Customer cus = cd.checkCustomer(userName, passWord, email);
+        Customer cus = cd.checkCustomer(userName, passWord);
         if (cd.checkEmail(email) == true) {
             String msg = "Your email account is already in use.";
             request.setAttribute("msg", msg);
