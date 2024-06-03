@@ -38,12 +38,16 @@
                 <i class="fas fa-bars" id="menu-bars"></i>
                 <i class="fas fa-search" id="search-icon"></i>
                 <a href="#" class="fas fa-shopping-cart"></a>
+<<<<<<< Updated upstream
                 <c:if test="${sessionScope.acc == null}">
                     <a href="cuslogin" class="login-btn">login</a>
                 </c:if>               
                 <c:if test="${sessionScope.acc != null}">
                     <a href="logout" class="login-btn">logout</a>
                 </c:if>
+=======
+                <a href="login" class="login-btn">Login</a>
+>>>>>>> Stashed changes
 
             </div> 
         </header>
@@ -205,7 +209,7 @@
                     </div>
                     <h3>Pizza</h3>
                     <!--                    <p>just come here and enjoy our food the test is so good.</p>-->
-                    <p><span class="price">150000đ</span></p>
+                    <p><span class="price">150.000đ</span></p>
                     <a href="#" class="btn">add to cart</a>
 
                 </div>
@@ -226,7 +230,7 @@
                     </div>
                     <h3>Hamberger</h3>
                     <!--                    <p>quality of the food is best in the city</p>-->
-                    <p><span class="price">50000đ</span></p>
+                    <p><span class="price">50.000đ</span></p>
                     <a href="#" class="btn">add to cart</a>
                 </div>
             </div>
@@ -244,9 +248,9 @@
                         <i class="fas fa-star"></i>
                         <i class="fas fa-star-half-alt"></i>
                     </div>
-                    <h3>Crep</h3>
+                    <h3>Crep Blueberry</h3>
                     <!--                    <p>a delicous food with a very good test.</p>-->
-                    <p><span class="price">35000đ</span></p>
+                    <p><span class="price">35.000đ</span></p>
                     <a href="#" class="btn">add to cart</a>
                 </div>
             </div>
@@ -264,9 +268,9 @@
                         <i class="fas fa-star"></i>
                         <i class="fas fa-star-half-alt"></i>
                     </div>
-                    <h3>Crep</h3>
+                    <h3>Crep Ice Cream</h3>
                     <!--                    <p>test of best mumma and our food</p>-->
-                    <p><span class="price">35000đ</span></p>
+                    <p><span class="price">35.000đ</span></p>
                     <a href="#" class="btn">add to cart</a>
                 </div>
             </div>
@@ -284,9 +288,9 @@
                         <i class="fas fa-star"></i>
                         <i class="fas fa-star-half-alt"></i>
                     </div>
-                    <h3>delicious food</h3>
+                    <h3>Pan Cake Fruits</h3>
                     <!--                    <p>test is best mumma and our restorent</p>-->
-                    <p><span class="price">35000đ</span></p>
+                    <p><span class="price">35.000đ</span></p>
                     <a href="#" class="btn">add to cart</a>
                 </div>
             </div>
@@ -304,9 +308,9 @@
                         <i class="fas fa-star"></i>
                         <i class="fas fa-star-half-alt"></i>
                     </div>
-                    <h3>delicious food</h3>
+                    <h3>Cup Cake</h3>
                     <!--                    <p>sweet testy and yummy food </p>-->
-                    <p><span class="price">35000đ</span></p>
+                    <p><span class="price">35.000đ</span></p>
                     <a href="#" class="btn">add to cart</a>
                 </div>
             </div>
@@ -324,9 +328,9 @@
                         <i class="fas fa-star"></i>
                         <i class="fas fa-star-half-alt"></i>
                     </div>
-                    <h3>delicious food</h3>
+                    <h3>Fruit Tea</h3>
                     <!--                    <p>The food is  very good, with a great variety of everyone!</p>-->
-                    <p><span class="price">35000đ</span></p>
+                    <p><span class="price">35.000đ</span></p>
                     <a href="#" class="btn">add to cart</a>
                 </div>
             </div>
@@ -344,9 +348,9 @@
                         <i class="fas fa-star"></i>
                         <i class="fas fa-star-half-alt"></i>
                     </div>
-                    <h3>delicious food</h3>
+                    <h3>Acai Cake</h3>
                     <!--                    <p>dont be hurry just give your time to test our serviece</p>-->
-                    <p><span class="price">100000đ</span></p>
+                    <p><span class="price">100.000đ</span></p>
                     <a href="#" class="btn">add to cart</a>
                 </div>
             </div>
@@ -364,9 +368,9 @@
                         <i class="fas fa-star"></i>
                         <i class="fas fa-star-half-alt"></i>
                     </div>
-                    <h3>delicious food</h3>
+                    <h3>Lemon Drinks</h3>
                     <!--                    <p>we serve the bestever our dish which is the best </p>-->
-                    <p><span class="price">50000đ</span></p>
+                    <p><span class="price">50.000đ</span></p>
                     <a href="#" class="btn">add to cart</a>
                 </div>
             </div>
