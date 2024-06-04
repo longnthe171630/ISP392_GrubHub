@@ -74,7 +74,7 @@
 
                                 <form id="login-form" action="cuslogin" method="POST" class="signin-form">
                                     <p class="text-danger " >
-                                        ${mess}
+                                        ${requestScope.alert}
                                     </p>
                                     <div class="form-group mb-3">
                                         <label class="label" for="name">Username</label>

@@ -38,16 +38,21 @@
                 <i class="fas fa-bars" id="menu-bars"></i>
                 <i class="fas fa-search" id="search-icon"></i>
                 <a href="#" class="fas fa-shopping-cart"></a>
-<<<<<<< Updated upstream
+
                 <c:if test="${sessionScope.acc == null}">
-                    <a href="cuslogin" class="login-btn">login</a>
+                    <a href="cuslogin" class="login-btn">Login</a>
                 </c:if>               
                 <c:if test="${sessionScope.acc != null}">
-                    <a href="logout" class="login-btn">logout</a>
+                    <div class="avatar-container">
+                        <img src="images/icon/avatar1.jpg" alt="Avatar" class="avatar" onclick="toggleDropdown()">
+                        <div id="dropdown" class="dropdown-content">
+                            <a href="profile">Profile</a>
+                            <a href="settings">Setting</a>
+                            <a href="logout">Logout</a>
+                        </div>
+                    </div>
                 </c:if>
-=======
-                <a href="login" class="login-btn">Login</a>
->>>>>>> Stashed changes
+                <!--                <a href="login" class="login-btn">Login</a>-->
 
             </div> 
         </header>
@@ -409,6 +414,29 @@
 
     <!-- custom js file link  -->
     <script src="js/script.js"></script>
+    <script>
+                            function toggleDropdown() {
+                                var dropdown = document.getElementById("dropdown");
+                                if (dropdown.style.display === "block") {
+                                    dropdown.style.display = "none";
+                                } else {
+                                    dropdown.style.display = "block";
+                                }
+                            }
 
+// Đóng dropdown nếu người dùng nhấn ngoài nó
+                            window.onclick = function (event) {
+                                if (!event.target.matches('.avatar')) {
+                                    var dropdowns = document.getElementsByClassName("dropdown-content");
+                                    for (var i = 0; i < dropdowns.length; i++) {
+                                        var openDropdown = dropdowns[i];
+                                        if (openDropdown.style.display === "block") {
+                                            openDropdown.style.display = "none";
+                                        }
+                                    }
+                                }
+                            }
+
+    </script>
 </body>
 </html>

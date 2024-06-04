@@ -60,7 +60,7 @@ public class LogoutServlet extends HttpServlet {
         p.setMaxAge(0);
         response.addCookie(u);
         response.addCookie(p);
-        response.sendRedirect("Login.jsp");
+        response.sendRedirect("LoginCus.jsp");
     }
 
     /**
