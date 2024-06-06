@@ -12,8 +12,13 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import model.*;
+import utils.Mail;
+import utils.Token;
 import utils.Validate;
+import java.util.*;
 
 /**
  *
@@ -48,11 +53,12 @@ public class RegisterCustomerServlet extends HttpServlet {
         }
     }
 
-
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Validate v = new Validate();
         CustomerDAO cd = new CustomerDAO();
+        
+        
         AddressDAO ad = new AddressDAO();
 
         String name = request.getParameter("name");
@@ -79,6 +85,12 @@ public class RegisterCustomerServlet extends HttpServlet {
             request.getRequestDispatcher("registercustomer.jsp").forward(request, response);
             return;
         }
+        if (!v.isValidUsername(userName)) {
+            String msg = "Re-enter the username";
+            request.setAttribute("msg", msg);
+            request.getRequestDispatcher("registercustomer.jsp").forward(request, response);
+            return;
+        }
         if (!v.isValidEmail(email)) {
             String msg = "Email address has not been entered correctly";
             request.setAttribute("msg", msg);
@@ -87,6 +99,28 @@ public class RegisterCustomerServlet extends HttpServlet {
         }
         if (!v.isValidPhone(phoneNumber)) {
             String msg = "Phone number must be number with 10 charactors";
+            request.setAttribute("msg", msg);
+            request.getRequestDispatcher("registercustomer.jsp").forward(request, response);
+            return;
+        }
+        // Kiểm tra ngày sinh có phải là ngày trong tương lai không
+
+        try {
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+            Date dateOfBirth = dateFormat.parse(dob);
+            Date currentDate = new Date();
+            if (dateOfBirth.after(currentDate)) {
+                // Gửi thông báo lỗi nếu ngày sinh là ngày trong tương lai
+                String msg = "Date of birth cannot be a future date.";
+                request.setAttribute("msg", msg);
+                request.getRequestDispatcher("registercustomer.jsp").forward(request, response);
+                return;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Xử lý nếu có lỗi xảy ra trong quá trình chuyển đổi ngày tháng
+            String msg = "Error processing date of birth.";
             request.setAttribute("msg", msg);
             request.getRequestDispatcher("registercustomer.jsp").forward(request, response);
             return;
@@ -122,10 +156,17 @@ public class RegisterCustomerServlet extends HttpServlet {
         if (cus == null) {
             Customer newCus = new Customer(name, userName, passWord, email, phoneNumber, dob, genderValue, idAddress);
             try {
+
                 cd.insertCustomer(newCus);
-                String msg = "Registration successfully.";
+                String token = new Token().generateRandomToken(18);
+                String url = "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/verifyemailcustomer?email=" + email + "&token=" + token;
+                cd.insertToken(cd.getIdLastCustomer(), token);
+                new Mail().sendEmail(email, "Verify email", "Click here to verify email: " + url);
+                String url1 = "registercustomer.jsp";
+                String msg = "An email was sent. Please check your email!";
                 request.setAttribute("msg", msg);
-                request.getRequestDispatcher("cuslogin").forward(request, response);
+                request.setAttribute("cus", newCus);
+                request.getRequestDispatcher(url1).forward(request, response);
             } catch (Exception e) {
                 e.printStackTrace();  // Log the exception for debugging
                 String msg = "Error during registration.";
