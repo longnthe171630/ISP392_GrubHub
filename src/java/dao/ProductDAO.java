@@ -1,4 +1,3 @@
-
 package dao;
 
 import model.Product;
@@ -10,7 +9,7 @@ import java.util.List;
  *
  * @author manh0
  */
-public class ProductDAO extends MyDAO{
+public class ProductDAO extends MyDAO {
 
     public List<Product> getProducts() {
         List<Product> t = new ArrayList<>();
@@ -146,7 +145,7 @@ public class ProductDAO extends MyDAO{
             ps.setString(1, xxProductId);
             rs = ps.executeQuery();
             if (rs.next()) {
-                 int xProductId = rs.getInt("product_id");
+                int xProductId = rs.getInt("product_id");
                 String xName = rs.getString("name");
                 int xPrice = rs.getInt("price");
                 String xDescription = rs.getString("description");
@@ -214,11 +213,41 @@ public class ProductDAO extends MyDAO{
         }
     }
 
+    public String getNameProductById(int product_id) {
+        xSql = "SELECT name FROM Product WHERE ID = ?";
+        Product x = null;
+        try {
+            ps = con.prepareStatement(xSql);
+            ps.setInt(1, product_id);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+//                int xProduct_id = rs.getInt("id");
+                String xName = rs.getString("name");
+//                int xPrice = rs.getInt("price");
+//                String xDescription = rs.getString("description");
+//                String xImage = rs.getString("image");
+//                boolean xStatus = rs.getBoolean("status");
+//                Date xCreate_date = rs.getDate("create_date");
+//                int xCategory_id = rs.getInt("category_id");
+//                int xRestaurant_id = rs.getInt("restaurant_id");
+//
+//                x = new Product(xProduct_id, xName, xPrice, xDescription, xImage, xStatus, xCreate_date, xCategory_id, xRestaurant_id);
+                return xName;
+            }
+            rs.close();
+            ps.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static void main(String[] args) {
         try {
             ProductDAO dao = new ProductDAO();
             List<Product> list = dao.getProducts();
-
+            dao.getNameProductById(7);
+            System.out.println(dao.getNameProductById(7));
             for (Product b : list) {
                 System.out.println(b);
             }

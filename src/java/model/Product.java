@@ -18,11 +18,13 @@ public class Product {
     private boolean status;
     private Date create_date;
     private int category_id;
+    private int restaurant_id;
 
     public Product() {
+        
     }
 
-    public Product(int id, String name, int price, String description, String image, boolean status, Date create_date, int category_id) {
+    public Product(int id, String name, int price, String description, String image, boolean status, Date create_date, int category_id, int restaurant_id) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -31,6 +33,7 @@ public class Product {
         this.status = status;
         this.create_date = create_date;
         this.category_id = category_id;
+        this.restaurant_id = restaurant_id;
     }
 
     public int getId() {
@@ -97,11 +100,18 @@ public class Product {
         this.category_id = category_id;
     }
 
-    @Override
-    public String toString() {
-        return "Product{" + "id=" + id + ", name=" + name + ", price=" + price + ", description=" + description + ", image=" + image + ", status=" + status + ", create_date=" + create_date + ", category_id=" + category_id + '}';
+    public int getRestaurant_id() {
+        return restaurant_id;
     }
 
+    public void setRestaurant_id(int restaurant_id) {
+        this.restaurant_id = restaurant_id;
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" + "id=" + id + ", name=" + name + ", price=" + price + ", description=" + description + ", image=" + image + ", status=" + status + ", create_date=" + create_date + ", category_id=" + category_id + ", restaurant_id=" + restaurant_id + '}';
+    }
     
     
 }

@@ -30,21 +30,51 @@
         <header>
             <a href="home" class="logo"><i class="fas fa-utensils"></i>GrubHub</a>
 
+<<<<<<< Updated upstream
             <nav class="navbar">
                 <a class="active" href="home">home</a>
                 <a href="About.jsp">about</a>
                 <a href="Foodlove.jsp">menu</a>
                 <a href="Contact.jsp">contact</a>
+=======
+            <nav class="navbar" style="transform: translate(100px, 0px);">
+                <a class="active" href="home">Home</a>
+                <a href="About.jsp">About</a>
+                <a href="Contact.jsp">Contact</a>
+                <c:if test="${sessionScope.acc != null}">
+                    <a class="active" href="home" >Hello ${sessionScope.acc.userName}</a>
+                </c:if>
+>>>>>>> Stashed changes
             </nav>
 
-            <div class="icons">
+            <div class="icons" style="transform: translate(210px, 0px);">
                 <i class="fas fa-bars" id="menu-bars"></i>
                 <i class="fas fa-search" id="search-icon"></i>
                 <a href="#" class="fas fa-shopping-cart"></a>
+<<<<<<< Updated upstream
                 <a href="#login" class="login-btn">login</a>
 
             </div> 
 
+=======
+                <!--                <a href="login" class="login-btn">Login</a>-->
+            </div>
+            <div>
+                <c:if test="${sessionScope.acc == null}">
+                    <a href="cuslogin" class="login-btn">Login</a>
+                </c:if>               
+                <c:if test="${sessionScope.acc != null}">
+                    <div class="avatar-container">
+                        <img src="images/icon/avatar1.jpg" alt="Avatar" class="avatar" onclick="toggleDropdown()">
+                        <div id="dropdown" class="dropdown-content">
+                            <a href="profile">Profile</a>
+                            <a href="settings">Setting</a>
+                            <a href="logout">Logout</a>
+                        </div>
+                    </div>
+                </c:if>
+            </div>
+>>>>>>> Stashed changes
         </header>
 
         <!-- header section ends-->
@@ -128,18 +158,10 @@
                     </div>
 
                 </div>
-
-
-
             </div>
-
             <div class="swiper-pagination"></div>
-
-        </div>
-
+        
     </section>
-
-
 
     <!-- home section ends -->
 

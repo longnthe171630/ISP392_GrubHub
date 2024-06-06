@@ -101,63 +101,6 @@ public class AccountDAO extends MyDAO {
         }
     }
 
-//kiểm tra trùng username
-//    public boolean existedUser(String username) {
-//        String sql = "SELECT [username]\n"
-//                + "      ,[password]\n"
-//                + "      ,[email]\n"
-//                + "      ,[phonenumber]\n"
-//                + "      ,[role]\n"
-//                + "  FROM [dbo].[Account] where username=?";
-//        try {
-//            PreparedStatement st = connection.prepareStatement(sql);
-//            st.setString(1, username);
-//            ResultSet rs = st.executeQuery();
-//            if (rs.next()) {
-//                return true;
-//            }
-//        } catch (Exception e) {
-//        }
-//        return false;
-//    }
-//kiểm tra trùng email
-//    public boolean existedEmail(String email) {
-//        String sql = "SELECT [username]\n"
-//                + "      ,[password]\n"
-//                + "      ,[email]\n"
-//                + "      ,[phonenumber]\n"
-//                + "      ,[role]\n"
-//                + "  FROM [dbo].[Account] where email=?";
-//        try {
-//            PreparedStatement st = connection.prepareStatement(sql);
-//            st.setString(1, email);
-//            ResultSet rs = st.executeQuery();
-//            if (rs.next()) {
-//                return true;
-//            }
-//        } catch (Exception e) {
-//        }
-//        return false;
-//    }
-//kiểm tra trùng số điện thoại
-//    public boolean existedPhoneNumber(String phonenumber) {
-//        String sql = "SELECT [username]\n"
-//                + "      ,[password]\n"
-//                + "      ,[email]\n"
-//                + "      ,[phonenumber]\n"
-//                + "      ,[role]\n"
-//                + "  FROM [dbo].[Account] where phonenumber=?";
-//        try {
-//            PreparedStatement st = connection.prepareStatement(sql);
-//            st.setString(1, phonenumber);
-//            ResultSet rs = st.executeQuery();
-//            if (rs.next()) {
-//                return true;
-//            }
-//        } catch (Exception e) {
-//        }
-//        return false;
-//    }
     public Account getAccountByEmail(String email) {
         String sql = "SELECT * FROM Account WHERE email = ?";
         int xId;
@@ -262,6 +205,5 @@ public class AccountDAO extends MyDAO {
         } else {
             System.out.println("No account found with email: " + emailToTest);
         }
-
     }
 }
