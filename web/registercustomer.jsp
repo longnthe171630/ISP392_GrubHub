@@ -45,6 +45,7 @@
                         <div class="input-box">
                             <span class="details">Date of Birth</span>
                             <input type="date" name="dob" value="<%= request.getParameter("dob") != null ? request.getParameter("dob") : "" %>" required>
+
                         </div>
                         <div class="input-box">
                             <span class="details">State</span>

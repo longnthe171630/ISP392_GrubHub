@@ -17,7 +17,7 @@ public class CustomerDAO extends MyDAO {
 
         xSql = "SELECT [username], [password]\n"
                 + "FROM [dbo].[Customer]\n"
-                + "WHERE [username] = ? AND [password] = ?";
+                + "WHERE [username] = ? OR [password] = ?";
 
         try {
             ps = con.prepareStatement(xSql);
@@ -33,6 +33,7 @@ public class CustomerDAO extends MyDAO {
         }
         return null;
     }
+
     public boolean checkEmail(String email) {
 
         xSql = "SELECT [email]\n"
@@ -42,7 +43,6 @@ public class CustomerDAO extends MyDAO {
         try {
             ps = con.prepareStatement(xSql);
             ps.setString(1, email);
-
 
             rs = ps.executeQuery();
             return rs.next();
@@ -54,7 +54,7 @@ public class CustomerDAO extends MyDAO {
 
     // thêm một tài khoản người mua mới vào db
     public void insertCustomer(Customer c) throws ParseException {
-        xSql = "INSERT INTO [dbo].[Customer]\n"
+        String xSql = "INSERT INTO [dbo].[Customer]\n"
                 + "           ([name]\n"
                 + "           ,[dob]\n"
                 + "           ,[gender]\n"
@@ -76,46 +76,114 @@ public class CustomerDAO extends MyDAO {
                 + "           ,?\n"
                 + "           ,GETDATE()\n"
                 + "           ,1)";
-        DateFormat inputDateFormat = new SimpleDateFormat("dd-MM-yyyy");
-        DateFormat outputDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+        DateFormat inputDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
         try {
+            // Phân tích chuỗi ngày đầu vào
             java.util.Date utilDate = inputDateFormat.parse(c.getDob());
-            String formattedDateStr = outputDateFormat.format(utilDate);
-            java.util.Date formattedUtilDate = outputDateFormat.parse(formattedDateStr);
-            java.sql.Date sqlDate = new java.sql.Date(formattedUtilDate.getTime());
-            // Format the date to the desired format
+
+            // Chuyển đổi sang java.sql.Date
+            java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+
+            // Chuẩn bị câu lệnh SQL
             ps = con.prepareStatement(xSql);
             ps.setString(1, c.getName());
-//            ps.setDate(2, new java.sql.Date(c.getDob().getTime())); // Chuyển đổi từ java.util.Date sang java.sql.Date
-            ps.setDate(2, sqlDate); // Chuyển đổi từ java.util.Date sang java.sql.Date
+            ps.setDate(2, sqlDate);
             ps.setBoolean(3, c.isGender());
             ps.setInt(4, c.getAddress_id());
             ps.setString(5, c.getUserName());
             ps.setString(6, c.getPassWord());
             ps.setString(7, c.getEmail());
             ps.setString(8, c.getPhoneNumber());
+
+            // Thực hiện câu lệnh SQL
             ps.executeUpdate();
-            ps.close(); // Đóng PreparedStatement sau khi sử dụng
+            ps.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
 
-   
-// test function
+    public int getIdLastCustomer() {
 
+        xSql = "SELECT TOP 1 * FROM customer ORDER BY id DESC";
+        try {
+            int id;
+            ps = con.prepareStatement(xSql);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                id = rs.getInt("id");
+                return id;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public void insertToken(int customerId, String token) throws SQLException {
+        xSql = "UPDATE customer SET token = ?, token_expiry = ? WHERE id = ?";
+        try {
+            ps = con.prepareStatement(xSql);
+            ps.setString(1, token);
+            // Set token expiry time (e.g., 24 hours from now)
+            ps.setTimestamp(2, new Timestamp(System.currentTimeMillis() + 24 * 3600 * 1000));
+            ps.setInt(3, customerId);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public boolean isTokenValid(String email, String token) throws SQLException {
+        xSql = "SELECT token, token_expiry FROM customer WHERE email = ?";
+        try {
+            ps.setString(1, email);
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+                String storedToken = rs.getString("token");
+                Timestamp tokenExpiry = rs.getTimestamp("token_expiry");
+                if (storedToken != null && storedToken.equals(token) && tokenExpiry.after(new Timestamp(System.currentTimeMillis()))) {
+                    return true;
+
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public void verifyEmail(String email) throws SQLException {
+        xSql = "UPDATE customer SET email_verified = 1 WHERE email = ?";
+        try {
+            ps = con.prepareStatement(xSql);
+            ps.setString(1, email);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public void ResetToken(int id) {
+        String xSql = "UPDATE customer SET token = '' WHERE id = ?";
+        
+        try {
+            ps = con.prepareStatement(xSql);
+            ps.setInt(1, id);
+            ps.executeUpdate();
+            
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+// test function
     public static void main(String[] args) {
         // Chuỗi ngày tháng có định dạng "dd-MM-yyyy"
         CustomerDAO cd = new CustomerDAO();
-        String name = "vu long pham";
-        String userName = "vupl";
-        String passWord = "123";
-        String email = "vupl123@gmail.com";
-        String phoneNumber = "012345";
-        Boolean gender = true;
-        int address_id = 1;
-        String dobStr = "11/01/2003";
-
+        System.out.println(cd.getIdLastCustomer());
     }
 }
