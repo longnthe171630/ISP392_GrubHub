@@ -16,20 +16,24 @@ public class Product {
     private int price;
     private String description, image;
     private boolean status;
-    private Date create_date;
+    private Date create_at;
     private int category_id;
 
     public Product() {
     }
 
+<<<<<<< Updated upstream
     public Product(int id, String name, int price, String description, String image, boolean status, Date create_date, int category_id) {
+=======
+    public Product(int id, String name, int price, String description, String image, boolean status, Date create_at, int category_id, int restaurant_id) {
+>>>>>>> Stashed changes
         this.id = id;
         this.name = name;
         this.price = price;
         this.description = description;
         this.image = image;
         this.status = status;
-        this.create_date = create_date;
+        this.create_at = create_at;
         this.category_id = category_id;
     }
 
@@ -81,12 +85,12 @@ public class Product {
         this.status = status;
     }
 
-    public Date getCreate_date() {
-        return create_date;
+    public Date getCreate_at() {
+        return create_at;
     }
 
-    public void setCreate_date(Date create_date) {
-        this.create_date = create_date;
+    public void setCreate_at(Date create_at) {
+        this.create_at = create_at;
     }
 
     public int getCategory_id() {
@@ -99,7 +103,11 @@ public class Product {
 
     @Override
     public String toString() {
+<<<<<<< Updated upstream
         return "Product{" + "id=" + id + ", name=" + name + ", price=" + price + ", description=" + description + ", image=" + image + ", status=" + status + ", create_date=" + create_date + ", category_id=" + category_id + '}';
+=======
+        return "Product{" + "id=" + id + ", name=" + name + ", price=" + price + ", description=" + description + ", image=" + image + ", status=" + status + ", create_at=" + create_at + ", category_id=" + category_id + ", restaurant_id=" + restaurant_id + '}';
+>>>>>>> Stashed changes
     }
 
     
