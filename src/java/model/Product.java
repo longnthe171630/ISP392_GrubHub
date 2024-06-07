@@ -18,15 +18,13 @@ public class Product {
     private boolean status;
     private Date create_at;
     private int category_id;
-
+    private int restaurant_id;
+    
     public Product() {
     }
 
-<<<<<<< Updated upstream
-    public Product(int id, String name, int price, String description, String image, boolean status, Date create_date, int category_id) {
-=======
     public Product(int id, String name, int price, String description, String image, boolean status, Date create_at, int category_id, int restaurant_id) {
->>>>>>> Stashed changes
+
         this.id = id;
         this.name = name;
         this.price = price;
@@ -103,11 +101,9 @@ public class Product {
 
     @Override
     public String toString() {
-<<<<<<< Updated upstream
-        return "Product{" + "id=" + id + ", name=" + name + ", price=" + price + ", description=" + description + ", image=" + image + ", status=" + status + ", create_date=" + create_date + ", category_id=" + category_id + '}';
-=======
+
         return "Product{" + "id=" + id + ", name=" + name + ", price=" + price + ", description=" + description + ", image=" + image + ", status=" + status + ", create_at=" + create_at + ", category_id=" + category_id + ", restaurant_id=" + restaurant_id + '}';
->>>>>>> Stashed changes
+
     }
 
     

@@ -36,7 +36,8 @@ public class ProductDAO extends MyDAO{
                 xStatus = rs.getBoolean("status");
                 xCreate_date = rs.getDate("create_date");
                 xCategory_id = rs.getInt("category_id");
-                x = new Product(xProductId, xName, xPrice, xDescription, xImage, xStatus, xCreate_date, xCategory_id);
+                int xRestaurant_id = rs.getInt("restaurant_id");
+                x = new Product(xProductId, xName, xPrice, xDescription, xImage, xStatus, xCreate_date, xCategory_id, xRestaurant_id);
                 t.add(x);
             }
             rs.close();
@@ -72,7 +73,9 @@ public class ProductDAO extends MyDAO{
                 xStatus = rs.getBoolean("status");
                 xCreate_date = rs.getDate("create_date");
                 xCategory_id = rs.getInt("category_id");
-                x = new Product(xProductId, xName, xPrice, xDescription, xImage, xStatus, xCreate_date, xCategory_id);
+                int xRestaurant_id = rs.getInt("restaurant_id");
+                
+                x = new Product(xProductId, xName, xPrice, xDescription, xImage, xStatus, xCreate_date, xCategory_id, xRestaurant_id);
                 t.add(x);
             }
             rs.close();
@@ -99,8 +102,9 @@ public class ProductDAO extends MyDAO{
                 boolean xStatus = rs.getBoolean("status");
                 Date xCreate_date = rs.getDate("create_date");
                 int xCategory_product_id = rs.getInt("categoryID");
-
-                Product x = new Product(xProductId, xName, xPrice, xDescription, xImage, xStatus, xCreate_date, xCategory_product_id);
+                int xRestaurant_id = rs.getInt("restaurant_id");
+                
+                Product x = new Product(xProductId, xName, xPrice, xDescription, xImage, xStatus, xCreate_date, xCategory_product_id, xRestaurant_id);
                 t.add(x);
             }
             rs.close();
@@ -127,8 +131,9 @@ public class ProductDAO extends MyDAO{
                 boolean xStatus = rs.getBoolean("status");
                 Date xCreate_date = rs.getDate("create_date");
                 int xCategory_product_id = rs.getInt("categoryID");
-
-                x = new Product(xProductId, xName, xPrice, xDescription, xImage, xStatus, xCreate_date, xCategory_product_id);
+                int xRestaurant_id = rs.getInt("restaurant_id");
+                
+                x = new Product(xProductId, xName, xPrice, xDescription, xImage, xStatus, xCreate_date, xCategory_product_id, xRestaurant_id);
             }
             rs.close();
             ps.close();
@@ -152,10 +157,11 @@ public class ProductDAO extends MyDAO{
                 String xDescription = rs.getString("description");
                 String xImage = rs.getString("image");
                 boolean xStatus = rs.getBoolean("status");
-                Date xCreate_date = rs.getDate("create_date");
+                Date xCreate_at = rs.getDate("create_at");
                 int xCategory_product_id = rs.getInt("categoryID");
-
-                x = new Product(xProductId, xName, xPrice, xDescription, xImage, xStatus, xCreate_date, xCategory_product_id);
+                int xRestaurant_id = rs.getInt("restaurant_id");
+                
+                x = new Product(xProductId, xName, xPrice, xDescription, xImage, xStatus, xCreate_at, xCategory_product_id, xRestaurant_id);
             }
             rs.close();
             ps.close();
@@ -175,7 +181,7 @@ public class ProductDAO extends MyDAO{
             ps.setString(3, x.getDescription());
             ps.setString(4, x.getImage());
             ps.setBoolean(5, x.isStatus());
-            ps.setDate(6, new java.sql.Date(x.getCreate_date().getTime()));
+            ps.setDate(6, new java.sql.Date(x.getCreate_at().getTime()));
             ps.setInt(7, x.getCategory_id());
             ps.executeUpdate();
             ps.close();
@@ -214,6 +220,35 @@ public class ProductDAO extends MyDAO{
         }
     }
 
+    public String getNameProductById(int product_id) {
+        xSql = "SELECT name FROM Product WHERE ID = ?";
+        Product x = null;
+        try {
+            ps = con.prepareStatement(xSql);
+            ps.setInt(1, product_id);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+//                int xProduct_id = rs.getInt("id");
+                String xName = rs.getString("name");
+//                int xPrice = rs.getInt("price");
+//                String xDescription = rs.getString("description");
+//                String xImage = rs.getString("image");
+//                boolean xStatus = rs.getBoolean("status");
+//                Date xCreate_date = rs.getDate("create_date");
+//                int xCategory_id = rs.getInt("category_id");
+//                int xRestaurant_id = rs.getInt("restaurant_id");
+//
+//                x = new Product(xProduct_id, xName, xPrice, xDescription, xImage, xStatus, xCreate_date, xCategory_id, xRestaurant_id);
+                return xName;
+            }
+            rs.close();
+            ps.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
     public static void main(String[] args) {
         try {
             ProductDAO dao = new ProductDAO();
