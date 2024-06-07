@@ -22,21 +22,21 @@ public class ProductDAO extends MyDAO{
         String xImage;
         boolean xStatus;
         Date xCreate_date;
-        int xCategory_id;
+        int xCategory_id, xRestaurant_id;
         Product x;
         try {
             ps = con.prepareStatement(xSql);
             rs = ps.executeQuery();
             while (rs.next()) {
-                xProductId = rs.getInt("product_id");
+                xProductId = rs.getInt("id");
                 xName = rs.getString("name");
                 xPrice = rs.getInt("price");
                 xDescription = rs.getString("description");
                 xImage = rs.getString("image");
                 xStatus = rs.getBoolean("status");
-                xCreate_date = rs.getDate("create_date");
+                xCreate_date = rs.getDate("create_at");
                 xCategory_id = rs.getInt("category_id");
-                int xRestaurant_id = rs.getInt("restaurant_id");
+                xRestaurant_id = rs.getInt("restaurant_id");
                 x = new Product(xProductId, xName, xPrice, xDescription, xImage, xStatus, xCreate_date, xCategory_id, xRestaurant_id);
                 t.add(x);
             }
@@ -65,13 +65,13 @@ public class ProductDAO extends MyDAO{
             ps.setString(1, "%" + xxName + "%");
             rs = ps.executeQuery();
             while (rs.next()) {
-                xProductId = rs.getInt("product_id");
+                xProductId = rs.getInt("id");
                 xName = rs.getString("name");
                 xPrice = rs.getInt("price");
                 xDescription = rs.getString("description");
                 xImage = rs.getString("image");
                 xStatus = rs.getBoolean("status");
-                xCreate_date = rs.getDate("create_date");
+                xCreate_date = rs.getDate("create_at");
                 xCategory_id = rs.getInt("category_id");
                 int xRestaurant_id = rs.getInt("restaurant_id");
                 
@@ -94,13 +94,13 @@ public class ProductDAO extends MyDAO{
             ps.setString(1, cproduct_id);
             rs = ps.executeQuery();
             while (rs.next()) {
-                int xProductId = rs.getInt("product_id");
+                int xProductId = rs.getInt("id");
                 String xName = rs.getString("name");
                 int xPrice = rs.getInt("price");
                 String xDescription = rs.getString("description");
                 String xImage = rs.getString("image");
                 boolean xStatus = rs.getBoolean("status");
-                Date xCreate_date = rs.getDate("create_date");
+                Date xCreate_date = rs.getDate("create_at");
                 int xCategory_product_id = rs.getInt("categoryID");
                 int xRestaurant_id = rs.getInt("restaurant_id");
                 
@@ -123,13 +123,13 @@ public class ProductDAO extends MyDAO{
             ps.setInt(1, ProductId);
             rs = ps.executeQuery();
             if (rs.next()) {
-                int xProductId = rs.getInt("product_id");
+                int xProductId = rs.getInt("id");
                 String xName = rs.getString("name");
                 int xPrice = rs.getInt("price");
                 String xDescription = rs.getString("description");
                 String xImage = rs.getString("image");
                 boolean xStatus = rs.getBoolean("status");
-                Date xCreate_date = rs.getDate("create_date");
+                Date xCreate_date = rs.getDate("create_at");
                 int xCategory_product_id = rs.getInt("categoryID");
                 int xRestaurant_id = rs.getInt("restaurant_id");
                 
@@ -151,7 +151,7 @@ public class ProductDAO extends MyDAO{
             ps.setString(1, xxProductId);
             rs = ps.executeQuery();
             if (rs.next()) {
-                 int xProductId = rs.getInt("product_id");
+                 int xProductId = rs.getInt("id");
                 String xName = rs.getString("name");
                 int xPrice = rs.getInt("price");
                 String xDescription = rs.getString("description");
@@ -191,7 +191,7 @@ public class ProductDAO extends MyDAO{
     }
 
     public void delete(int xxProductId) {
-        xSql = "delete from Product where product_id=?";
+        xSql = "delete from Product where id=?";
         try {
             ps = con.prepareStatement(xSql);
             ps.setInt(1, xxProductId);
@@ -202,7 +202,7 @@ public class ProductDAO extends MyDAO{
         }
     }
 
-    public void updateProduct(int product_id, String xName, int xPrice, String xDescription, String xImage, boolean xStatus, Date xCreate_date, int category_product_id) {
+    public void updateProduct(int id, String xName, int xPrice, String xDescription, String xImage, boolean xStatus, Date xCreate_date, int category_product_id) {
         xSql = "UPDATE Product SET Title=?, AuthorID=?, Description=?, Price=?, Quantity=?, PublicationDate=?, ProductImage=?, CategoryID=?, Status=? WHERE ProductID=?";
         try {
             ps = con.prepareStatement(xSql);
@@ -253,7 +253,7 @@ public class ProductDAO extends MyDAO{
         try {
             ProductDAO dao = new ProductDAO();
             List<Product> list = dao.getProducts();
-
+            System.out.println(dao.getNameProductById(1));
             for (Product b : list) {
                 System.out.println(b);
             }
