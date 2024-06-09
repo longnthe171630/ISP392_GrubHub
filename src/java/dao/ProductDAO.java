@@ -47,6 +47,37 @@ public class ProductDAO extends MyDAO{
         }
         return (t);
     }
+    public List<Product> getProducts2() {
+        List<Product> t = new ArrayList<>();
+        String xSql = """
+                  SELECT p.product_id, p.name, p.price, p.description, p.image, p.status, p.create_date, p.category_id, p.restaurant_id, r.name AS restaurant_name
+                  FROM Product p
+                  JOIN Restaurant r ON p.restaurant_id = r.id
+                  WHERE p.product_id IN (1, 2, 3, 4)""";
+        try {
+            ps = con.prepareStatement(xSql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                int xProductId = rs.getInt("product_id");
+                String xName = rs.getString("name");
+                int xPrice = rs.getInt("price");
+                String xDescription = rs.getString("description");
+                String xImage = rs.getString("image");
+                boolean xStatus = rs.getBoolean("status");
+                Date xCreate_date = rs.getDate("create_date");
+                int xCategory_id = rs.getInt("category_id");
+                int xRestaurant_id = rs.getInt("restaurant_id");
+                String xRestaurant_name = rs.getString("restaurant_name");
+                Product x = new Product(xProductId, xName, xPrice, xDescription, xImage, xStatus, xCreate_date, xCategory_id, xRestaurant_id, xRestaurant_name);
+                t.add(x);
+            }
+            rs.close();
+            ps.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return t;
+    }
 
     public List<Product> getProducts(String xxName) {
         List<Product> t = new ArrayList<>();
@@ -105,6 +136,34 @@ public class ProductDAO extends MyDAO{
                 int xRestaurant_id = rs.getInt("restaurant_id");
                 
                 Product x = new Product(xProductId, xName, xPrice, xDescription, xImage, xStatus, xCreate_date, xCategory_product_id, xRestaurant_id);
+                t.add(x);
+            }
+            rs.close();
+            ps.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return t;
+    }
+    public List<Product> getProductByRID(String cproduct_id) {
+        List<Product> t = new ArrayList<>();
+        xSql = "SELECT * FROM Product WHERE restaurant_id = ?";
+        try {
+            ps = con.prepareStatement(xSql);
+            ps.setString(1, cproduct_id);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                int xProductId = rs.getInt("product_id");
+                String xName = rs.getString("name");
+                int xPrice = rs.getInt("price");
+                String xDescription = rs.getString("description");
+                String xImage = rs.getString("image");
+                boolean xStatus = rs.getBoolean("status");
+                Date xCreate_date = rs.getDate("create_date");
+                int xCategory_id = rs.getInt("category_id");
+                int xResxRestaurant_id = rs.getInt("restaurant_id");
+
+                Product x = new Product(xProductId, xName, xPrice, xDescription, xImage, xStatus, xCreate_date, xCategory_id, xResxRestaurant_id);
                 t.add(x);
             }
             rs.close();

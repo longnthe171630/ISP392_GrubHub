@@ -27,6 +27,20 @@ public class Restaurant {
         this.image = image;
     }
 
+    public Restaurant(int id, String name, String phonenumber, int address_id, int restaurant_rating, int account_id) {
+        this.id = id;
+        this.name = name;
+        this.phonenumber = phonenumber;
+        this.address_id = address_id;
+        this.restaurant_rating = restaurant_rating;
+        this.account_id = account_id;
+    }
+
+  
+
+    
+    
+
     public int getId() {
         return id;
     }

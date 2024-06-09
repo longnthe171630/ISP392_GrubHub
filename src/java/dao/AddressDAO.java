@@ -49,19 +49,21 @@ public class AddressDAO extends MyDAO {
 
     public static void main(String[] args) {
         AddressDAO ad = new AddressDAO();
-        Address a = new Address(1, "thon 3 ", "thach hoa", "thach that");
+        Address add = new Address(1, "thon 3 ", "thach hoa", "thach that");
+        int idAddress= 0;
 
-        // Tạo địa chỉ mới
-        ad.createAddress(a);
+// Kiểm tra xem địa chỉ đã tồn tại trong cơ sở dữ liệu chưa
+        Address existingAddress = ad.getAddress(add);
 
-        // Kiểm tra xem địa chỉ mới đã được thêm vào chưa
-        Address result = ad.getAddress(a);
-
-        if (result != null) {
-            System.out.println("Address created successfully:");
-            System.out.println("ID: " + result.getId() + ", Details: " + result.getDetails() + ", State: " + result.getState() + ", Street: " + result.getStreet());
+        if (existingAddress == null) {
+            // Nếu địa chỉ chưa tồn tại, tạo nó trong cơ sở dữ liệu
+            ad.createAddress(add);
+            idAddress = ad.getAddress(add).getId(); // Lấy ID của địa chỉ vừa tạo
+            System.out.println(idAddress);
         } else {
-            System.out.println("Failed to create address.");
+            // Nếu địa chỉ đã tồn tại, sử dụng ID hiện tại của nó
+            idAddress = existingAddress.getId();
+            System.out.println(idAddress);
         }
     }
 }
