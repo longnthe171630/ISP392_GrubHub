@@ -11,30 +11,53 @@ import java.util.Date;
  * @author manh0
  */
 public class Product {
-    private int id; 
+
+    private int id;
     private String name;
     private int price;
     private String description, image;
     private boolean status;
-    private Date create_at;
+    private Date create_date;
     private int category_id;
     private int restaurant_id;
-    
+    private String restaurant_name;
+
     public Product() {
     }
 
-    public Product(int id, String name, int price, String description, String image, boolean status, Date create_at, int category_id, int restaurant_id) {
+    public Product(int id, String name, int price, String description, String image, boolean status, Date create_date, int category_id, int restaurant_id) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.description = description;
         this.image = image;
         this.status = status;
-        this.create_at = create_at;
+        this.create_date = create_date;
         this.category_id = category_id;
         this.restaurant_id = restaurant_id;
     }
 
+    public Product(int id, String name, int price, String description, String image, boolean status, Date create_date, int category_id, int restaurant_id, String restaurant_name) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.description = description;
+        this.image = image;
+        this.status = status;
+        this.create_date = create_date;
+        this.category_id = category_id;
+        this.restaurant_id = restaurant_id;
+        this.restaurant_name = restaurant_name;
+    }
+
+    public String getRestaurant_name() {
+        return restaurant_name;
+    }
+
+    public void setRestaurant_name(String restaurant_name) {
+        this.restaurant_name = restaurant_name;
+    }
+    
     public int getId() {
         return id;
     }
@@ -83,12 +106,12 @@ public class Product {
         this.status = status;
     }
 
-    public Date getCreate_at() {
-        return create_at;
+    public Date getCreate_date() {
+        return create_date;
     }
 
     public void setCreate_at(Date create_at) {
-        this.create_at = create_at;
+        this.create_date = create_at;
     }
 
     public int getCategory_id() {
@@ -109,8 +132,7 @@ public class Product {
 
     @Override
     public String toString() {
-        return "Product{" + "id=" + id + ", name=" + name + ", price=" + price + ", description=" + description + ", image=" + image + ", status=" + status + ", create_at=" + create_at + ", category_id=" + category_id + ", restaurant_id=" + restaurant_id + '}';
+        return "Product{" + "id=" + id + ", name=" + name + ", price=" + price + ", description=" + description + ", image=" + image + ", status=" + status + ", create_at=" + create_date + ", category_id=" + category_id + ", restaurant_id=" + restaurant_id + '}';
     }
 
-    
 }
