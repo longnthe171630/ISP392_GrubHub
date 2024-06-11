@@ -151,35 +151,42 @@
                     <div class="recentOrders">
                         <div class="cardHeader">
                             <h2>Recent Orders</h2>
-                            <a href="order" class="btn" style ="color: black">View All</a>
+                            <a href="order" class="btn" style ="color: black">All Order</a>
                         </div>
 
                         <table>
                             <thead>
                                 <tr>
-                                    <!--                                    <th>ID</th>-->
+                                    <th>ID</th>
                                     <!--                                    <th>Address ID</th>-->
-                                    <th>Order ID</th>
+                                    <!--                                    <th>Delivery Person</th>-->
                                     <th>Ship Price</th>
-
                                     <th>Delivery Date</th>
                                     <th>Status</th>
-                                    <!--                                    <th>Delivery Person</th>
-                                                                        <th>Account ID</th>-->
+                                    <th>Image</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <c:forEach var="d" items="${list}">
                                     <tr>
-<!--                                        <td>${d.id}</td>-->
-<!--                                        <td>${d.address_id}</td>-->
-                                        <td>${d.order_id}</td>
+                                        <td>${d.id}</td>
+<!--                                        <td>${d.address_id}</td> -->
+<!--                                        <td>${d.delivery_person_id}</td>-->
                                         <td>${d.ship_price}</td>
-
                                         <td>${d.delivery_date}</td>
-                                        <td>${d.status}</td>
-<!--                                        <td>${d.delivery_person}</td>
-                                        <td>${d.account_id}</td>   -->
+                                        <td>
+                                            <span class="<c:choose>
+                                                      <c:when test="${d.status == 'Đang giao'}">status-inProgress</c:when>
+                                                      <c:when test="${d.status == 'Đã giao'}">status-delivered</c:when>
+                                                      <c:when test="${d.status == 'Đã hủy'}">status-return</c:when>
+                                                      <c:otherwise>status-unknown</c:otherwise>
+                                                  </c:choose>">
+                                                ${d.status}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <img src="${d.image}" alt="Update" style="max-width: 100px; height: auto;">
+                                        </td>
                                     </tr>
                                 </c:forEach>
                             </tbody>
@@ -195,7 +202,7 @@
                         <table>
                             <tr>
                                 <td width="30px">
-                                    <div class="imgBx"><img src="assets/imgs/customer02.jpg" alt=""></div>
+                                    <div class="imgBx"><img src="images/icon/avatar1.jpg" alt=""></div>
                                 </td>
                                 <td>
                                     <h4>Admin<br> <span>VietNam</span></h4>
@@ -209,7 +216,6 @@
         </div>
 
         <!-- =========== Scripts =========  -->
-        <script src="js/main.js"></script>
 
         <!-- ====== ionicons ======= -->
         <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>

@@ -17,20 +17,20 @@ public class Delivery {
     private int order_id;
     private Date delivery_date;
     private String status;
-    private int delivery_person;
+    private int delivery_person_id;
     private int account_id;
 
     public Delivery() {
     }
 
-    public Delivery(int id, int address_id, float ship_price, int order_id, Date delivery_date, String status, int delivery_person, int account_id) {
+    public Delivery(int id, int address_id, float ship_price, int order_id, Date delivery_date, String status, int delivery_person_id, int account_id) {
         this.id = id;
         this.address_id = address_id;
         this.ship_price = ship_price;
         this.order_id = order_id;
         this.delivery_date = delivery_date;
         this.status = status;
-        this.delivery_person = delivery_person;
+        this.delivery_person_id = delivery_person_id;
         this.account_id = account_id;
     }
 
@@ -82,12 +82,12 @@ public class Delivery {
         this.status = status;
     }
 
-    public int getDelivery_person() {
-        return delivery_person;
+    public int getDelivery_person_id() {
+        return delivery_person_id;
     }
 
-    public void setDelivery_person(int delivery_person) {
-        this.delivery_person = delivery_person;
+    public void setDelivery_person_id(int delivery_person_id) {
+        this.delivery_person_id = delivery_person_id;
     }
 
     public int getAccount_id() {
@@ -100,7 +100,7 @@ public class Delivery {
 
     @Override
     public String toString() {
-        return "Delivery{" + "id=" + id + ", address_id=" + address_id + ", ship_price=" + ship_price + ", order_id=" + order_id + ", delivery_date=" + delivery_date + ", status=" + status + ", delivery_person=" + delivery_person + ", account_id=" + account_id + '}';
+        return "Delivery{" + "id=" + id + ", address_id=" + address_id + ", ship_price=" + ship_price + ", order_id=" + order_id + ", delivery_date=" + delivery_date + ", status=" + status + ", delivery_person_id=" + delivery_person_id + ", account_id=" + account_id + '}';
     }
 
     

@@ -17,6 +17,8 @@ public class Customer {
     public Customer() {
     }
 
+    
+    
     public Customer(int id, String name, String dob, boolean gender, int address_id, int account_id) {
         this.id = id;
         this.name = name;

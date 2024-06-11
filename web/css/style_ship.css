@@ -11,6 +11,7 @@
 
 :root {
     --green: #008000;
+    --light-green: #90EE90;
     --white: #fff;
     --gray: #f5f5f5;
     --black1: #222;
@@ -263,6 +264,7 @@ body {
     position: relative;
     width: 100%;
     padding: 20px;
+    padding: 10px;
     display: grid;
     grid-template-columns: 2fr 1fr;
     grid-gap: 30px;
@@ -283,6 +285,9 @@ body {
 /*    display: grid;  Sử dụng Grid Layout, cho phép sắp xếp các phần tử con bên trong theo dạng lưới. */
     min-height: 500px; /* Đặt chiều cao tối thiểu của phần tử là 500px, giúp đảm bảo phần tử có kích thước cố định đủ lớn. */
     background: var(--white); /* Thiết lập màu nền của phần tử, ở đây là giá trị của biến CSS `--white`. */
+    /*    display: grid;  Sử dụng Grid Layout, cho phép sắp xếp các phần tử con bên trong theo dạng lưới. */
+    min-height: 500px; /* Đặt chiều cao tối thiểu của phần tử là 500px, giúp đảm bảo phần tử có kích thước cố định đủ lớn. */
+    background: var(--black); /* Thiết lập màu nền của phần tử, ở đây là giá trị của biến CSS `--white`. */
     padding: 30px; /* Đặt khoảng cách bên trong phần tử là 30px từ tất cả các cạnh (trên, dưới, trái, phải). */
     box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08); /* Thêm hiệu ứng bóng đổ cho phần tử, với độ mờ và vị trí đổ bóng được xác định bởi các giá trị. */
     border-radius: 20px; /* Bo tròn các góc của phần tử với bán kính 20px, làm cho các góc không còn sắc nhọn. */
@@ -302,7 +307,7 @@ body {
     padding: 5px 10px;
     background: var(--blue);
     text-decoration: none;
-    color: var(--white);
+    color: var(--white);;
     border-radius: 6px;
 }
 
@@ -374,6 +379,34 @@ body {
 .recentCustomers {
     position: relative;
 /*    display: grid;*/
+    background: var(--light-green);
+    color: var(--black1);
+}
+.details .recentOrders table tr td {
+    padding: 10px;
+    text-align: center;
+}
+
+.status-inProgress {
+    color: blue; /* Màu cho trạng thái Đang giao */
+}
+
+.status-delivered {
+    color: green; /* Màu cho trạng thái Đã giao */
+}
+
+.status-return {
+    color: red; /* Màu cho trạng thái Đã hủy */
+}
+
+.status-unknown {
+    color: gray; /* Màu cho trạng thái không xác định */
+}
+
+
+.recentCustomers {
+    position: relative;
+    /*    display: grid;*/
     min-height: 500px;
     padding: 20px;
     background: var(--white);
@@ -413,6 +446,11 @@ body {
 }
 .recentCustomers table tr:hover td h4 span {
     color: var(--green);
+    background: var(--red);
+    color: var(--red);
+}
+.recentCustomers table tr:hover td h4 span {
+    color: var(--red);
 }
 
 /* ====================== Responsive Design ========================== */
@@ -561,25 +599,6 @@ button:hover {
     background-color: #0056b3;
 }
 
-/* Định dạng cho phần tử input */
-input[type="text"],
-input[type="email"],
-input[type="password"] {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    transition: border-color 0.3s ease;
-}
-
-input[type="text"]:focus,
-input[type="email"]:focus,
-input[type="password"]:focus {
-    border-color: #007bff;
-}
-
-/* Định dạng cho phần tử bảng */
 table {
     width: 100%;
     border-collapse: collapse;
@@ -631,3 +650,24 @@ table th {
     text-decoration: none;
     cursor: pointer;
 }
+.button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); /* Đổ bóng cho văn bản */
+    margin: 5px;
+    width: 120px; /*Đặt chiều rộng cố định*/
+}
+
+.button.all {
+    background-color: light-green;
+    color: white; /* Màu chữ trắng */
+}
+
+.button:hover {
+    opacity: 1.5; /* Hiệu ứng mờ dần khi di chuột qua */
+}
+

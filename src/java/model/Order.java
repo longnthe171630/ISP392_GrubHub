@@ -18,10 +18,22 @@ public class Order {
     private int total_amount;
     private String status;
     private Date order_date;
-
+    private Address fromAddress;
+    private Address toAddress;
+    
     public Order() {
     }
 
+    public Order(int id, int total_amount, String status, Date order_date, Address fromAddress, Address toAddress) {
+        this.id = id;
+        this.total_amount = total_amount;
+        this.status = status;
+        this.order_date = order_date;
+        this.fromAddress = fromAddress;
+        this.toAddress = toAddress;
+    }
+
+    
     public Order(int id, int restaurant_id, int delivery_id, int customer_id, int total_amount, String status, Date order_date) {
         this.id = id;
         this.restaurant_id = restaurant_id;
@@ -88,10 +100,25 @@ public class Order {
         this.order_date = order_date;
     }
 
+    public Address getFromAddress() {
+        return fromAddress;
+    }
+
+    public void setFromAddress(Address fromAddress) {
+        this.fromAddress = fromAddress;
+    }
+
+    public Address getToAddress() {
+        return toAddress;
+    }
+
+    public void setToAddress(Address toAddress) {
+        this.toAddress = toAddress;
+    }
+
     @Override
     public String toString() {
-        return "Order{" + "id=" + id + ", restaurant_id=" + restaurant_id + ", delivery_id=" + delivery_id + ", customer_id=" + customer_id + ", total_amount=" + total_amount + ", status=" + status + ", order_date=" + order_date + '}';
+        return "Order{" + "id=" + id + ", restaurant_id=" + restaurant_id + ", delivery_id=" + delivery_id + ", customer_id=" + customer_id + ", total_amount=" + total_amount + ", status=" + status + ", order_date=" + order_date + ", fromAddress=" + fromAddress + ", toAddress=" + toAddress + '}';
     }
-    
-    
+
 }

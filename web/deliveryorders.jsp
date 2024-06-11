@@ -156,10 +156,10 @@
                             <table>
                                 <thead>
                                     <tr>
-                                        <td>ID</td>
-                                        <td>Restaurant ID</td>
-<!--                                        <td>Delivery ID</td>-->
-                                        <td>Customer ID</td>
+                                        <td>Code</td>
+                                        <td>From</td>
+
+                                        <td>To</td>
                                         <td>Total Amount</td>
                                         <td>Status</td>
                                         <td>Order Date</td>
@@ -167,34 +167,37 @@
                                 </thead>
 
                                 <tbody>  
-                                    <c:forEach var="d" items="${order}">
-                                        <tr onclick="openModal(${d.id})" style="cursor: pointer;">
-                                            <td>${d.id}</td>
-                                            <td>${d.restaurant_id}</td>
-<!--                                            <td>${d.delivery_id}</td>-->
-                                            <td>${d.customer_id}</td>
-                                            <td>${d.total_amount}</td>
-                                            <td>${d.status}</td>
-                                            <td>${d.order_date}</td>
+                                    <c:forEach var="o" items="${order}">
+                                        <tr onclick="openModal(${o.id})" style="cursor: pointer;">
+                                            <td>${o.id}</td>
+                                            <td>${o.fromAddress}</td>
+                                            <td>${o.toAddress}</td>
+                                            <td>${o.total_amount}</td>
+                                            <td>
+                                                <span class="<c:choose>
+                                                          <c:when test="${o.status == 'Đã giao'}">status-delivered</c:when>
+                                                          <c:when test="${o.status == 'Đang giao'}">status-inProgress</c:when>
+                                                          <c:when test="${o.status == 'Đã hủy'}">status-return</c:when>
+                                                          <c:otherwise>status-unknown</c:otherwise>
+                                                      </c:choose>">${o.status}</span>
+                                            </td>
+                                            <td>${o.order_date}</td>
+
                                         </tr>
                                     </c:forEach>
                                 </tbody>
                             </table>
-
-                            <form action = "#" method = "POST">
+                            
                                 <div id="myModal" class="modal">
                                     <div class="modal-content">
                                         <span class="close" onclick="closeModal();">&times;</span>
                                         <div id="modalContent">
                                             <!-- Nội dung chi tiết đơn hàng sẽ được tải vào đây -->
                                         </div>
-                                        <div class="modal-footer" style = "margin-top: 200px;">
-                                            <button type="submit" id="acceptBtn" name = "accept">Nhận Đơn</button>
-                                            <button type="submit" id="declineBtn" name = "reject">Bỏ qua</button>
-                                        </div>
+                                        
                                     </div>
                                 </div>
-                            </form>
+                            
                         </div>
                     </div>
                 </div>
@@ -253,6 +256,7 @@
                                                 modal.style.display = "none";
                                             }
         </script>
+        
     </body>
 
 </html>
