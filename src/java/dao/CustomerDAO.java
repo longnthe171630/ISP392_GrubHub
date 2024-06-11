@@ -179,7 +179,66 @@ public class CustomerDAO extends MyDAO {
             ex.printStackTrace();
         }
     }
+    
+    public Customer getCustomer(String username) {
+        xSql = "SELECT [username]\n"
+                + "      ,[password]\n"
+                + "      ,[email]\n"
+                + "      ,[phonenumber]\n"
+                + "      ,[dob]\n"
+                + "      ,[gender]\n"
+                + "  FROM [dbo].[Customer]\n"
+                + "  where username = ? ";
+        DateFormat inputDate = new SimpleDateFormat("yyyy-MM-dd");
 
+        try {
+            ps = con.prepareStatement(xSql);
+            ps.setString(1, username);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Customer c = new Customer(
+                        rs.getString(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getString(5),
+                        rs.getBoolean(6));
+                return c;
+            }
+        } catch (Exception e) {
+
+        }
+
+        return null;
+
+    }
+    
+    public void updateUser(Customer a) throws SQLException {
+        xSql = "UPDATE Customer "
+                + "SET email = ?, "
+                + "phonenumber = ?, "
+                + "dob = ?, "
+                + "gender = ? "
+                + "WHERE username = ?";
+        DateFormat inputDate = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            java.util.Date utilDate = inputDate.parse(a.getDob());
+
+            java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+            ps = con.prepareStatement(xSql);
+            ps.setString(1, a.getEmail());
+            ps.setString(2, a.getPhoneNumber());
+            ps.setDate(3, sqlDate);
+            ps.setBoolean(4, a.isGender());
+            ps.setString(5, a.getUserName());
+            ps.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
 // test function
     public static void main(String[] args) {
         // Chuỗi ngày tháng có định dạng "dd-MM-yyyy"
