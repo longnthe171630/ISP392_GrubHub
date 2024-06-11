@@ -394,7 +394,6 @@ public class ProductDAO extends MyDAO {
             for (Product b : list) {
                 System.out.println(b);
             }
-            System.out.println(p);
         } catch (Exception e) {
             e.printStackTrace();
         }
