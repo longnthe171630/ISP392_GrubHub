@@ -4,10 +4,13 @@
  */
 package controller;
 
-import model.Category;
-import dao.CategoryDAO;
-import model.Product;
-import dao.ProductDAO;
+import dao.CustomerDAO;
+import model.Customer;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -15,14 +18,13 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
 
 /**
  *
- * @author manh0
+ * @author Admin
  */
-//@WebServlet(name="HomeServlet", urlPatterns={"/home"})
-public class HomeServlet extends HttpServlet {
+@WebServlet(name = "LoadServlet", urlPatterns = {"/load"})
+public class LoadServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -35,31 +37,7 @@ public class HomeServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        String indexPage = request.getParameter("index");
-        if (indexPage == null) {
-            indexPage = "1";
-        }
-        int index = Integer.parseInt(indexPage);
 
-        ProductDAO dao = new ProductDAO();
-        CategoryDAO dao2 = new CategoryDAO();
-        List<Product> list = dao.getProducts();
-        List<Category> listC = dao2.getCategorys();
-        List<Product> listPC = dao.getProducts2();
-        List<Product> listPP = dao.getProducTop9(index);
-        int cnt = dao.getTotalProduct();
-        int endPage = cnt / 9;
-        if (cnt % 9 != 0) {
-            endPage++;
-        }
-        request.setAttribute("endP", endPage);
-        //b2: set data to jsp
-        request.setAttribute("listPP", listPP);
-        request.setAttribute("listP", list);
-        request.setAttribute("listPC", listPC);
-        request.setAttribute("listCC", listC);
-        request.getRequestDispatcher("Home.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -74,7 +52,14 @@ public class HomeServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+
+        HttpSession session = request.getSession();
+        CustomerDAO dao = new CustomerDAO();
+        String username = (String) session.getAttribute("username");
+        Customer c = dao.getCustomer(username);
+        request.setAttribute("customer", c);
+        request.getRequestDispatcher("Showinfo.jsp").forward(request, response);
+
     }
 
     /**
@@ -90,15 +75,9 @@ public class HomeServlet extends HttpServlet {
             throws ServletException, IOException {
         processRequest(request, response);
     }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
+    
     @Override
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
 }

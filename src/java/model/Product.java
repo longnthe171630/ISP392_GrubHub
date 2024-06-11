@@ -22,10 +22,8 @@ public class Product {
     private Restaurant restaurant;
     private Category category;
 
-
     public Product() {
     }
-
 
     public Product(int id, String name, int price, String description, String image, boolean status, Date create_date, int quantity, Restaurant restaurant, Category category) {
 
@@ -44,13 +42,15 @@ public class Product {
     }
 
     public String getRestaurant_name() {
-        return restaurant_name;
+        return restaurant.getName();
     }
 
     public void setRestaurant_name(String restaurant_name) {
-        this.restaurant_name = restaurant_name;
+        if (restaurant != null) {
+            restaurant.setName(restaurant_name);
+        }
     }
-    
+
     public int getId() {
         return id;
     }
@@ -103,11 +103,10 @@ public class Product {
         return create_date;
     }
 
-
     public void setCreate_date(Date create_date) {
         this.create_date = create_date;
     }
-    
+
     public int getQuantity() {
         return quantity;
 
@@ -137,6 +136,5 @@ public class Product {
     public String toString() {
         return "Product{" + "id=" + id + ", name=" + name + ", price=" + price + ", description=" + description + ", image=" + image + ", status=" + status + ", create_date=" + create_date + ", quantity=" + quantity + ", restaurant=" + restaurant + ", category=" + category + '}';
     }
-
 
 }

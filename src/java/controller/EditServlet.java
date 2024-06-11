@@ -4,25 +4,22 @@
  */
 package controller;
 
-import model.Category;
-import dao.CategoryDAO;
-import model.Product;
-import dao.ProductDAO;
+
+import dao.CustomerDAO;
+import model.Customer;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
+import jakarta.servlet.http.HttpSession;
 
 /**
  *
- * @author manh0
+ * @author Admin
  */
-//@WebServlet(name="HomeServlet", urlPatterns={"/home"})
-public class HomeServlet extends HttpServlet {
+public class EditServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -36,30 +33,18 @@ public class HomeServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String indexPage = request.getParameter("index");
-        if (indexPage == null) {
-            indexPage = "1";
+        try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet EditServlet</title>");
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet EditServlet at " + request.getContextPath() + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
         }
-        int index = Integer.parseInt(indexPage);
-
-        ProductDAO dao = new ProductDAO();
-        CategoryDAO dao2 = new CategoryDAO();
-        List<Product> list = dao.getProducts();
-        List<Category> listC = dao2.getCategorys();
-        List<Product> listPC = dao.getProducts2();
-        List<Product> listPP = dao.getProducTop9(index);
-        int cnt = dao.getTotalProduct();
-        int endPage = cnt / 9;
-        if (cnt % 9 != 0) {
-            endPage++;
-        }
-        request.setAttribute("endP", endPage);
-        //b2: set data to jsp
-        request.setAttribute("listPP", listPP);
-        request.setAttribute("listP", list);
-        request.setAttribute("listPC", listPC);
-        request.setAttribute("listCC", listC);
-        request.getRequestDispatcher("Home.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -74,17 +59,32 @@ public class HomeServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+
+        HttpSession session = request.getSession();
+        String userNameSess = (String) session.getAttribute("username");
+        String username = request.getParameter("username");
+        String email = request.getParameter("email");
+        String phonenumber = request.getParameter("phonenumber");
+        String dob = request.getParameter("dob");
+        String genderString = request.getParameter("gender");
+        boolean gender = false;
+
+        if (genderString != null) {
+            gender = genderString.equalsIgnoreCase("Female");
+            request.getRequestDispatcher("load").forward(request, response);
+        }
+
+        try {
+            CustomerDAO dao = new CustomerDAO();
+            Customer a = new Customer(userNameSess, email, phonenumber, dob, gender);
+            dao.updateUser(a);
+            request.setAttribute("customer", a);
+            request.getRequestDispatcher("Showinfo.jsp").forward(request, response);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

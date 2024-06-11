@@ -38,6 +38,15 @@ public class Customer {
         this.email = email;
     }
 
+    public Customer(String userName, String passWord, String email, String phoneNumber, String dob, boolean gender) {
+        this.userName = userName;
+        this.passWord = passWord;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.dob = dob;
+        this.gender = gender;
+    }
+
     public Customer(int id, String name, String userName, String passWord, String email, String phoneNumber, String dob, boolean gender, int address_id, Date createDate) {
         this.id = id;
         this.name = name;
@@ -49,6 +58,14 @@ public class Customer {
         this.gender = gender;
         this.address_id = address_id;
         this.createDate = createDate;
+    }
+
+    public Customer(String userName, String email, String phoneNumber, String dob, boolean gender) {
+        this.userName = userName;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.dob = dob;
+        this.gender = gender;
     }
 
     public Customer(String name, String userName, String passWord, String email, String phoneNumber, String dob, boolean gender, int address_id) {
