@@ -395,6 +395,32 @@ header .icons #menu-bars {
     padding:1rem 0;
 }
 
+.stars i {
+    color: #ff9800;
+    margin: 0 2px;
+}
+.back-button {
+    margin: 20px 0;
+}
+
+.back-button button {
+    background-color: #ff9800;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.back-button button:hover {
+    background-color: #e68900;
+}
+
 .dishes .box-container .box .stars i{
     font-size: 1.7rem;
     color:var(--green);
@@ -1343,6 +1369,7 @@ body {
     z-index: 1;
 }
 
+
 .dropdown-content a {
     color: black;
     padding: 0px 16px;
@@ -1352,4 +1379,35 @@ body {
 
 .dropdown-content a:hover {
     background-color: #f1f1f1
+}
+
+/* Custom styles for restaurant details */
+.restaurant-details {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 800px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.restaurant-details h1 {
+    font-size: 2.5em;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.restaurant-info {
+    font-size: 1.2em;
+    color: #555;
+    margin: 20px 0;
+}
+
+.restaurant-info p {
+    margin: 10px 0;
+}
+
+.stars i {
+    color: #ff9800;
 }

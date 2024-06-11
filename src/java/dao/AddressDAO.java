@@ -1,5 +1,7 @@
 package dao;
 
+import java.util.ArrayList;
+import java.util.List;
 import model.Address;
 
 public class AddressDAO extends MyDAO {
@@ -19,6 +21,30 @@ public class AddressDAO extends MyDAO {
 
             if (rs.next()) { // Kiểm tra nếu có hàng trả về
                 return new Address(rs.getInt("id"), rs.getString("details"), rs.getString("state"), rs.getString("street"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace(); // In ra ngoại lệ nếu có lỗi
+        }
+        return null; // Trả về null nếu không có kết quả nào
+    }
+
+    public Address getAddressById(int id) {
+        xSql = "SELECT [id], [details], [state], [street]\n"
+                + "  FROM [dbo].[Address]\n"
+                + "  WHERE [id] = ?\n";
+        try {
+            ps = con.prepareStatement(xSql);
+            ps.setInt(1, id);
+            rs = ps.executeQuery(); // Thực hiện truy vấn và lấy kết quả
+
+            while (rs.next()) { // Kiểm tra nếu có hàng trả về
+                Address a = new Address();
+                a.setId(rs.getInt("id"));
+                a.setDetails(rs.getString("details"));
+                a.setState(rs.getString("state"));
+                a.setStreet(rs.getString("street"));
+                return a;
+
             }
         } catch (Exception e) {
             e.printStackTrace(); // In ra ngoại lệ nếu có lỗi
@@ -49,21 +75,25 @@ public class AddressDAO extends MyDAO {
 
     public static void main(String[] args) {
         AddressDAO ad = new AddressDAO();
-        Address add = new Address(1, "thon 3 ", "thach hoa", "thach that");
-        int idAddress= 0;
 
-// Kiểm tra xem địa chỉ đã tồn tại trong cơ sở dữ liệu chưa
-        Address existingAddress = ad.getAddress(add);
+       Address list = ad.getAddressById(1);
+        System.out.println(list);
 
-        if (existingAddress == null) {
-            // Nếu địa chỉ chưa tồn tại, tạo nó trong cơ sở dữ liệu
-            ad.createAddress(add);
-            idAddress = ad.getAddress(add).getId(); // Lấy ID của địa chỉ vừa tạo
-            System.out.println(idAddress);
-        } else {
-            // Nếu địa chỉ đã tồn tại, sử dụng ID hiện tại của nó
-            idAddress = existingAddress.getId();
-            System.out.println(idAddress);
-        }
+//        Address add = new Address(1, "thon 3 ", "thach hoa", "thach that");
+//        int idAddress = 0;
+//
+//// Kiểm tra xem địa chỉ đã tồn tại trong cơ sở dữ liệu chưa
+//        Address existingAddress = ad.getAddress(add);
+//
+//        if (existingAddress == null) {
+//            // Nếu địa chỉ chưa tồn tại, tạo nó trong cơ sở dữ liệu
+//            ad.createAddress(add);
+//            idAddress = ad.getAddress(add).getId(); // Lấy ID của địa chỉ vừa tạo
+//            System.out.println(idAddress);
+//        } else {
+//            // Nếu địa chỉ đã tồn tại, sử dụng ID hiện tại của nó
+//            idAddress = existingAddress.getId();
+//            System.out.println(idAddress);
+//        }
     }
 }

@@ -1,21 +1,22 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package dao;
 
+import model.Cart;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import model.CartItem;
+import model.Customer;
 import model.Order;
 
 /**
  *
- * @author Long1
+ * @author manh0
  */
 public class OrderDAO extends MyDAO {
-    
-        public List<Order> getOrder() {
+
+    public List<Order> getOrder() {
         List<Order> t = new ArrayList<>();
         xSql = "select * from [Order]";
         int xId;
@@ -37,8 +38,8 @@ public class OrderDAO extends MyDAO {
                 xTotal_amount = rs.getInt("total_amount");
                 xStatus = rs.getString("status");
                 xOrder_date = rs.getDate("order_date");
-                
-                x = new Order(xId, xRestaurant_Id,xCustomer_Id, xDelivery_Id,  xTotal_amount, xStatus, xOrder_date);
+
+                x = new Order(xId, xRestaurant_Id, xCustomer_Id, xDelivery_Id, xTotal_amount, xStatus, xOrder_date);
                 t.add(x);
             }
             rs.close();
@@ -48,17 +49,59 @@ public class OrderDAO extends MyDAO {
         }
         return (t);
     }
-    
-    public static void main(String[] args) {
-        OrderDAO d = new OrderDAO();
-        List<Order> lo = d.getOrder();
-        if (lo == null) {
-            System.out.println("List empty");
-        } else {
-            for (Order o : lo) {
-                System.out.println(o);
-                
+
+    public int getNumberOrders() {
+        try {
+            String sql = "SELECT COUNT(*) FROM Orders";
+            ps = connection.prepareStatement(sql);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                int number = rs.getInt(1);
+                return number;
             }
+        } catch (Exception e) {
+        }
+        return 1;
+    }
+
+    public void addOrder(Customer u, Cart cart) {
+        xSql = "insert to [order](customer_id,total_amount,order_date) values [?, ? , ?]";
+        LocalDate curDate = LocalDate.now();
+        Date date = Date.valueOf(curDate); // Convert LocalDate to java.sql.Date
+
+        try {
+            ps = con.prepareStatement(xSql);
+            ps.setDate(1, date);
+            ps.setInt(2, u.getId());
+            ps.setDouble(3, cart.getTotalMoney());
+            ps.executeUpdate();
+
+            xSql = "select top 1 id from [Order] order by id desc";
+            ps = con.prepareStatement(xSql);
+            ps.executeQuery();
+            if (rs.next()) {
+                int oid = rs.getInt(1);
+                for (CartItem i : cart.getItems()) {
+                    xSql = "insert to [OrderDetails](order_id,product_id,quantity,price) values(?, ?, ?, ?)";
+                    ps = con.prepareStatement(xSql);
+                    ps.setInt(1, oid);
+                    ps.setInt(2, i.getProduct().getId());
+                    ps.setInt(3, i.getQuantity());
+                    ps.setDouble(4, i.getPrice());
+                    ps.executeUpdate();
+
+                }
+            }
+            xSql = "update product set quantity=quantity-? where product_id = ?";
+            ps = con.prepareStatement(xSql);
+            for(CartItem i: cart.getItems()){
+                ps.setInt(1, i.getQuantity());
+                ps.setInt(1,i.getProduct().getId());
+                ps.executeUpdate();
+            }
+            
+            
+        } catch (Exception e) {
         }
     }
 }
