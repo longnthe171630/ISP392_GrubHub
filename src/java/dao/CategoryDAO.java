@@ -131,7 +131,7 @@ public class CategoryDAO extends MyDAO {
             ps.setInt(1, xxBookId);
             rs = ps.executeQuery();
             while (rs.next()) {
-                xCategoryName = rs.getString("CategoryName");
+                xCategoryName = rs.getString("name");
             }
             rs.close();
             ps.close();
@@ -141,23 +141,27 @@ public class CategoryDAO extends MyDAO {
         return xCategoryName;
     }
 
-    public int getBookCategoryId(String xxCategoryName) {
-        xSql = "select CategoryID  from category where CategoryName  = ?";
+    public Category getCategoryId(int id) {
+        xSql = "select id , name  from category where id  = ?";
 
         int xCategoryId = 0;
+        String xCategoryName;
         try {
             ps = con.prepareStatement(xSql);
-            ps.setString(1, xxCategoryName);
+            ps.setInt(1, id);
             rs = ps.executeQuery();
             while (rs.next()) {
-                xCategoryId = rs.getInt("CategoryID");
+                Category c = new Category();
+                c.setId(rs.getInt("id"));
+                c.setName(rs.getString("name"));
+                return c;
             }
             rs.close();
             ps.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return xCategoryId;
+        return null;
     }
 
 }

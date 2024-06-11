@@ -9,9 +9,9 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-    <link rel = "icon" 
-          href="images/icon/logo.png" 
-          type="image/x-icon">
+        <link rel = "icon" 
+              href="images/icon/logo.png" 
+              type="image/x-icon">
 
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -22,51 +22,68 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
         <!-- custom css file link  -->
         <link rel="stylesheet" href="css/style.css">
+        <style>
+            .pagination-container {
+                margin-top: 20px;
+                display: flex;
+                justify-content: center;
+            }
+            .pagination {
+                display: flex;
+                flex-wrap: nowrap;
+                list-style: none;
+                padding-left: 0;
+            }
+            .pagination .page-item {
+                margin: 0 5px; /* Space between links */
+            }
+            .pagination .page-item .page-link {
+                color: #28a745; /* Green color */
+                background-color: #f8f9fa; /* Light grey background */
+                border: 1px solid #dee2e6; /* Border color */
+                padding: 10px 15px; /* Larger padding */
+                font-size: 18px; /* Larger font size */
+                border-radius: 5px; /* Rounded corners */
+                transition: background-color 0.3s, color 0.3s; /* Smooth transition */
+            }
+            .pagination .page-item .page-link:hover {
+                background-color: #28a745; /* Green background on hover */
+                color: #fff; /* White text on hover */
+                text-decoration: none; /* Remove underline */
+            }
+            .pagination .page-item.active .page-link {
+                background-color: #28a745; /* Green background */
+                border-color: #28a745; /* Border color */
+                color: #fff; /* White text */
+            }
+        </style>
+
+        <script>
+            function addToCart(id) {
+                $.ajax({
+                    type: "POST",
+                    url: "cart",
+                    data: {
+                        id id,
+                        num: 1
+                    },
+                    success: function (response) {
+                        $("#cartCount").text(response.cartSize);
+                    }
+                });
+            }
+        </script>
         <script src="https://maps.googleapis.com/maps/api/js?key=your_actual_api_key_here&callback=initMap" async defer></script>
     </head>
-<body>
+    <body>
         <!-- header section starts      -->
-        <header>
-            <a href="home" class="logo"><i class="fas fa-utensils"></i>GrubHub</a>
 
-            <nav class="navbar">
-                <a class="active" href="home">Home</a>
-                <a href="restaurant">Restaurant</a>
-                <a href="About.jsp">About</a>
-                <a href="Contact.jsp">Contact</a>
-                
-                <c:if test="${sessionScope.acc != null}">
-                    <a class="" href="" >Hello ${sessionScope.acc.userName}</a>
-                </c:if>
-            </nav>
+        <jsp:include page="Hearder.jsp"></jsp:include>
+            <!-- home section starts  -->
 
-            <div class="icons">
-                <i class="fas fa-bars" id="menu-bars"></i>
-                <i class="fas fa-search" id="search-icon"></i>
-                <a href="cart" class="fas fa-shopping-cart"></a>
-                <c:if test="${sessionScope.acc == null}">
-                    <a href="cuslogin" class="login-btn">login</a>
-                </c:if>               
-                <c:if test="${sessionScope.acc != null}">
-                    <a href="logout" class="login-btn">logout</a>
-                </c:if>
-
-            </div> 
-        </header>
-        <!-- header section ends-->
-
-        <!-- search form  -->
-        <form action="search" method="post" id="search-form">
-            <input value="${txtS}" name="txt" type="search" placeholder="What do you want?" id="search-box">
-            <label for="search-box" class="fas fa-search"></label>
-            <i class="fas fa-times" id="close"></i>
-        </form>
-
-        <!-- home section starts  -->
-
-        <section class="home" id="home">
-            <div class="swiper-container home-slider">
-                <div class="swiper-wrapper wrapper">
+            <section class="home" id="home">
+                <div class="swiper-container home-slider">
+                    <div class="swiper-wrapper wrapper">
                     <c:forEach items="${requestScope.listPC}" var="v">
                         <div class="swiper-slide slide">
                             <div class="content">
@@ -83,7 +100,7 @@
             </div>
             <div class="swiper-pagination"></div>
         </section>
-        
+
         <br>
         <br>
         <br>
@@ -101,40 +118,53 @@
 
 
         <section class="dishes" id="dishes">
-            <h1 class="heading"> Categories </h1>
-            <div class="container">
-                <div class="row">
-                    <!-- Category Section -->
-                    <jsp:include page="Category.jsp"></jsp:include>
-                        <!-- Product Section -->
-                        <div class="col-sm-9">
-                            <div class="box-container">
-                            <c:forEach items="${requestScope.listP}" var="o">
-                                <div class="box">
-                                    <a href="#" class="fas fa-heart"></a>
-                                    <a href="detail?product_id=${o.id}" class="fas fa-eye"></a>
-                                    <img src="images/Product/${o.image}" alt="${o.name}">
-                                    <h3>${o.name}</h3>
-                                    <div class="stars">
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star-half-alt"></i>
-                                    </div>
-                                    <p><span>${o.price} đ</span></p>
-                                    <form action="cart" method="post">
-                                        <input type="hidden" name="action" value="add">
-                                        <input type="hidden" name="productId" value="${o.id}">
-                                        <button type="submit" class="btn">Add to Cart</button>
-                                    </form>
+    <h1 class="heading"> Categories </h1>
+    <div class="container">
+        <div class="row">
+            <!-- Category Section -->
+            <jsp:include page="Category.jsp"></jsp:include>
+            <form name="f" action="" method="post">
+                <!-- Product Section -->
+                <div class="col-sm-9">
+                    <div class="box-container">
+                        <jsp:useBean id="db" class="dao.ProductDAO"/>
+                        <c:forEach items="${requestScope.listPP}" var="o">
+                            <div class="box">
+                                <a href="#" class="fas fa-heart"></a>
+                                <a href="detail?product_id=${o.id}" class="fas fa-eye"></a>
+                                <img src="images/Product/${o.image}" alt="${o.name}">
+                                <h3>${o.name}</h3>
+                                <div class="stars">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
                                 </div>
-                            </c:forEach>
-                        </div>
+                                <p><span>${o.price} đ</span></p>
+                                <form action="cart" method="post">
+                                    <input type="hidden" name="id" value="${o.id}"/>
+                                    <input type="hidden" name="num" value="1"/>
+                                    <input type="button" onclick="buy('${o.id}')" class="btn" value="Add to cart" />
+                                </form>
+                            </div>
+                        </c:forEach>
                     </div>
                 </div>
-            </div>
-        </section>
+                <div class="pagination-container col-md-12">
+                    <ul class="pagination justify-content-center">
+                        <c:forEach begin="1" end="${endP}" var="i">
+                            <li class="page-item ${param.index == i ? 'active' : ''}">
+                                <a class="page-link" href="home?index=${i}">${i}</a>
+                            </li>
+                        </c:forEach>
+                    </ul>
+                </div>
+            </form>   
+        </div>
+    </div>
+</section>
+
 
         <!-- dishes section ends -->
 
@@ -169,168 +199,6 @@
                     </div>
                 </div>
 
-                <div class="box">
-                    <div class="image">
-                        <img src="images/menu-2.jpg" alt="">
-                        <a href="#" class="fas fa-heart"></a>
-                    </div>
-                    <div class="content">
-                        <div class="stars">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star-half-alt"></i>
-                        </div>
-                        <h3>Hamberger</h3>
-                        <!--                    <p>quality of the food is best in the city</p>-->
-                        <p><span class="price">50000đ</span></p>
-                        <a href="#" class="btn">add to cart</a>
-                    </div>
-                </div>
-
-                <div class="box">
-                    <div class="image">
-                        <img src="images/menu-3.jpg" alt="">
-                        <a href="#" class="fas fa-heart"></a>
-                    </div>
-                    <div class="content">
-                        <div class="stars">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star-half-alt"></i>
-                        </div>
-                        <h3>Crep</h3>
-                        <!--                    <p>a delicous food with a very good test.</p>-->
-                        <p><span class="price">35000đ</span></p>
-                        <a href="#" class="btn">add to cart</a>
-                    </div>
-                </div>
-
-                <!--            <div class="box">
-                                <div class="image">
-                                    <img src="images/menu-4.jpg" alt="">
-                                    <a href="#" class="fas fa-heart"></a>
-                                </div>
-                                <div class="content">
-                                    <div class="stars">
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star-half-alt"></i>
-                                    </div>
-                                    <h3>Crep</h3>
-                                                        <p>test of best mumma and our food</p>
-                                    <p><span class="price">35000đ</span></p>
-                                    <a href="#" class="btn">add to cart</a>
-                                </div>
-                            </div>
-                
-                            <div class="box">
-                                <div class="image">
-                                    <img src="images/menu-5.jpg" alt="">
-                                    <a href="#" class="fas fa-heart"></a>
-                                </div>
-                                <div class="content">
-                                    <div class="stars">
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star-half-alt"></i>
-                                    </div>
-                                    <h3>delicious food</h3>
-                                                        <p>test is best mumma and our restorent</p>
-                                    <p><span class="price">35000đ</span></p>
-                                    <a href="#" class="btn">add to cart</a>
-                                </div>
-                            </div>
-                
-                            <div class="box">
-                                <div class="image">
-                                    <img src="images/menu-6.jpg" alt="">
-                                    <a href="#" class="fas fa-heart"></a>
-                                </div>
-                                <div class="content">
-                                    <div class="stars">
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star-half-alt"></i>
-                                    </div>
-                                    <h3>delicious food</h3>
-                                                        <p>sweet testy and yummy food </p>
-                                    <p><span class="price">35000đ</span></p>
-                                    <a href="#" class="btn">add to cart</a>
-                                </div>
-                            </div>
-                
-                            <div class="box">
-                                <div class="image">
-                                    <img src="images/menu-7.jpg" alt="">
-                                    <a href="#" class="fas fa-heart"></a>
-                                </div>
-                                <div class="content">
-                                    <div class="stars">
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star-half-alt"></i>
-                                    </div>
-                                    <h3>delicious food</h3>
-                                                        <p>The food is  very good, with a great variety of everyone!</p>
-                                    <p><span class="price">35000đ</span></p>
-                                    <a href="#" class="btn">add to cart</a>
-                                </div>
-                            </div>
-                
-                            <div class="box">
-                                <div class="image">
-                                    <img src="images/menu-8.jpg" alt="">
-                                    <a href="#" class="fas fa-heart"></a>
-                                </div>
-                                <div class="content">
-                                    <div class="stars">
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star-half-alt"></i>
-                                    </div>
-                                    <h3>delicious food</h3>
-                                                        <p>dont be hurry just give your time to test our serviece</p>
-                                    <p><span class="price">100000đ</span></p>
-                                    <a href="#" class="btn">add to cart</a>
-                                </div>
-                            </div>
-                
-                            <div class="box">
-                                <div class="image">
-                                    <img src="images/menu-9.jpg" alt="">
-                                    <a href="#" class="fas fa-heart"></a>
-                                </div>
-                                <div class="content">
-                                    <div class="stars">
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star-half-alt"></i>
-                                    </div>
-                                    <h3>delicious food</h3>
-                                                        <p>we serve the bestever our dish which is the best </p>
-                                    <p><span class="price">50000đ</span></p>
-                                    <a href="#" class="btn">add to cart</a>
-                                </div>
-                            </div>-->
-
-            </div>
-
         </section>
 
 
@@ -354,11 +222,16 @@
 
         <!-- footer section starts  -->
 
-
         <!-- loader part  -->
         <div class="loader-container">
             <img src="images/loader.gif" alt="">
         </div>
+        <script type="text/javascript">
+            function buy(id) {
+                document.f.action = "buy?id=" + id;
+                document.f.submit();
+            }
+        </script>
         <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 
         <!-- custom js file link  -->

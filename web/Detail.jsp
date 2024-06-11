@@ -69,7 +69,11 @@
         <br>
         <br>
         <br>
+        <div class="back-button">
+            <button onclick="goBack()">Back</button>
+        </div>
         <div class="container">
+
             <div class="row">
                 <div class="col-sm-9">
                     <div class="container">
@@ -98,22 +102,22 @@
                                             <dt>Description</dt>
                                             <dd><p>${detail.description}</p></dd>
                                             <div class="container">
-<!--                                                <div class="row">
-
-                                                    <div class="box">
-                                                        <a href="restaurant?id=${restaurant.id}" class="fas fa-eye"></a>
-                                                        <a href="#" class="fas fa-heart"></a>
-                                                        <h3>${restaurant.name}</h3>
-                                                        <div class="stars">
-                                                            <i class="fas fa-star"></i>
-                                                            <i class="fas fa-star"></i>
-                                                            <i class="fas fa-star"></i>
-                                                            <i class="fas fa-star"></i>
-                                                            <i class="fas fa-star-half-alt"></i>
-                                                        </div>
-                                                    </div>
-
-                                                </div>-->
+                                                <!--                                                <div class="row">
+                                                
+                                                                                                    <div class="box">
+                                                                                                        <a href="restaurant?id=${restaurant.id}" class="fas fa-eye"></a>
+                                                                                                        <a href="#" class="fas fa-heart"></a>
+                                                                                                        <h3>${restaurant.name}</h3>
+                                                                                                        <div class="stars">
+                                                                                                            <i class="fas fa-star"></i>
+                                                                                                            <i class="fas fa-star"></i>
+                                                                                                            <i class="fas fa-star"></i>
+                                                                                                            <i class="fas fa-star"></i>
+                                                                                                            <i class="fas fa-star-half-alt"></i>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                
+                                                                                                </div>-->
                                             </div>
                                         </dl>
                                         <hr>
@@ -147,6 +151,11 @@
                 </div>
             </div>
         </div>
+        <script>
+            function goBack() {
+                window.history.back();
+            }
+        </script>
         <jsp:include page="Footer.jsp"></jsp:include>
     </body>
 </html>

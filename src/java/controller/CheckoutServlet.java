@@ -1,30 +1,30 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 package controller;
 
-
-import model.Category;
-import model.Product;
+import dao.OrderDAO;
+import java.io.IOException;
+import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.List;
-import dal.*;
-import dao.CategoryDAO;
-import dao.ProductDAO;
+import jakarta.servlet.http.HttpSession;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import model.Cart;
+import model.Customer;
 
 /**
  *
- * @author trinh
+ * @author manh0
  */
-@WebServlet(name = "CategoryControl", urlPatterns = {"/category"})
-public class CategoryServlet extends HttpServlet {
+@WebServlet(name = "CheckoutServlet", urlPatterns = {"/checkout"})
+public class CheckoutServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,22 +38,18 @@ public class CategoryServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String cateID = request.getParameter("id");   
-        String indexPage = request.getParameter("index");
-        if (indexPage == null) {
-            indexPage = "1";
+        try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet CheckoutServlet</title>");
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet CheckoutServlet at " + request.getContextPath() + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
         }
-        int index = Integer.parseInt(indexPage);
-        //da lay dc category id ve roi
-        ProductDAO dao = new ProductDAO();
-        CategoryDAO dao2 = new CategoryDAO();
-        List<Product> list = dao.getProductByCID(cateID, index);
-        List<Category> listC = dao2.getCategorys();
-        
-        request.setAttribute("listP", list);
-        request.setAttribute("listCC", listC);
-        request.setAttribute("tag", cateID);
-        request.getRequestDispatcher("Home.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -82,7 +78,27 @@ public class CategoryServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        HttpSession session = request.getSession();
+        Cart cart = null;
+        Object o = session.getAttribute("cart");
+        if (o != null) {
+            cart = (Cart) o;
+        } else {
+            cart = new Cart();
+        }
+        Customer acount = null;
+        Object a = session.getAttribute("acc");
+        if (a != null) {
+            acount = (Customer) a;
+            OrderDAO odb = new OrderDAO();
+            odb.addOrder(acount, cart);
+
+            session.removeAttribute("cart");
+            session.setAttribute("size", 0);
+            response.sendRedirect("home");
+        } else {
+            response.sendRedirect("LoginCus.jsp");
+        }
     }
 
     /**

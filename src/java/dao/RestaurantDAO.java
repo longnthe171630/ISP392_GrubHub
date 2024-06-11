@@ -7,6 +7,7 @@ package dao;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import model.Address;
 import model.Restaurant;
 
 /**
@@ -15,12 +16,14 @@ import model.Restaurant;
  */
 public class RestaurantDAO extends MyDAO {
 
+    private AddressDAO ad = new AddressDAO();
+
     public List<Restaurant> getRestaurants() {
         List<Restaurant> t = new ArrayList<>();
         xSql = "select * from Restaurant ";
         int xRestaurantId;
         String xName;
-        int xAddressId;
+        Address a;
         String xPhonenumber;
         int xRestaurantRating;
         int xAccountId;
@@ -31,11 +34,11 @@ public class RestaurantDAO extends MyDAO {
             while (rs.next()) {
                 xRestaurantId = rs.getInt("id");
                 xName = rs.getString("name");
-                xAddressId = rs.getInt("address_id");
+                a = ad.getAddressById(rs.getInt("address_id"));
                 xPhonenumber = rs.getString("phonenumber");
                 xRestaurantRating = rs.getInt("restaurant_rating");
                 xAccountId = rs.getInt("account_id");
-                x = new Restaurant(xRestaurantId, xName, xPhonenumber, xAddressId, xRestaurantRating, xAccountId);
+                x = new Restaurant(xRestaurantId, xName, xPhonenumber, a, xRestaurantRating, xAccountId);
                 t.add(x);
             }
             rs.close();
@@ -63,11 +66,11 @@ public class RestaurantDAO extends MyDAO {
             while (rs.next()) {
                 xRestaurantId = rs.getInt("product_id");
                 xName = rs.getString("name");
-                xAddressId = rs.getInt("price");
+                Address a = ad.getAddressById(rs.getInt("address_id"));
                 xPhonenumber = rs.getString("description");
                 xRestaurantRating = rs.getInt("category_id");
                 xAccountId = rs.getInt("category_id");
-                x = new Restaurant(xRestaurantId, xName, xPhonenumber, xAddressId, xRestaurantRating, xAccountId);
+                x = new Restaurant(xRestaurantId, xName, xPhonenumber, a, xRestaurantRating, xAccountId);
                 t.add(x);
             }
             rs.close();
@@ -88,12 +91,12 @@ public class RestaurantDAO extends MyDAO {
             while (rs.next()) {
                 int xRestaurantId = rs.getInt("id");
                 String xName = rs.getString("name");
-                int xAddressId = rs.getInt("address_id");
+                Address a = ad.getAddressById(rs.getInt("address_id"));
                 String xPhonenumber = rs.getString("phonenumber");
                 int xRestaurantRating = rs.getInt("restaurant_id");
                 int xAccountId = rs.getInt("account_id");
 
-                Restaurant x = new Restaurant(xRestaurantId, xName, xPhonenumber, xAddressId, xRestaurantRating, xAccountId);
+                Restaurant x = new Restaurant(xRestaurantId, xName, xPhonenumber, a, xRestaurantRating, xAccountId);
                 t.add(x);
             }
             rs.close();
@@ -114,12 +117,12 @@ public class RestaurantDAO extends MyDAO {
             if (rs.next()) {
                 int xRestaurantId = rs.getInt("id");
                 String xName = rs.getString("name");
-                int xAddressId = rs.getInt("address_id");
+                Address a = ad.getAddressById(rs.getInt("address_id"));
                 String xPhonenumber = rs.getString("phonenumber");
                 int xRestaurantRating = rs.getInt("restaurant_rating");
                 int xAccountId = rs.getInt("account_id");
 
-                x = new Restaurant(xRestaurantId, xName, xPhonenumber, xAddressId, xRestaurantRating, xAccountId);
+                x = new Restaurant(xRestaurantId, xName, xPhonenumber, a, xRestaurantRating, xAccountId);
             }
             rs.close();
             ps.close();
@@ -127,6 +130,29 @@ public class RestaurantDAO extends MyDAO {
             e.printStackTrace();
         }
         return x;
+    }
+
+    public Restaurant getRestaurantById(int RestaurantId) {
+        xSql = "SELECT * FROM Restaurant WHERE ID = ?";
+        try {
+            ps = con.prepareStatement(xSql);
+            ps.setInt(1, RestaurantId);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                Restaurant r = new Restaurant();
+                r.setId(rs.getInt("id"));
+                r.setName(rs.getString("name"));
+                Address a = ad.getAddressById(rs.getInt("address_id"));
+                r.setPhonenumber(rs.getString("phonenumber"));
+                r.setRestaurant_rating(rs.getInt("restaurant_rating"));
+                return r;
+            }
+            rs.close();
+            ps.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public Restaurant getRestaurant(String xxRestaurantId) {
@@ -139,12 +165,12 @@ public class RestaurantDAO extends MyDAO {
             if (rs.next()) {
                 int xRestaurantId = rs.getInt("id");
                 String xName = rs.getString("name");
-                int xAddressId = rs.getInt("address_id");
+                Address a = ad.getAddressById(rs.getInt("address_id"));
                 String xPhonenumber = rs.getString("phonenumber");
                 int xRestaurantRating = rs.getInt("restaurant_rating");
                 int xAccountId = rs.getInt("account_id");
 
-                x = new Restaurant(xRestaurantId, xName, xPhonenumber, xAddressId, xRestaurantRating, xAccountId);
+                x = new Restaurant(xRestaurantId, xName, xPhonenumber, a, xRestaurantRating, xAccountId);
             }
             rs.close();
             ps.close();
@@ -160,7 +186,7 @@ public class RestaurantDAO extends MyDAO {
         try {
             ps = con.prepareStatement(xSql);
             ps.setString(1, x.getName());
-            ps.setInt(2, x.getAddress_id());
+            ps.setInt(2, x.getAddress().getId());
             ps.setString(3, x.getPhonenumber());
             ps.setInt(4, x.getRestaurant_rating());
             ps.setInt(5, x.getAccount_id());
@@ -205,10 +231,10 @@ public class RestaurantDAO extends MyDAO {
         try {
             RestaurantDAO dao = new RestaurantDAO();
             List<Restaurant> list = dao.getRestaurants();
-
-            Restaurant r = dao.getRestaurant("1");
-            for (Restaurant b : list) {
-                System.out.println(b);
+            
+            Restaurant r = dao.getRestaurantById(1);
+            for(Restaurant o : list){
+                System.out.println(o);
             }
             System.out.println(r);
         } catch (Exception e) {
