@@ -14,8 +14,10 @@ import model.Restaurant;
  */
 public class ProductDAO extends MyDAO {
 
+
     private CategoryDAO cd = new CategoryDAO();
     private RestaurantDAO rt = new RestaurantDAO();
+
 
     public List<Product> getProducts() {
         List<Product> t = new ArrayList<>();
@@ -35,6 +37,7 @@ public class ProductDAO extends MyDAO {
                 Category c = cd.getCategoryId(rs.getInt("category_id"));
 
                 Product x = new Product(xProductId, xName, xPrice, xDescription, xImage, xStatus, xCreate_date, xPrice, s, c);
+
                 t.add(x);
             }
             rs.close();
@@ -44,7 +47,6 @@ public class ProductDAO extends MyDAO {
         }
         return (t);
     }
-
     public String getNameProductById(int product_id) {
         xSql = "SELECT name FROM Product WHERE ID = ?";
         Product x = null;
@@ -76,16 +78,16 @@ public class ProductDAO extends MyDAO {
 
     public List<Product> getProducts2() {
         List<Product> t = new ArrayList<>();
-        String xSql = """
-                  SELECT p.product_id, p.name, p.price, p.description, p.image, p.status, p.create_date, p.category_id, p.restaurant_id, r.name AS restaurant_name
-                  FROM Product p
-                  JOIN Restaurant r ON p.restaurant_id = r.id
-                  WHERE p.product_id IN (1, 2, 3, 4)""";
+         xSql = "SELECT p.id, p.name, p.price, p.description, p.image, p.status, p.create_date, "
+                + "p.category_id, p.restaurant_id, r.name AS restaurant_name "
+                + "FROM Product p "
+                + "JOIN Restaurant r ON p.restaurant_id = r.id "
+                + "WHERE p.id IN (1, 2, 3, 4)";
         try {
             ps = con.prepareStatement(xSql);
             rs = ps.executeQuery();
             while (rs.next()) {
-                int xProductId = rs.getInt("product_id");
+                int xProductId = rs.getInt("id");
                 String xName = rs.getString("name");
                 int xPrice = rs.getInt("price");
                 String xDescription = rs.getString("description");
@@ -201,10 +203,12 @@ public class ProductDAO extends MyDAO {
                 xImage = rs.getString("image");
                 xStatus = rs.getBoolean("status");
                 xCreate_date = rs.getDate("create_date");
+
                 int xQuantity = rs.getInt("quantity");
                 Restaurant s = rt.getRestaurantById(rs.getInt("restaurant_id"));
                 Category c = cd.getCategoryId(rs.getInt("category_id"));
                 x = new Product(xProductId, xName, xPrice, xDescription, xImage, xStatus, xCreate_date,xQuantity, s, c);
+
                 t.add(x);
             }
             rs.close();
@@ -235,6 +239,7 @@ public class ProductDAO extends MyDAO {
                 Restaurant s = rt.getRestaurantById(rs.getInt("restaurant_id"));
                 Category c = cd.getCategoryId(rs.getInt("category_id"));
                 Product x = new Product(xProductId, xName, xPrice, xDescription, xImage, xStatus, xCreate_date,xQuantity, s, c);
+
                 t.add(x);
             }
             rs.close();
@@ -344,6 +349,7 @@ public class ProductDAO extends MyDAO {
             ps.setInt(7, x.getQuantity());
             ps.setInt(8, x.getRestaurant().getId());
             ps.setInt(9, x.getCategory().getId());
+
             ps.executeUpdate();
             ps.close();
         } catch (Exception e) {
@@ -388,6 +394,7 @@ public class ProductDAO extends MyDAO {
             for (Product b : list) {
                 System.out.println(b);
             }
+            System.out.println(p);
         } catch (Exception e) {
             e.printStackTrace();
         }
