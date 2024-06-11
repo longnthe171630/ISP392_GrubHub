@@ -55,10 +55,10 @@ public class CusLoginServlet extends HttpServlet {
         Cookie arr[] = request.getCookies();
         if (arr != null) {
             for (Cookie o : arr) {
-                if (o.getName().equals("userA")) {
+                if (o.getName().equals("username")) {
                     request.setAttribute("username", o.getValue());
                 }
-                if (o.getName().equals("passA")) {
+                if (o.getName().equals("password")) {
                     request.setAttribute("password", o.getValue());
                 }
             }
@@ -83,20 +83,20 @@ public class CusLoginServlet extends HttpServlet {
         //processRequest(request, response);
         String user = request.getParameter("username");
         String pass = request.getParameter("password");
+        HttpSession session = request.getSession();
         String remember = request.getParameter("remember");
-//        CustomerDAO accountDAO = new AccountDAO();
         CustomerDAO customerDAO = new CustomerDAO();
-//        Account a = accountDAO.checkAccount(user, pass);
         Customer c = customerDAO.checkCustomer(user, pass);
+        session.setAttribute("username",user);
         if (c == null) {
             request.setAttribute("alert", "Wrong user or password!");
             request.getRequestDispatcher("LoginCus.jsp").forward(request, response);
-        } else {
-            HttpSession session = request.getSession();
+        } else {          
             session.setAttribute("acc", c);
+            session.setAttribute("customer", c);
             //luu account len cookie
-            Cookie u = new Cookie("userA", user);
-            Cookie p = new Cookie("passA", pass);
+            Cookie u = new Cookie("username", user);
+            Cookie p = new Cookie("password", pass);
             u.setMaxAge(60);
             if (remember != null) {
                 p.setMaxAge(60);
