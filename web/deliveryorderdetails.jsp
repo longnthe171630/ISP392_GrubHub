@@ -15,41 +15,26 @@
 
     <body>
         <h2>Order Details</h2><br>
+        <p><strong>Code:</strong> ${order1.id}</p><br>
         <p><strong>Product:</strong> ${productname}</p><br>
         <p><strong>Quantity:</strong> ${orderdetails.quantity}</p><br>
         <p><strong>Price:</strong> ${orderdetails.price}</p> <br>
         <p><strong>Ship Price:</strong> ${ship_price}</p><br>
-        <p><strong>Status:</strong> ${order.status} </p>
+        <p><strong>Status:</strong> ${order1.status}</p><br>
 
         <iframe 
             src="${directionsURL}"
             width="330px"
             height="390px;" 
             frameborder="0" 
-            style="border:1px; margin-top: -200px; margin-left: 340px;"  
+            style="border:1px; margin-left: 340px; margin-top: -250px;" 
             allowfullscreen>
         </iframe>
 
         <form action = "deliverystatus" method = "POST">
-            <div class="order-details" style ="margin-top: -150px">    
-                <c:choose>
-                    <c:when test="${order.status == 'Đang giao'}">
-                        <button type="submit" id="contactCustomer" class="button all" style="display: block;">Contact</button>
-                    </c:when>
-                    <c:when test="${order.status == 'Đã giao'}">
-                        <button type="submit" id="viewHistory" class="button all" style="display: block;">History</button>
-                    </c:when>
-                    <c:when test="${order.status == 'Đã hủy'}">
-                        <button type="submit" id="viewReason" class="button all" style="display: block;">Reason</button>
-                    </c:when>
-                    <c:when test="${order.status == 'Đang chờ'}">
-                        <button type="submit" id="acceptOrder" class="button all" style="display: block;">Accept</button>
-                        <button type="submit" id="rejectOrder" class="button all" style="display: block;">Reject</button>
-                    </c:when>
-                    <c:otherwise>
-                        <button type="button" class="button all" style="display: block;">Un-active</button>
-                    </c:otherwise>
-                </c:choose>
+            <div class="order-details" style ="margin-top: -130px">    
+                <button type = "submit" name = "accept">Nhận đơn</button>
+                <button type = "submit" name = "reject">Bỏ qua</button>
             </div>
         </form>
     </body>

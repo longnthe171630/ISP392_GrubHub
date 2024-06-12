@@ -9,6 +9,7 @@ import model.Account;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,6 +20,7 @@ import jakarta.servlet.http.HttpSession;
  *
  * @author Admin
  */
+@WebServlet(name="LoginServlet", urlPatterns={"/login"})
 public class LoginServlet extends HttpServlet {
 
     /**
@@ -116,7 +118,7 @@ public class LoginServlet extends HttpServlet {
                     response.sendRedirect("RestaurantDashboard.jsp");
                     break;
                 case 4: // Shipper
-                    response.sendRedirect("ShipperDashboard.jsp");
+                    response.sendRedirect("deliverydashboard");
                     break;
                 default:
                     response.sendRedirect("Home.jsp");

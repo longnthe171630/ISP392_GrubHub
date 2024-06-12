@@ -8,14 +8,13 @@
 }
 
 *{
-    font-family: 'Nunito', sans-serif;
+    font-family: sans-serif;
     margin:0;
     padding:0;
     box-sizing: border-box;
     text-decoration: none;
     outline: none;
     border:none;
-    text-transform: capitalize;
     transition: all .2s linear;
 }
 
@@ -85,7 +84,6 @@ section:nth-child(even){
     color:var(--black);
     font-size: 3rem;
     padding-bottom: 2rem;
-    text-transform: uppercase;
 }
 
 .btn{
@@ -176,7 +174,6 @@ header .login-btn {
     background: var(--black);
     border-radius: .5rem;
     padding: .8rem 2rem;
-    text-transform: capitalize;
     transition: all .2s linear;
 }
 
@@ -214,7 +211,6 @@ header .icons #menu-bars {
     padding:1rem 0;
     color:#fff;
     font-size: 3rem;
-    text-transform: none;
     background:none;
 }
 
@@ -601,7 +597,6 @@ header .icons #menu-bars {
     padding:1rem;
     font-size: 1.6rem;
     color:var(--black);
-    text-transform: none;
     margin-bottom: 1rem;
     width:100%;
 }

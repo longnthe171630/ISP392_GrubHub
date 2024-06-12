@@ -35,12 +35,11 @@ public class OrderDAO extends MyDAO {
                 xId = rs.getInt("id");
                 xRestaurant_Id = rs.getInt("restaurant_id");
                 xCustomer_Id = rs.getInt("customer_id");
-                xDelivery_Id = rs.getInt("delivery_id");
                 xTotal_amount = rs.getInt("total_amount");
                 xStatus = rs.getString("status");
                 xOrder_date = rs.getDate("order_date");
 
-                x = new Order(xId, xRestaurant_Id, xCustomer_Id, xDelivery_Id, xTotal_amount, xStatus, xOrder_date);
+                x = new Order(xId, xRestaurant_Id, xCustomer_Id, xTotal_amount, xStatus, xOrder_date);
                 t.add(x);
             }
             rs.close();
@@ -121,7 +120,7 @@ public class OrderDAO extends MyDAO {
                 + "JOIN \n"
                 + "restaurant r ON o.restaurant_id = r.id\n"
                 + "JOIN\n"
-                + "address r_address ON r.address_id = r_address.id;";
+                + "address r_address ON r.address_id = r_address.id where o.status = N'Đang chờ'";
 
         try {
             ps = con.prepareStatement(xSql);
@@ -200,18 +199,44 @@ public class OrderDAO extends MyDAO {
         return x;
     }
 
+    public List<Order> getOrderByStatus() {
+        List<Order> t = new ArrayList<>();
+        xSql = "SELECT * FROM [Order] WHERE [status] IN (N'Đang chờ');";
+        Order x;
+        try {
+            ps = con.prepareStatement(xSql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                int xId = rs.getInt("id");
+                int xRestaurant_Id = rs.getInt("restaurant_id");
+                int xCustomer_Id = rs.getInt("customer_id");
+                int xTotal_amount = rs.getInt("total_amount");
+                String xStatus = rs.getString("status");
+                java.sql.Date xOrder_date = rs.getDate("order_date");
+
+                x = new Order(xId, xRestaurant_Id, xCustomer_Id, xTotal_amount, xStatus, xOrder_date);
+                t.add(x);
+            }
+            rs.close();
+            ps.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return (t);
+    }
+    
     public static void main(String[] args) {
         OrderDAO d = new OrderDAO();
-//        List<Order> lo = d.getOrder();
-//        if (lo == null) {
-//            System.out.println("List empty");
-//        } else {
-//            for (Order o : lo) {
-//                System.out.println(o);
-//
-//            }
-//        }
-        d.getAddressRestaurant_CustomerWithId();
-        d.getOrderById(1);
+        List<Order> lo = d.getAddressRestaurant_CustomerWithId();
+        if (lo == null) {
+            System.out.println("List empty");
+        } else {
+            for (Order o : lo) {
+                System.out.println(o);
+
+            }
+        }
+//        d.getAddressRestaurant_CustomerWithId();
+//        d.getOrderById(1);
     }
 }

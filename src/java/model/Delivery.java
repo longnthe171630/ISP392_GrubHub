@@ -11,27 +11,26 @@ import java.util.Date;
  * @author Long1
  */
 public class Delivery {
+
     private int id;
-    private int address_id;
-    private float ship_price;
     private int order_id;
+    private int delivery_person_id;
+    private int ship_price;
     private Date delivery_date;
     private String status;
-    private int delivery_person_id;
-    private int account_id;
+    private String image;
 
     public Delivery() {
     }
 
-    public Delivery(int id, int address_id, float ship_price, int order_id, Date delivery_date, String status, int delivery_person_id, int account_id) {
+    public Delivery(int id, int order_id, int delivery_person_id, int ship_price, Date delivery_date, String status, String image) {
         this.id = id;
-        this.address_id = address_id;
-        this.ship_price = ship_price;
         this.order_id = order_id;
+        this.delivery_person_id = delivery_person_id;
+        this.ship_price = ship_price;
         this.delivery_date = delivery_date;
         this.status = status;
-        this.delivery_person_id = delivery_person_id;
-        this.account_id = account_id;
+        this.image = image;
     }
 
     public int getId() {
@@ -42,28 +41,28 @@ public class Delivery {
         this.id = id;
     }
 
-    public int getAddress_id() {
-        return address_id;
-    }
-
-    public void setAddress_id(int address_id) {
-        this.address_id = address_id;
-    }
-
-    public float getShip_price() {
-        return ship_price;
-    }
-
-    public void setShip_price(float ship_price) {
-        this.ship_price = ship_price;
-    }
-
     public int getOrder_id() {
         return order_id;
     }
 
     public void setOrder_id(int order_id) {
         this.order_id = order_id;
+    }
+
+    public int getDelivery_person_id() {
+        return delivery_person_id;
+    }
+
+    public void setDelivery_person_id(int delivery_person_id) {
+        this.delivery_person_id = delivery_person_id;
+    }
+
+    public int getShip_price() {
+        return ship_price;
+    }
+
+    public void setShip_price(int ship_price) {
+        this.ship_price = ship_price;
     }
 
     public Date getDelivery_date() {
@@ -82,25 +81,17 @@ public class Delivery {
         this.status = status;
     }
 
-    public int getDelivery_person_id() {
-        return delivery_person_id;
+    public String getImage() {
+        return image;
     }
 
-    public void setDelivery_person_id(int delivery_person_id) {
-        this.delivery_person_id = delivery_person_id;
-    }
-
-    public int getAccount_id() {
-        return account_id;
-    }
-
-    public void setAccount_id(int account_id) {
-        this.account_id = account_id;
+    public void setImage(String image) {
+        this.image = image;
     }
 
     @Override
     public String toString() {
-        return "Delivery{" + "id=" + id + ", address_id=" + address_id + ", ship_price=" + ship_price + ", order_id=" + order_id + ", delivery_date=" + delivery_date + ", status=" + status + ", delivery_person_id=" + delivery_person_id + ", account_id=" + account_id + '}';
+        return "Delivery{" + "id=" + id + ", order_id=" + order_id + ", delivery_person_id=" + delivery_person_id + ", ship_price=" + ship_price + ", delivery_date=" + delivery_date + ", status=" + status + ", image=" + image + '}';
     }
 
     

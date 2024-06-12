@@ -18,33 +18,19 @@ public class DeliveryDAO extends MyDAO{
     
     public List<Delivery> getDelivery() {
         List<Delivery> t = new ArrayList<>();
-        xSql = "select * from [Delivery]";
-        int xId;
-        int xAddress_Id;
-        int xOrder_id;
-        float xShip_price;
-        int xOrder_Id;
-        java.sql.Date xDelivery_date;
-        String xStatus;
-        int xDelivery_person_id;
-        int xAccount_id;
-        Delivery x;
+        xSql = "select * from Delivery";
         try {
             ps = con.prepareStatement(xSql);
             rs = ps.executeQuery();
             while (rs.next()) {
-                xId = rs.getInt("id");
-                xAddress_Id = rs.getInt("address_id");
-                xDelivery_person_id = rs.getInt("delivery_person_id");
-                xOrder_id = rs.getInt("order_id");
-                xShip_price = rs.getFloat("ship_price");
-                xOrder_Id = rs.getInt("order_id");
-                xDelivery_date = rs.getDate("delivery_date");
-                xStatus = rs.getString("status");
-                xDelivery_person_id = rs.getInt("delivery_person_id");
-                xAccount_id = rs.getInt("account_id");
-                x = new Delivery(xId, xAddress_Id, xShip_price, xOrder_Id, xDelivery_date, xStatus, xDelivery_person_id, xAccount_id);
-
+                int xId = rs.getInt("id");
+                int xOrder_id = rs.getInt("order_id");
+                int xDelivery_person_id = rs.getInt("delivery_person_id");
+                int xShip_price = rs.getInt("ship_price");
+                java.sql.Date xDelivery_date = rs.getDate("delivery_date");
+                String xStatus = rs.getString("status");
+                String xImage = rs.getString("image");
+                Delivery x = new Delivery(xId, xOrder_id, xDelivery_person_id ,xShip_price , xDelivery_date, xStatus, xImage);
                 t.add(x);
             }
             rs.close();
@@ -74,9 +60,34 @@ public class DeliveryDAO extends MyDAO{
         return 0;
     }
     
+    public List<Delivery> getDeliveryByStatus() {
+        List<Delivery> t = new ArrayList<>();
+        xSql = "SELECT * FROM [Delivery] WHERE [status] IN ('Đang giao',N'Đã giao', N'Không giao được');";
+        try {
+            ps = con.prepareStatement(xSql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                int xId = rs.getInt("id");
+                int xOrder_id = rs.getInt("order_id");
+                int xDelivery_person_id = rs.getInt("delivery_person_id");
+                int xShip_price = rs.getInt("ship_price");
+                java.sql.Date xDelivery_date = rs.getDate("delivery_date");
+                String xStatus = rs.getString("status");
+                String xImage = rs.getString("image");
+                Delivery x = new Delivery(xId, xOrder_id, xDelivery_person_id ,xShip_price , xDelivery_date, xStatus, xImage);
+                t.add(x);
+            }
+            rs.close();
+            ps.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return (t);
+    }
+    
     public static void main(String[] args) {
         DeliveryDAO d = new DeliveryDAO();
-        List<Delivery> ld = d.getDelivery();
+        List<Delivery> ld = d.getDeliveryByStatus();
         if (ld == null) {
             System.out.println("List empty");
         } else {

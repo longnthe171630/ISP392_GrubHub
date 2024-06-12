@@ -92,7 +92,7 @@
                     <div class="avatar-container">
                         <img src="images/icon/avatar1.jpg" alt="Avatar" class="avatar" onclick="toggleDropdown()">
                         <div id="dropdown" class="dropdown-content">
-                            <a href="profile">Profile</a>
+                            <a href="Showinfo">Profile</a>
                             <a href="settings">Setting</a>
                             <a href="logout">Logout</a>
                         </div>
@@ -158,8 +158,6 @@
                             <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <!--                                    <th>Address ID</th>-->
-                                    <!--                                    <th>Delivery Person</th>-->
                                     <th>Ship Price</th>
                                     <th>Delivery Date</th>
                                     <th>Status</th>
@@ -170,19 +168,24 @@
                                 <c:forEach var="d" items="${list}">
                                     <tr>
                                         <td>${d.id}</td>
-<!--                                        <td>${d.address_id}</td> -->
-<!--                                        <td>${d.delivery_person_id}</td>-->
                                         <td>${d.ship_price}</td>
                                         <td>${d.delivery_date}</td>
                                         <td>
-                                            <span class="<c:choose>
-                                                      <c:when test="${d.status == 'Đang giao'}">status-inProgress</c:when>
-                                                      <c:when test="${d.status == 'Đã giao'}">status-delivered</c:when>
-                                                      <c:when test="${d.status == 'Đã hủy'}">status-return</c:when>
-                                                      <c:otherwise>status-unknown</c:otherwise>
-                                                  </c:choose>">
-                                                ${d.status}
-                                            </span>
+                                            <c:choose>
+                                                <c:when test="${d.status == 'Đang giao'}">
+                                                    <span class="status-inProgress">${d.status}</span>
+                                                </c:when>
+                                                <c:when test="${d.status == 'Đã giao'}">
+                                                    <span class="status-delivered">${d.status}</span>
+                                                </c:when>
+                                                <c:when test="${d.status == 'Không giao được'}">
+                                                    <span class="status-return">${d.status}</span>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <!-- Không hiển thị gì nếu không phù hợp -->
+                                                </c:otherwise>
+                                            </c:choose>
+
                                         </td>
                                         <td>
                                             <img src="${d.image}" alt="Update" style="max-width: 100px; height: auto;">

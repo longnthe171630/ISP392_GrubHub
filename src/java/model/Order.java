@@ -13,7 +13,6 @@ import java.util.Date;
 public class Order {
     private int id;
     private int restaurant_id;
-    private int delivery_id;
     private int customer_id;
     private int total_amount;
     private String status;
@@ -34,10 +33,9 @@ public class Order {
     }
 
     
-    public Order(int id, int restaurant_id, int delivery_id, int customer_id, int total_amount, String status, Date order_date) {
+    public Order(int id, int restaurant_id, int customer_id, int total_amount, String status, Date order_date) {
         this.id = id;
         this.restaurant_id = restaurant_id;
-        this.delivery_id = delivery_id;
         this.customer_id = customer_id;
         this.total_amount = total_amount;
         this.status = status;
@@ -58,14 +56,6 @@ public class Order {
 
     public void setRestaurant_id(int restaurant_id) {
         this.restaurant_id = restaurant_id;
-    }
-
-    public int getDelivery_id() {
-        return delivery_id;
-    }
-
-    public void setDelivery_id(int delivery_id) {
-        this.delivery_id = delivery_id;
     }
 
     public int getCustomer_id() {
@@ -118,7 +108,7 @@ public class Order {
 
     @Override
     public String toString() {
-        return "Order{" + "id=" + id + ", restaurant_id=" + restaurant_id + ", delivery_id=" + delivery_id + ", customer_id=" + customer_id + ", total_amount=" + total_amount + ", status=" + status + ", order_date=" + order_date + ", fromAddress=" + fromAddress + ", toAddress=" + toAddress + '}';
+        return "Order{" + "id=" + id + ", restaurant_id=" + restaurant_id + ", customer_id=" + customer_id + ", total_amount=" + total_amount + ", status=" + status + ", order_date=" + order_date + ", fromAddress=" + fromAddress + ", toAddress=" + toAddress + '}';
     }
 
 }

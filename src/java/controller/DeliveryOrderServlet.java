@@ -63,10 +63,11 @@ public class DeliveryOrderServlet extends HttpServlet {
         float ship_price = dao3.getShipPricByOrderId(order_id);
 
         OrderDAO orderDAO = new OrderDAO();
-        Order order = orderDAO.getOrderById(order_id);
+        List<Order> order = orderDAO.getAddressRestaurant_CustomerWithId();
         
-        Address fromAddress = order.getFromAddress();
-        Address toAddress = order.getToAddress();
+        Order order1 = orderDAO.getOrderById(order_id);
+        Address fromAddress = order1.getFromAddress();
+        Address toAddress = order1.getToAddress();
 
         // Tạo URL của Google Maps Directions API với thông tin địa chỉ xuất phát và đích đến
         String directionsURL = "https://www.google.com/maps/embed/v1/directions?key=AIzaSyAOVYRIgupAurZup5y1PRh8Ismb1A3lLao&origin=" + fromAddress + "&destination=" + toAddress;
@@ -74,6 +75,7 @@ public class DeliveryOrderServlet extends HttpServlet {
         // Đặt directionsURL vào thuộc tính request để chuyển đến trang JSP
         request.setAttribute("directionsURL", directionsURL);
         request.setAttribute("order", order);
+        request.setAttribute("order1", order1);
         request.setAttribute("ship_price", ship_price);
         request.setAttribute("productname", product);
         request.setAttribute("orderdetails", orderdetails);

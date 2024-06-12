@@ -53,7 +53,7 @@ public class DeliveryDashboardServlet extends HttpServlet {
         //da lay dc category id ve roi
         DeliveryDAO dao = new DeliveryDAO();
         //AddressDAO dao2 = new AddressDAO();
-        List<Delivery> list = dao.getDelivery();
+        List<Delivery> list = dao.getDeliveryByStatus();
         //List<Address> listC = dao2.getAddressByAddressId(Id);
         request.setAttribute("list", list);
         //request.setAttribute("listCC", listC);
