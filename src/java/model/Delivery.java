@@ -11,17 +11,21 @@ import java.util.Date;
  * @author Long1
  */
 public class Delivery {
-    private int id, address_id, delivery_person_id;
-    private float ship_price;
-    private java.sql.Date delivery_date;
-    private String status, image;
+
+    private int id;
+    private int order_id;
+    private int delivery_person_id;
+    private int ship_price;
+    private Date delivery_date;
+    private String status;
+    private String image;
 
     public Delivery() {
     }
 
-    public Delivery(int id, int address_id, int delivery_person_id, float ship_price, java.sql.Date delivery_date, String status, String image) {
+    public Delivery(int id, int order_id, int delivery_person_id, int ship_price, Date delivery_date, String status, String image) {
         this.id = id;
-        this.address_id = address_id;
+        this.order_id = order_id;
         this.delivery_person_id = delivery_person_id;
         this.ship_price = ship_price;
         this.delivery_date = delivery_date;
@@ -37,12 +41,12 @@ public class Delivery {
         this.id = id;
     }
 
-    public int getAddress_id() {
-        return address_id;
+    public int getOrder_id() {
+        return order_id;
     }
 
-    public void setAddress_id(int address_id) {
-        this.address_id = address_id;
+    public void setOrder_id(int order_id) {
+        this.order_id = order_id;
     }
 
     public int getDelivery_person_id() {
@@ -53,19 +57,19 @@ public class Delivery {
         this.delivery_person_id = delivery_person_id;
     }
 
-    public float getShip_price() {
+    public int getShip_price() {
         return ship_price;
     }
 
-    public void setShip_price(float ship_price) {
+    public void setShip_price(int ship_price) {
         this.ship_price = ship_price;
     }
 
-    public java.sql.Date getDelivery_date() {
+    public Date getDelivery_date() {
         return delivery_date;
     }
 
-    public void setDelivery_date(java.sql.Date delivery_date) {
+    public void setDelivery_date(Date delivery_date) {
         this.delivery_date = delivery_date;
     }
 
@@ -87,8 +91,8 @@ public class Delivery {
 
     @Override
     public String toString() {
-        return "Delivery{" + "id=" + id + ", address_id=" + address_id + ", delivery_person_id=" + delivery_person_id + ", ship_price=" + ship_price + ", delivery_date=" + delivery_date + ", status=" + status + ", image=" + image + '}';
+        return "Delivery{" + "id=" + id + ", order_id=" + order_id + ", delivery_person_id=" + delivery_person_id + ", ship_price=" + ship_price + ", delivery_date=" + delivery_date + ", status=" + status + ", image=" + image + '}';
     }
-    
+
     
 }
