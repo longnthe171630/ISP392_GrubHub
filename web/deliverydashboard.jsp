@@ -92,7 +92,7 @@
                     <div class="avatar-container">
                         <img src="images/icon/avatar1.jpg" alt="Avatar" class="avatar" onclick="toggleDropdown()">
                         <div id="dropdown" class="dropdown-content">
-                            <a href="profile">Profile</a>
+                            <a href="Showinfo">Profile</a>
                             <a href="settings">Setting</a>
                             <a href="logout">Logout</a>
                         </div>
@@ -151,15 +151,13 @@
                     <div class="recentOrders">
                         <div class="cardHeader">
                             <h2>Recent Orders</h2>
-                            <a href="order" class="btn" style ="color: black">View All</a>
+                            <a href="order" class="btn" style ="color: black">All Order</a>
                         </div>
 
                         <table>
                             <thead>
                                 <tr>
                                     <th>ID</th>
-<!--                                    <th>Address ID</th>-->
-                                    <th>Delivery Person</th>
                                     <th>Ship Price</th>
                                     <th>Delivery Date</th>
                                     <th>Status</th>
@@ -170,12 +168,28 @@
                                 <c:forEach var="d" items="${list}">
                                     <tr>
                                         <td>${d.id}</td>
-<!--                                        <td>${d.address_id}</td> -->
-                                        <td>${d.delivery_person_id}</td>
                                         <td>${d.ship_price}</td>
                                         <td>${d.delivery_date}</td>
-                                        <td>${d.status}</td>
-                                        <td>${d.image}</td>   
+                                        <td>
+                                            <c:choose>
+                                                <c:when test="${d.status == 'Đang giao'}">
+                                                    <span class="status-inProgress">${d.status}</span>
+                                                </c:when>
+                                                <c:when test="${d.status == 'Đã giao'}">
+                                                    <span class="status-delivered">${d.status}</span>
+                                                </c:when>
+                                                <c:when test="${d.status == 'Không giao được'}">
+                                                    <span class="status-return">${d.status}</span>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <!-- Không hiển thị gì nếu không phù hợp -->
+                                                </c:otherwise>
+                                            </c:choose>
+
+                                        </td>
+                                        <td>
+                                            <img src="${d.image}" alt="Update" style="max-width: 100px; height: auto;">
+                                        </td>
                                     </tr>
                                 </c:forEach>
                             </tbody>
@@ -191,7 +205,7 @@
                         <table>
                             <tr>
                                 <td width="30px">
-                                    <div class="imgBx"><img src="assets/imgs/customer02.jpg" alt=""></div>
+                                    <div class="imgBx"><img src="images/icon/avatar1.jpg" alt=""></div>
                                 </td>
                                 <td>
                                     <h4>Admin<br> <span>VietNam</span></h4>
@@ -205,7 +219,6 @@
         </div>
 
         <!-- =========== Scripts =========  -->
-        <script src="js/main.js"></script>
 
         <!-- ====== ionicons ======= -->
         <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>

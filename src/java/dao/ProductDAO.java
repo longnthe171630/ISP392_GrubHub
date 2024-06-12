@@ -14,26 +14,19 @@ public class ProductDAO extends MyDAO {
     public List<Product> getProducts() {
         List<Product> t = new ArrayList<>();
         xSql = "select * from Product ";
-        int xId;
-        String xName;
-        int xPrice;
-        String xDescription;
-        String xImage;
-        boolean xStatus;
-        Date xCreate_date;
-        int xCategory_id;
+        
         Product x;
         try {
             ps = con.prepareStatement(xSql);
             rs = ps.executeQuery();
             while (rs.next()) {
-                xId = rs.getInt("id");
-                xName = rs.getString("name");
-                xPrice = rs.getInt("price");
-                xDescription = rs.getString("description");
-                xImage = rs.getString("image");
-                xStatus = rs.getBoolean("status");
-                xCreate_date = rs.getDate("create_date");
+                int xId = rs.getInt("id");
+                String xName = rs.getString("name");
+                int xPrice = rs.getInt("price");
+                String xDescription = rs.getString("description");
+                String xImage = rs.getString("image");
+                boolean xStatus = rs.getBoolean("status");
+                java.sql.Date xCreate_date = rs.getDate("create_date");
                 xCategory_id = rs.getInt("category_id");
                 int xRestaurant_id = rs.getInt("restaurant_id");
                 x = new Product(xId, xName, xPrice, xDescription, xImage, xStatus, xCreate_date, xCategory_id, xRestaurant_id);

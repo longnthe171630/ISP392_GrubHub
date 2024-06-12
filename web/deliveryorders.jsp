@@ -92,7 +92,7 @@
                     <div class="avatar-container">
                         <img src="images/icon/avatar1.jpg" alt="Avatar" class="avatar" onclick="toggleDropdown()">
                         <div id="dropdown" class="dropdown-content">
-                            <a href="profile">Profile</a>
+                            <a href="Showinfo.jsp">Profile</a>
                             <a href="settings">Setting</a>
                             <a href="logout">Logout</a>
                         </div>
@@ -156,10 +156,8 @@
                             <table>
                                 <thead>
                                     <tr>
-                                        <td>ID</td>
-                                        <td>Restaurant ID</td>
-<!--                                        <td>Delivery ID</td>-->
-                                        <td>Customer ID</td>
+                                        <td>From</td>
+                                        <td>To</td>
                                         <td>Total Amount</td>
                                         <td>Status</td>
                                         <td>Order Date</td>
@@ -167,34 +165,32 @@
                                 </thead>
 
                                 <tbody>  
-                                    <c:forEach var="d" items="${order}">
-                                        <tr onclick="openModal(${d.id})" style="cursor: pointer;">
-                                            <td>${d.id}</td>
-                                            <td>${d.restaurant_id}</td>
-<!--                                            <td>${d.delivery_id}</td>-->
-                                            <td>${d.customer_id}</td>
-                                            <td>${d.total_amount}</td>
-                                            <td>${d.status}</td>
-                                            <td>${d.order_date}</td>
+                                    <c:forEach var="o" items="${order}">
+                                        <tr onclick="openModal(${o.id})" style="cursor: pointer;">
+<!--                                            <td>${o.id}</td>-->
+                                            <td>${o.fromAddress}</td>
+                                            <td>${o.toAddress}</td>
+                                            <td>${o.total_amount}</td>
+                                            <td>
+                                                <span class="status-pending">${o.status}</span>
+                                            </td>
+                                            <td>${o.order_date}</td>
+
                                         </tr>
                                     </c:forEach>
                                 </tbody>
                             </table>
 
-                            <form action = "#" method = "POST">
-                                <div id="myModal" class="modal">
-                                    <div class="modal-content">
-                                        <span class="close" onclick="closeModal();">&times;</span>
-                                        <div id="modalContent">
-                                            <!-- Nội dung chi tiết đơn hàng sẽ được tải vào đây -->
-                                        </div>
-                                        <div class="modal-footer" style = "margin-top: 200px;">
-                                            <button type="submit" id="acceptBtn" name = "accept">Nhận Đơn</button>
-                                            <button type="submit" id="declineBtn" name = "reject">Bỏ qua</button>
-                                        </div>
+                            <div id="myModal" class="modal">
+                                <div class="modal-content">
+                                    <span class="close" onclick="closeModal();">&times;</span>
+                                    <div id="modalContent">
+                                        <!-- Nội dung chi tiết đơn hàng sẽ được tải vào đây -->
                                     </div>
+
                                 </div>
-                            </form>
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -208,51 +204,52 @@
         <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
         <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
         <script>
-                                            function toggleDropdown() {
-                                                var dropdown = document.getElementById("dropdown");
-                                                if (dropdown.style.display === "block") {
-                                                    dropdown.style.display = "none";
-                                                } else {
-                                                    dropdown.style.display = "block";
-                                                }
+                                        function toggleDropdown() {
+                                            var dropdown = document.getElementById("dropdown");
+                                            if (dropdown.style.display === "block") {
+                                                dropdown.style.display = "none";
+                                            } else {
+                                                dropdown.style.display = "block";
                                             }
+                                        }
 
-                                            // Đóng dropdown nếu người dùng nhấn ngoài nó
-                                            window.onclick = function (event) {
-                                                if (!event.target.matches('.avatar')) {
-                                                    var dropdowns = document.getElementsByClassName("dropdown-content");
-                                                    for (var i = 0; i < dropdowns.length; i++) {
-                                                        var openDropdown = dropdowns[i];
-                                                        if (openDropdown.style.display === "block") {
-                                                            openDropdown.style.display = "none";
-                                                        }
+                                        // Đóng dropdown nếu người dùng nhấn ngoài nó
+                                        window.onclick = function (event) {
+                                            if (!event.target.matches('.avatar')) {
+                                                var dropdowns = document.getElementsByClassName("dropdown-content");
+                                                for (var i = 0; i < dropdowns.length; i++) {
+                                                    var openDropdown = dropdowns[i];
+                                                    if (openDropdown.style.display === "block") {
+                                                        openDropdown.style.display = "none";
                                                     }
                                                 }
                                             }
-                                            //Mở modal                
-                                            function openModal(id) {
-                                                fetch('order', {
-                                                    method: 'POST',
-                                                    headers: {
-                                                        'Content-Type': 'application/x-www-form-urlencoded',
-                                                    },
-                                                    body: 'id=' + id
-                                                })
-                                                        .then(response => response.text())
-                                                        .then(html => {
-                                                            document.getElementById('modalContent').innerHTML = html;
-                                                            var modal = document.getElementById("myModal");
-                                                            modal.style.display = "block";
-                                                        })
-                                                        .catch(error => console.error('Error:', error));
-                                            }
+                                        }
+                                        //Mở modal                
+                                        function openModal(id) {
+                                            fetch('order', {
+                                                method: 'POST',
+                                                headers: {
+                                                    'Content-Type': 'application/x-www-form-urlencoded',
+                                                },
+                                                body: 'id=' + id
+                                            })
+                                                    .then(response => response.text())
+                                                    .then(html => {
+                                                        document.getElementById('modalContent').innerHTML = html;
+                                                        var modal = document.getElementById("myModal");
+                                                        modal.style.display = "block";
+                                                    })
+                                                    .catch(error => console.error('Error:', error));
+                                        }
 
-                                            // Đóng modal
-                                            function closeModal() {
-                                                var modal = document.getElementById("myModal");
-                                                modal.style.display = "none";
-                                            }
+                                        // Đóng modal
+                                        function closeModal() {
+                                            var modal = document.getElementById("myModal");
+                                            modal.style.display = "none";
+                                        }
         </script>
+
     </body>
 
 </html>
