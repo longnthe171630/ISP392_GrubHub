@@ -98,10 +98,12 @@
                                         </div>
                                         <div class="w-50 text-md-right">
                                             <a href="forgotpassword.jsp">Forgot Password</a>
+                                            
                                         </div>
                                     </div>
                                 </form>
                                 <p class="text-center">Don't have a account? <a href="registercustomer.jsp">Sign Up</a></p>
+                                 <p class="text-center"> <a href="login">Others</a></p>
                                 <div class="g-recaptcha" data-sitekey="6LclNuwpAAAAAJ15fzuD-_YURoq0-XxvEub_ZkDF"></div>
                                 <div style="color: red" id="error"></div>
                             </div>

@@ -77,13 +77,13 @@
                     <span id="cartCount">${sessionScope.cart.items.size()}</span>
                 </a>
 
-                <c:if test="${sessionScope.acc == null}">
+                <c:if test="${sessionScope.customer == null && sessionScope.account == null}">
                     <a href="cuslogin" class="login-btn">login</a>
                 </c:if>               
-                <c:if test="${sessionScope.acc != null}">
+                <c:if test="${sessionScope.customer != null || sessionScope.account != null}">
                     <a href="logout" class="login-btn">logout</a>
-                </c:if>
-
+                </c:if>              
+                    
             </div> 
 
         </header>
