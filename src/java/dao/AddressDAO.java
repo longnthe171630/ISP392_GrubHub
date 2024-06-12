@@ -105,7 +105,29 @@ public class AddressDAO extends MyDAO {
         return (t);
     }
     
-    
+    public Address getAddressById(int id) {
+        xSql = "SELECT [id], [details], [state], [street]\n"
+                + "  FROM [dbo].[Address]\n"
+                + "  WHERE [id] = ?\n";
+        try {
+            ps = con.prepareStatement(xSql);
+            ps.setInt(1, id);
+            rs = ps.executeQuery(); // Thực hiện truy vấn và lấy kết quả
+
+            while (rs.next()) { // Kiểm tra nếu có hàng trả về
+                Address a = new Address();
+                a.setId(rs.getInt("id"));
+                a.setDetails(rs.getString("details"));
+                a.setState(rs.getString("state"));
+                a.setStreet(rs.getString("street"));
+                return a;
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace(); // In ra ngoại lệ nếu có lỗi
+        }
+        return null; // Trả về null nếu không có kết quả nào
+    }
     
     public static void main(String[] args) {
         AddressDAO ad = new AddressDAO();
