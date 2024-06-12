@@ -47,6 +47,8 @@ public class LogoutServlet extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession();
         session.removeAttribute("acc");
+        session.removeAttribute("customer");
+        session.removeAttribute("account");
         String user = request.getParameter("username");
         String pass = request.getParameter("password");
 //        response.sendRedirect("Login.jsp"); 
