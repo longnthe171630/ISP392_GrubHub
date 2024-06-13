@@ -4,6 +4,7 @@
  */
 package dao;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -225,6 +226,30 @@ public class RestaurantDAO extends MyDAO {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    public List<Restaurant> getListRestaurant() {
+        List<Restaurant> list = new ArrayList<>();
+        try {
+            String sql = "select r.id, r.name, r.phonenumber, a.details, a.state, a.street " +
+                         "from Restaurant r " +
+                         "join Address a on a.id = r.address_id";
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int xId= rs.getInt("id");
+                String xName=rs.getString("name");
+                String xPhonenumber=rs.getString("phonenumber");
+                String xDetail=rs.getString("details");
+                String xState=rs.getString("state");
+                String xStreet=rs.getString("street");
+                Restaurant a = new Restaurant(xId, xName, xPhonenumber, xDetail, xState, xStreet);
+                list.add(a);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return list;
     }
 
     public static void main(String[] args) {

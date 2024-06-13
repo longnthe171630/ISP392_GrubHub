@@ -224,6 +224,30 @@ public class OrderDAO extends MyDAO {
         }
         return (t);
     }
+    public List<Order> getListOrder() {
+        List<Order> list = new ArrayList<>();
+        try {
+            String sql = "select o.id, r.name, c.name , total_amount, status, order_date\n"
+                    + "from [Order] o\n"
+                    + "join Restaurant r on r.id= o.restaurant_id\n"
+                    + "join Customer c on c.id= o.customer_id";
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Order a = new Order(rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getInt(4),
+                        rs.getString(5),
+                        rs.getDate(6));
+                list.add(a);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return list;
+    }
     
     public static void main(String[] args) {
         OrderDAO d = new OrderDAO();

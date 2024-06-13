@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.List;
 import model.Account;
 
 /**
@@ -243,10 +244,37 @@ public class AccountDAO extends MyDAO {
         }
         return null;
     }
+    public List<Account> getListAccount() {
+        List<Account> list = new ArrayList<>();
+        String sql = "select * from Account";
+        
+        Account a;
+        try {
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                PreparedStatement st = con.prepareStatement(sql);
+                int xId = rs.getInt("id");
+                String xUsername = rs.getString("username");
+                String xPassword = rs.getString("password");
+                String xEmail = rs.getString("email");
+                String xPhonenumber = rs.getString("phonenumber");
+                int xRole = rs.getInt("role");
+                a = new Account (xId, xUsername, xPassword, xEmail, xPhonenumber, xRole);
+                list.add(a);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return list;
+    }
 
     public static void main(String[] args) {
         AccountDAO accountDAO = new AccountDAO();
-
+        List<Account> list= accountDAO.getListAccount();
+        for(Account a: list){
+            System.out.println(a);
+        }
         // Kiểm thử hàm getAccountByEmail
         String emailToTest = "icon0690@gmail.com";
         Account account = accountDAO.getAccountByEmail(emailToTest);

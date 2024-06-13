@@ -12,7 +12,7 @@ public class Account {
     private int id;
     private String username, password, email, phonenumber;
     private int role;
-
+    private String img;
     public Account() {
     }
 
@@ -32,6 +32,22 @@ public class Account {
         this.phonenumber = phonenumber;
         this.role = role;
     }
+
+    public Account(int id, String username, String password, String email, String phonenumber, int role, String img) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.phonenumber = phonenumber;
+        this.role = role;
+        this.img = img;
+    }
+
+    @Override
+    public String toString() {
+        return "Account{" + "id=" + id + ", username=" + username + ", password=" + password + ", email=" + email + ", phonenumber=" + phonenumber + ", role=" + role + ", img=" + img + '}';
+    }
+    
     
 
     public int getId() {
@@ -80,6 +96,14 @@ public class Account {
 
     public void setPhonenumber(String phonenumber) {
         this.phonenumber = phonenumber;
+    }
+
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
     }
     
     

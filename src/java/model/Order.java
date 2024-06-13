@@ -12,6 +12,8 @@ import java.util.Date;
  */
 public class Order {
     private int id;
+     private String nameRes;
+    private String nameCus;
     private int restaurant_id;
     private int customer_id;
     private int total_amount;
@@ -19,7 +21,7 @@ public class Order {
     private Date order_date;
     private Address fromAddress;
     private Address toAddress;
-    
+   
     public Order() {
     }
 
@@ -41,6 +43,32 @@ public class Order {
         this.status = status;
         this.order_date = order_date;
     }
+
+    public Order(int id, String nameRes, String nameCus, int total_amount, String status, Date order_date) {
+        this.id = id;
+        this.nameRes = nameRes;
+        this.nameCus = nameCus;
+        this.total_amount = total_amount;
+        this.status = status;
+        this.order_date = order_date;
+    }
+
+    public String getNameRes() {
+        return nameRes;
+    }
+
+    public void setNameRes(String nameRes) {
+        this.nameRes = nameRes;
+    }
+
+    public String getNameCus() {
+        return nameCus;
+    }
+
+    public void setNameCus(String nameCus) {
+        this.nameCus = nameCus;
+    }
+    
 
     public int getId() {
         return id;
