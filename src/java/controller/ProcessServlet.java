@@ -4,31 +4,25 @@
  */
 package controller;
 
-import dao.OrderDAO;
 import dao.ProductDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.sql.SQLException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import model.Cart;
-import model.Customer;
+import model.CartItem;
 import model.Product;
 
 /**
  *
  * @author manh0
  */
-@WebServlet(name = "CheckoutServlet", urlPatterns = {"/checkout"})
-public class CheckoutServlet extends HttpServlet {
+public class ProcessServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -47,10 +41,10 @@ public class CheckoutServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet CheckoutServlet</title>");
+            out.println("<title>Servlet ProcessServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet CheckoutServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ProcessServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -68,7 +62,56 @@ public class CheckoutServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        ProductDAO dao = new ProductDAO();
+        List<Product> list = dao.getProducts();
+        Cookie[] arr = request.getCookies();
+        String txt = "";
+        if (arr != null) {
+            for (Cookie o : arr) {
+                if (o.getName().equals("cart")) {
+                    txt += o.getValue();
+                    o.setMaxAge(0);
+                    response.addCookie(o);
+                }
+            }
+        }
+        Cart cart = new Cart(txt, list);
+        String num_raw = request.getParameter("num");
+        String id_raw = request.getParameter("id");
+        int id, num = 0;
+        try {
+            id = Integer.parseInt(id_raw);
+            Product p = dao.getProduct(id);
+            int numStore = p.getQuantity();
+            num = Integer.parseInt(num_raw);
+            if (num == -1 && (cart.getQuantityByID(id) <= 1)) {
+                cart.removeItem(id);
+            } else {
+                if ((num == 1) && cart.getQuantityByID(id) >= numStore) {
+                    num = 0;
+                }
+                double price = p.getPrice();
+                CartItem t = new CartItem(p, num,(int) price);
+                cart.addItem(t);
+            }
+        } catch (NumberFormatException e) {
+            System.out.println(e);
+        }
+        List<CartItem> items = cart.getItems();
+        txt = "";
+        if (!items.isEmpty()) {
+            txt = items.get(0).getProduct().getId() + ":"
+                    + items.get(0).getQuantity();
+            for (int i = 1; i < items.size(); i++) {
+                txt += "/" + items.get(i).getProduct().getId() + ":"
+                        + items.get(i).getQuantity();
+            }
+        }
+        Cookie c = new Cookie("cart", txt);
+        c.setMaxAge(2 * 24 * 60 * 60);
+        response.addCookie(c);
+        request.setAttribute("cart", cart);
+        request.getRequestDispatcher("Cart.jsp").forward(request, response);
     }
 
     /**
@@ -90,23 +133,18 @@ public class CheckoutServlet extends HttpServlet {
             for (Cookie o : arr) {
                 if (o.getName().equals("cart")) {
                     txt += o.getValue();
+                    o.setMaxAge(0);
+                    response.addCookie(o);
                 }
             }
         }
         Cart cart = new Cart(txt, list);
-        HttpSession session = request.getSession();
-        Customer a = (Customer)session.getAttribute("account");
-        if(a==null){
-            response.sendRedirect("LoginCus.jsp");
-        }
-        else{
-            OrderDAO d = new OrderDAO();
-            d.addOrder(a, cart);
-            Cookie c = new Cookie("cart","");
-            c.setMaxAge(0);
-            response.addCookie(c);
-            request.getRequestDispatcher("home").forward(request, response);
-        }
+        int id = Integer.parseInt(request.getParameter("id"));
+        cart.removeItem(id);
+
+        request.setAttribute("cart", cart);
+        request.setAttribute("size", cart.getItems().size());
+        request.getRequestDispatcher("cart.jsp").forward(request, response);
     }
 
     /**

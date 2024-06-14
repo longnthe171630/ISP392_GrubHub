@@ -26,6 +26,20 @@ public class Product {
     public Product() {
     }
 
+    public Product(int id, String name, int price, int quantity, String description, String image, boolean status, float rating, Date create_date, Restaurant restaurant, Category category) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.quantity = quantity;
+        this.description = description;
+        this.image = image;
+        this.status = status;
+        this.rating = rating;
+        this.create_date = create_date;
+        this.restaurant = restaurant;
+        this.category = category;
+    }
+
     public Product(int id, String name, int price, int quantity, String description, String image, boolean status, Date create_date, Restaurant restaurant, Category category) {
         this.id = id;
         this.name = name;
@@ -148,7 +162,9 @@ public class Product {
 
     @Override
     public String toString() {
-        return "Product{" + "id=" + id + ", name=" + name + ", price=" + price + ", description=" + description + ", image=" + image + ", status=" + status + ", create_date=" + create_date + ", quantity=" + quantity + ", restaurant=" + restaurant + ", category=" + category + '}';
+        return "Product{" + "id=" + id + ", name=" + name + ", price=" + price + ", quantity=" + quantity + ", description=" + description + ", image=" + image + ", status=" + status + ", rating=" + rating + ", create_date=" + create_date + ", restaurant=" + restaurant + ", category=" + category + '}';
     }
+
+
 
 }

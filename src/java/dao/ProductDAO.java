@@ -14,10 +14,8 @@ import model.Restaurant;
  */
 public class ProductDAO extends MyDAO {
 
-
     private CategoryDAO cd = new CategoryDAO();
     private RestaurantDAO rt = new RestaurantDAO();
-
 
     public List<Product> getProducts() {
         List<Product> t = new ArrayList<>();
@@ -29,15 +27,16 @@ public class ProductDAO extends MyDAO {
                 int xProductId = rs.getInt("id");
                 String xName = rs.getString("name");
                 int xPrice = rs.getInt("price");
+                float xRating = rs.getFloat("rating");
                 String xDescription = rs.getString("description");
                 String xImage = rs.getString("image");
                 boolean xStatus = rs.getBoolean("status");
                 Date xCreate_date = rs.getDate("create_date");
+                int xQuantity = rs.getInt("quantity");
                 Restaurant s = rt.getRestaurantById(rs.getInt("restaurant_id"));
                 Category c = cd.getCategoryId(rs.getInt("category_id"));
 
-                Product x = new Product(xProductId, xName, xPrice, xDescription, xImage, xStatus, xCreate_date, xPrice, s, c);
-
+                Product x = new Product(xProductId, xName, xPrice, xQuantity, xDescription, xImage, xStatus, xRating, xCreate_date, s, c);
                 t.add(x);
             }
             rs.close();
@@ -47,6 +46,7 @@ public class ProductDAO extends MyDAO {
         }
         return (t);
     }
+
     public String getNameProductById(int product_id) {
         xSql = "SELECT name FROM Product WHERE ID = ?";
         Product x = null;
@@ -78,11 +78,11 @@ public class ProductDAO extends MyDAO {
 
     public List<Product> getProducts2() {
         List<Product> t = new ArrayList<>();
-         xSql = "SELECT p.id, p.name, p.price, p.description, p.image, p.status, p.create_date, "
-                + "p.category_id, p.restaurant_id, r.name AS restaurant_name "
-                + "FROM Product p "
-                + "JOIN Restaurant r ON p.restaurant_id = r.id "
-                + "WHERE p.id IN (1, 2, 3, 4)";
+        String xSql = """
+                 SELECT p.id, p.name, p.price,p.quantity,  p.description, p.image,p.status,p.rating, p.create_date, p.category_id, p.restaurant_id, r.name AS restaurant_name
+                                    FROM Product p
+                                    JOIN Restaurant r ON p.restaurant_id = r.id
+                                    WHERE p.id IN (1, 2, 3, 4)""";
         try {
             ps = con.prepareStatement(xSql);
             rs = ps.executeQuery();
@@ -90,13 +90,16 @@ public class ProductDAO extends MyDAO {
                 int xProductId = rs.getInt("id");
                 String xName = rs.getString("name");
                 int xPrice = rs.getInt("price");
+                int xQuantity = rs.getInt("quantity");
                 String xDescription = rs.getString("description");
                 String xImage = rs.getString("image");
                 boolean xStatus = rs.getBoolean("status");
+                float xRating = rs.getFloat("rating");
                 Date xCreate_date = rs.getDate("create_date");
                 Restaurant s = rt.getRestaurantById(rs.getInt("restaurant_id"));
                 Category c = cd.getCategoryId(rs.getInt("category_id"));
-                Product x = new Product(xProductId, xName, xPrice, xDescription, xImage, xStatus, xCreate_date, xPrice, s, c);
+
+                Product x = new Product(xProductId, xName, xPrice, xQuantity, xDescription, xImage, xStatus, xRating, xCreate_date, s, c);
                 t.add(x);
             }
             rs.close();
@@ -139,17 +142,9 @@ public class ProductDAO extends MyDAO {
         List<Product> t = new ArrayList<>();
         xSql = """
                select * from Product 
-               order by product_id
+               order by id
                offset ? rows fetch next 9 rows only""";
-        int xProductId;
-        String xName;
-        int xPrice;
-        String xDescription;
-        String xImage;
-        boolean xStatus;
-        Date xCreate_date;
-        int xCategory_id;
-        int xRestaurant_id;
+
         Product x;
         try {
             ps = con.prepareStatement(xSql);
@@ -157,17 +152,19 @@ public class ProductDAO extends MyDAO {
             rs = ps.executeQuery();
 
             while (rs.next()) {
-                xProductId = rs.getInt("id");
-                xName = rs.getString("name");
-                xPrice = rs.getInt("price");
-                xDescription = rs.getString("description");
-                xImage = rs.getString("image");
-                xStatus = rs.getBoolean("status");
-                xCreate_date = rs.getDate("create_date");
+                int xProductId = rs.getInt("id");
+                String xName = rs.getString("name");
+                int xPrice = rs.getInt("price");
+                float xRating = rs.getFloat("rating");
+                String xDescription = rs.getString("description");
+                String xImage = rs.getString("image");
+                boolean xStatus = rs.getBoolean("status");
+                Date xCreate_date = rs.getDate("create_date");
                 int xQuantity = rs.getInt("quantity");
                 Restaurant s = rt.getRestaurantById(rs.getInt("restaurant_id"));
                 Category c = cd.getCategoryId(rs.getInt("category_id"));
-                x = new Product(xProductId, xName, xPrice, xDescription, xImage, xStatus, xCreate_date, xQuantity, s, c);
+
+                x = new Product(xProductId, xName, xPrice, xQuantity, xDescription, xImage, xStatus, xRating, xCreate_date, s, c);
                 t.add(x);
             }
             rs.close();
@@ -181,34 +178,24 @@ public class ProductDAO extends MyDAO {
     public List<Product> getProducts(String xxName) {
         List<Product> t = new ArrayList<>();
         xSql = "select * from Product where name like ?";
-        int xProductId;
-        String xName;
-        int xPrice;
-        String xDescription;
-        String xImage;
-        boolean xStatus;
-        Date xCreate_date;
-        int xCategory_id;
-        int xRestaurant_id;
-        Product x;
         try {
             ps = con.prepareStatement(xSql);
             ps.setString(1, "%" + xxName + "%");
             rs = ps.executeQuery();
             while (rs.next()) {
-                xProductId = rs.getInt("id");
-                xName = rs.getString("name");
-                xPrice = rs.getInt("price");
-                xDescription = rs.getString("description");
-                xImage = rs.getString("image");
-                xStatus = rs.getBoolean("status");
-                xCreate_date = rs.getDate("create_date");
-
-                int xQuantity = rs.getInt("quantity");
+                int xProductId = rs.getInt("id");
+                String xName = rs.getString("name");
+                int xPrice = rs.getInt("price");
+                float xRating = rs.getFloat("rating");
+                String xDescription = rs.getString("description");
+                String xImage = rs.getString("image");
+                boolean xStatus = rs.getBoolean("status");
+                Date xCreate_date = rs.getDate("create_date");
+                int quantity = rs.getInt("quantity");
                 Restaurant s = rt.getRestaurantById(rs.getInt("restaurant_id"));
                 Category c = cd.getCategoryId(rs.getInt("category_id"));
-                x = new Product(xProductId, xName, xPrice, xDescription, xImage, xStatus, xCreate_date,xQuantity, s, c);
 
+                Product x = new Product(xProductId, xName, xPrice, quantity, xDescription, xImage, xStatus, xRating, xCreate_date, s, c);
                 t.add(x);
             }
             rs.close();
@@ -231,15 +218,16 @@ public class ProductDAO extends MyDAO {
                 int xProductId = rs.getInt("id");
                 String xName = rs.getString("name");
                 int xPrice = rs.getInt("price");
+                float xRating = rs.getFloat("rating");
                 String xDescription = rs.getString("description");
                 String xImage = rs.getString("image");
                 boolean xStatus = rs.getBoolean("status");
                 Date xCreate_date = rs.getDate("create_date");
-                int xQuantity = rs.getInt("quantity");
+                int quantity = rs.getInt("quantity");
                 Restaurant s = rt.getRestaurantById(rs.getInt("restaurant_id"));
                 Category c = cd.getCategoryId(rs.getInt("category_id"));
-                Product x = new Product(xProductId, xName, xPrice, xDescription, xImage, xStatus, xCreate_date,xQuantity, s, c);
 
+                Product x = new Product(xProductId, xName, xPrice, quantity, xDescription, xImage, xStatus, xRating, xCreate_date, s, c);
                 t.add(x);
             }
             rs.close();
@@ -261,14 +249,16 @@ public class ProductDAO extends MyDAO {
                 int xProductId = rs.getInt("id");
                 String xName = rs.getString("name");
                 int xPrice = rs.getInt("price");
+                float xRating = rs.getFloat("rating");
                 String xDescription = rs.getString("description");
                 String xImage = rs.getString("image");
                 boolean xStatus = rs.getBoolean("status");
                 Date xCreate_date = rs.getDate("create_date");
-                int xQuantity = rs.getInt("quantity");
+                int quantity = rs.getInt("quantity");
                 Restaurant s = rt.getRestaurantById(rs.getInt("restaurant_id"));
                 Category c = cd.getCategoryId(rs.getInt("category_id"));
-                Product x = new Product(xProductId, xName, xPrice, xDescription, xImage, xStatus, xCreate_date,xQuantity, s, c);
+
+                Product x = new Product(xProductId, xName, xPrice, quantity, xDescription, xImage, xStatus, xRating, xCreate_date, s, c);
                 t.add(x);
             }
             rs.close();
@@ -290,14 +280,16 @@ public class ProductDAO extends MyDAO {
                 int xProductId = rs.getInt("id");
                 String xName = rs.getString("name");
                 int xPrice = rs.getInt("price");
+                float xRating = rs.getFloat("rating");
                 String xDescription = rs.getString("description");
                 String xImage = rs.getString("image");
                 boolean xStatus = rs.getBoolean("status");
                 Date xCreate_date = rs.getDate("create_date");
-                int xQuantity = rs.getInt("quantity");
+                int quantity = rs.getInt("quantity");
                 Restaurant s = rt.getRestaurantById(rs.getInt("restaurant_id"));
                 Category c = cd.getCategoryId(rs.getInt("category_id"));
-                x = new Product(xProductId, xName, xPrice, xDescription, xImage, xStatus, xCreate_date,xQuantity, s, c);
+
+                x = new Product(xProductId, xName, xPrice, quantity, xDescription, xImage, xStatus, xRating, xCreate_date, s, c);
             }
             rs.close();
             ps.close();
@@ -318,14 +310,16 @@ public class ProductDAO extends MyDAO {
                 int xProductId = rs.getInt("id");
                 String xName = rs.getString("name");
                 int xPrice = rs.getInt("price");
+                float xRating = rs.getFloat("rating");
                 String xDescription = rs.getString("description");
                 String xImage = rs.getString("image");
                 boolean xStatus = rs.getBoolean("status");
                 Date xCreate_date = rs.getDate("create_date");
-                int xQuantity = rs.getInt("quantity");
+                int quantity = rs.getInt("quantity");
                 Restaurant s = rt.getRestaurantById(rs.getInt("restaurant_id"));
                 Category c = cd.getCategoryId(rs.getInt("category_id"));
-                x = new Product(xProductId, xName, xPrice, xDescription, xImage, xStatus, xCreate_date,xQuantity, s, c);
+
+                x = new Product(xProductId, xName, xPrice, quantity, xDescription, xImage, xStatus, xRating, xCreate_date, s, c);
             }
             rs.close();
             ps.close();
@@ -349,7 +343,6 @@ public class ProductDAO extends MyDAO {
             ps.setInt(7, x.getQuantity());
             ps.setInt(8, x.getRestaurant().getId());
             ps.setInt(9, x.getCategory().getId());
-
             ps.executeUpdate();
             ps.close();
         } catch (Exception e) {
@@ -358,7 +351,7 @@ public class ProductDAO extends MyDAO {
     }
 
     public void delete(int xxProductId) {
-        xSql = "delete from Product where id=?";
+        xSql = "delete from Product where product_id=?";
         try {
             ps = con.prepareStatement(xSql);
             ps.setInt(1, xxProductId);
@@ -390,7 +383,7 @@ public class ProductDAO extends MyDAO {
     public static void main(String[] args) {
         try {
             ProductDAO dao = new ProductDAO();
-            List<Product> list = dao.getProducts();
+            List<Product> list = dao.getProducTop9(2);
             for (Product b : list) {
                 System.out.println(b);
             }

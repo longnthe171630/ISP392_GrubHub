@@ -9,7 +9,10 @@ import java.util.List;
 import model.Address;
 import model.CartItem;
 import model.Customer;
+import model.Email;
 import model.Order;
+import model.Product;
+import utils.Mail;
 
 /**
  *
@@ -65,44 +68,100 @@ public class OrderDAO extends MyDAO {
     }
 
     public void addOrder(Customer u, Cart cart) {
-        xSql = "insert to [order](customer_id,total_amount,order_date) values [?, ? , ?]";
-        LocalDate curDate = LocalDate.now();
-        Date date = Date.valueOf(curDate); // Convert LocalDate to java.sql.Date
+        String xSql;
+        ps = null;
 
         try {
+
+            // Insert order into 'order' table
+            LocalDate curDate = LocalDate.now();
+            Date date = Date.valueOf(curDate); // Convert LocalDate to java.sql.Date
+
+            xSql = "insert into [Order] (restaurant_id, customer_id, total_amount,status, order_date ) values (?, ?, ?, ?, ?)";
             ps = con.prepareStatement(xSql);
-            ps.setDate(1, date);
+            ps.setInt(1, 1);
             ps.setInt(2, u.getId());
             ps.setDouble(3, cart.getTotalMoney());
+            ps.setString(4, "Đang xử lí");
+            ps.setDate(5, date);
+
             ps.executeUpdate();
 
+            // Retrieve the generated order ID
             xSql = "select top 1 id from [Order] order by id desc";
             ps = con.prepareStatement(xSql);
-            ps.executeQuery();
+            rs = ps.executeQuery();
+            int oid = 0;
             if (rs.next()) {
-                int oid = rs.getInt(1);
-                for (CartItem i : cart.getItems()) {
-                    xSql = "insert to [OrderDetails](order_id,product_id,quantity,price) values(?, ?, ?, ?)";
-                    ps = con.prepareStatement(xSql);
-                    ps.setInt(1, oid);
-                    ps.setInt(2, i.getProduct().getId());
-                    ps.setInt(3, i.getQuantity());
-                    ps.setDouble(4, i.getPrice());
-                    ps.executeUpdate();
-
-                }
+                oid = rs.getInt(1);
             }
-            xSql = "update product set quantity=quantity-? where product_id = ?";
+            rs.close();
+
+            // Insert order details into 'orderdetails' table
+            xSql = "insert into Orderdetails (order_id, product_id, quantity, price) values (?, ?, ?, ?)";
             ps = con.prepareStatement(xSql);
             for (CartItem i : cart.getItems()) {
-                ps.setInt(1, i.getQuantity());
-                ps.setInt(1, i.getProduct().getId());
+                ps.setInt(1, oid);
+                ps.setInt(2, i.getProduct().getId());
+                ps.setInt(3, i.getQuantity());
+                ps.setDouble(4, i.getPrice());
                 ps.executeUpdate();
             }
 
-        } catch (Exception e) {
+            // Update product quantity
+            xSql = "update product set quantity = quantity - ? where id = ?";
+            ps = con.prepareStatement(xSql);
+            for (CartItem i : cart.getItems()) {
+                ps.setInt(1, i.getQuantity());
+                ps.setInt(2, i.getProduct().getId());
+                ps.executeUpdate();
+            }
+          sendOrderConfirmationEmail(u, cart);
+        } catch (SQLException e) {
+            e.printStackTrace(); // Log or handle SQLException
         }
     }
+
+    private void sendOrderConfirmationEmail(Customer customer, Cart cart) {
+        String customerEmail = customer.getEmail();
+        String subject = "Your order confirmation";
+        String message = "Thank you for your order. Your order total is: " + cart.getTotalMoney();
+
+        Mail mail = new Mail();
+        boolean emailSent = mail.sendEmail1(customerEmail, subject, message);
+
+        if (emailSent) {
+            System.out.println("Order confirmation email sent successfully.");
+        } else {
+            System.out.println("Failed to send order confirmation email.");
+        }
+    }
+
+//
+//    public static void main(String[] args) {
+//        OrderDAO orderDAO = new OrderDAO();
+//        ProductDAO dao = new ProductDAO();
+//
+//        // Assume that the ProductDAO can retrieve products from the database
+//        List<Product> productList = dao.getProducts();
+//
+//        // Select a product from the productList to add to the cart
+//        Product product = productList.get(0); // Select the first product for simplicity
+//
+//        // Create a CartItem
+//        CartItem cartItem = new CartItem(product, 1, product.getPrice()); // Example: quantity = 1
+//
+//        // Create a Cart and add the CartItem to it
+//        Cart cart = new Cart();
+//        cart.addItem(cartItem);
+//
+//        Customer customer = new Customer();
+//        customer.setId(1); // Set ID of the customer
+//        customer.setEmail("manh07051@gmail.com"); // Set email of the customer
+//
+//        // Call the addOrder method and pass the customer and cart
+//        orderDAO.addOrder(customer, cart);
+//    }
 
     public List<Order> getAddressRestaurant_CustomerWithId() {
         List<Order> orders = new ArrayList<>();

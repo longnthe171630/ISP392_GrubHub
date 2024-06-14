@@ -47,6 +47,18 @@ public class Customer {
         this.gender = gender;
     }
 
+    public Customer(int id, String name, String userName, String passWord, String email, String phoneNumber, String dob, boolean gender) {
+        this.id = id;
+        this.name = name;
+        this.userName = userName;
+        this.passWord = passWord;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.dob = dob;
+        this.gender = gender;
+    }
+    
+
     public Customer(int id, String name, String userName, String passWord, String email, String phoneNumber, String dob, boolean gender, int address_id, Date createDate) {
         this.id = id;
         this.name = name;

@@ -6,6 +6,7 @@ import model.CartItem;
 import model.Product;
 
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -19,41 +20,30 @@ public class BuyServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        Cart cart = null;
-        Object o = session.getAttribute("cart");
-        if (o != null) {
-            cart = (Cart) o;
+       ProductDAO dao = new ProductDAO();
+        List<Product> list = dao.getProducts();
+        Cookie[] arr = request.getCookies();
+        String txt = "";
+        if (arr != null) {
+            for (Cookie o : arr) {
+                if (o.getName().equals("cart")) {
+                    txt += o.getValue();
+                    o.setMaxAge(0);
+                    response.addCookie(o);
+                }
+            }
+        }
+        String num = request.getParameter("num");
+        String id = request.getParameter("id");
+        if (txt.isEmpty()) {
+            txt =id+":"+num;
         } else {
-            cart = new Cart();
+            txt =txt+"/"+id+":"+num;
         }
-
-        String tnum = request.getParameter("num");
-        String tid = request.getParameter("id");
-        int num, id;
-        try {
-            num = Integer.parseInt(tnum);
-            id = Integer.parseInt(tid);
-
-            ProductDAO dao = new ProductDAO();
-            Product p = dao.getProduct(id);
-            double price = p.getPrice() * 1.2;  // Assuming 1.2 is the price multiplier
-            CartItem t = new CartItem(p, num,(int) price);  // Ensure price is double
-            cart.addItem(t);
-        } catch (NumberFormatException e) {
-            num = 1;  // Default quantity
-        }
-
-        List<CartItem> list = cart.getItems();
-        session.setAttribute("cart", cart);
-        session.setAttribute("listItemsInCart", list);
-        session.setAttribute("cartSize", list.size());  // Corrected to cartSize
-        if ("XMLHttpRequest".equals(request.getHeader("X-Requested-With"))) {
-            response.setContentType("application/json");
-            response.getWriter().write("{\"cartSize\": " + cart.getItems().size() + "}");
-        } else {
-            response.sendRedirect("home");
-        }
+        Cookie c = new Cookie("cart", txt);
+        c.setMaxAge(2 * 24 * 60 * 60);
+        response.addCookie(c);
+        request.getRequestDispatcher("home").forward(request, response);
     }
 
     @Override

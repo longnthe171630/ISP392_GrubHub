@@ -127,7 +127,6 @@
                 <!-- Product Section -->
                 <div class="col-sm-9">
                     <div class="box-container">
-                        <jsp:useBean id="db" class="dao.ProductDAO"/>
                         <c:forEach items="${requestScope.listPP}" var="o">
                             <div class="box">
                                 <a href="#" class="fas fa-heart"></a>
@@ -142,7 +141,7 @@
                                     <i class="fas fa-star-half-alt"></i>
                                 </div>
                                 <p><span>${o.price} đ</span></p>
-                                <form action="cart" method="post">
+                                <form action="show" method="post">
                                     <input type="hidden" name="id" value="${o.id}"/>
                                     <input type="hidden" name="num" value="1"/>
                                     <input type="button" onclick="buy('${o.id}')" class="btn" value="Add to cart" />
@@ -202,16 +201,6 @@
         </section>
 
 
-
-        <section id="map-section">
-            <h1 class="heading"> Our Location </h1>
-            <div class="map-container">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3724.506341458941!2d105.52528919999999!3d21.012416699999996!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135abc60e7d3f19%3A0x2be9d7d0b5abcbf4!2sFPT%20University!5e0!3m2!1sen!2s!4v1716697336875!5m2!1sen!2s" width="800" height="450" display: flex
-                        align-items: center
-                        justify-content: center style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-            </div>
-        </section>
-
         <!-- menu section ends -->
 
         <!-- order section starts  -->
@@ -227,8 +216,9 @@
             <img src="images/loader.gif" alt="">
         </div>
         <script type="text/javascript">
-            function buy(id) {
-                document.f.action = "buy?id=" + id;
+             function buy(id) {
+                var m = document.f.num.value;
+                document.f.action = "buy?id=" + id + "&num=" + m;
                 document.f.submit();
             }
         </script>

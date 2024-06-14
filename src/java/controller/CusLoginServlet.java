@@ -4,9 +4,7 @@
  */
 package controller;
 
-import dao.AccountDAO;
 import dao.CustomerDAO;
-import model.Account;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -52,20 +50,34 @@ public class CusLoginServlet extends HttpServlet {
             throws ServletException, IOException {
         //processRequest(request, response);
         //b1 get user pass tu cookie
-        Cookie arr[] = request.getCookies();
-        if (arr != null) {
-            for (Cookie o : arr) {
-                if (o.getName().equals("username")) {
-                    request.setAttribute("username", o.getValue());
-                }
-                if (o.getName().equals("password")) {
-                    request.setAttribute("password", o.getValue());
-                }
-            }
+        String user = request.getParameter("username");
+        String pass = request.getParameter("password");
+        CustomerDAO customerDAO = new CustomerDAO();
+        Customer a = customerDAO.getAccount(user, pass);
+        if(a!=null){
+            String er="username: " + user +"and password: " + pass + "don't exsited";
+            request.setAttribute("error", er);
+            request.getRequestDispatcher("LoginCus.jsp").forward(request, response);
+            request.getRequestDispatcher("home").forward(request, response);
         }
-
-        //b2 set user and pass vao login form
-        request.getRequestDispatcher("LoginCus.jsp").forward(request, response);
+        else{
+            HttpSession session = request.getSession(true);
+            session.setAttribute("account", a);
+        }
+//        Cookie arr[] = request.getCookies();
+//        if (arr != null) {
+//            for (Cookie o : arr) {
+//                if (o.getName().equals("userA")) {
+//                    request.setAttribute("username", o.getValue());
+//                }
+//                if (o.getName().equals("passA")) {
+//                    request.setAttribute("password", o.getValue());
+//                }
+//            }
+//        }
+//
+//        //b2 set user and pass vao login form
+//        request.getRequestDispatcher("LoginCus.jsp").forward(request, response);
 
     }
 
@@ -83,20 +95,20 @@ public class CusLoginServlet extends HttpServlet {
         //processRequest(request, response);
         String user = request.getParameter("username");
         String pass = request.getParameter("password");
-        HttpSession session = request.getSession();
         String remember = request.getParameter("remember");
+//        CustomerDAO accountDAO = new AccountDAO();
         CustomerDAO customerDAO = new CustomerDAO();
-        Customer c = customerDAO.checkCustomer(user, pass);
-        session.setAttribute("username",user);
+//        Account a = accountDAO.checkAccount(user, pass);
+        Customer c = customerDAO.getAccount(user, pass);
         if (c == null) {
             request.setAttribute("alert", "Wrong user or password!");
             request.getRequestDispatcher("LoginCus.jsp").forward(request, response);
-        } else {          
-            session.setAttribute("acc", c);
-            session.setAttribute("customer", c);
+        } else {
+            HttpSession session = request.getSession();
+            session.setAttribute("account", c);
             //luu account len cookie
-            Cookie u = new Cookie("username", user);
-            Cookie p = new Cookie("password", pass);
+            Cookie u = new Cookie("userA", user);
+            Cookie p = new Cookie("passA", pass);
             u.setMaxAge(60);
             if (remember != null) {
                 p.setMaxAge(60);

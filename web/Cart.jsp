@@ -1,8 +1,10 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ page import="java.util.List" %>
 <%@ page import="model.CartItem" %>
 <%@ page import="model.Product" %>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -49,37 +51,37 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                            <c:set var="o" value="${sessionScope.cart}" />
-                                            <c:set var="t" value="0" />
+                                            <c:set var="o" value="${requestScope.cart}" />
+                                            <c:set var="tt" value="0" />
                                             <c:forEach items="${o.items}" var="i">
-                                                <c:set var="t" value="${t + 1}" />
+                                                <c:set var="tt" value="${tt + 1}" />
                                                 <tr>
                                                     <th scope="row">
                                                         <div class="p-2">
-                                                            <img src="images/${i.product.image}" alt="product" width="70">
+                                                            <img src="images/Product/${i.product.image}" alt="product" width="70">
                                                             <div class="ml-3 d-inline-block align-middle">
                                                                 <h5 class="mb-0"> <a href="#" class="text-dark d-inline-block">${i.product.name}</a>
                                                                 </h5><span class="text-muted font-weight-normal font-italic"></span>
                                                             </div>
                                                         </div>
                                                     </th>
-                                                    <td class="align-middle"><strong>${i.product.price}</strong></td>
-                                                    <td class="align-middle">
-                                                    <td>
-                                                        <button class="btnSub"><a href="process?num=-1&id=${i.product.id}">-</a></button>
-                                                        <input type="text" readonly value="${i.quantity}"/>
-                                                        <button class="btnSub"><a href="process?num=1&id=${i.product.id}">+</a></button>
-                                                    </td>
+                                            <br>
+                                            <th class="align-middle"><strong>${i.product.price}</strong></th>
+                                            <th>
+                                                <button class="btnSub"><a href="process?num=-1&id=${i.product.id}">-</a></button>
+                                                <input type="text" readonly value="${i.quantity}"/>
+                                                <button class="btnSub"><a href="process?num=1&id=${i.product.id}">+</a></button>
+                                            </th>
 
-                                                    <td class="align-middle"><a href="#" class="text-dark">
-                                                            <form action="process" method="post">
-                                                                <input type="hidden" name="id" value="${i.product.id}">
-                                                                <input type="submit"  class="btn btn-danger" value="Delete">
-                                                            </form>
-                                                        </a>
-                                                    </td>
-                                                </tr> 
-                                            </c:forEach>
+                                            <th class="align-middle"><a href="#" class="text-dark">
+                                                    <form action="process" method="post">
+                                                        <input type="hidden" name="id" value="${i.product.id}">
+                                                        <input type="submit"  class="btn btn-danger" value="Delete">
+                                                    </form>
+                                                </a>
+                                            </th>
+                                            </tr> 
+                                        </c:forEach>
                                         </tbody>
                                     </table>
                                 </div>
@@ -103,14 +105,14 @@
                                 <div class="bg-light rounded-pill px-4 py-3 text-uppercase font-weight-bold">Thành tiền</div>
                                 <div class="p-4">
                                     <ul class="list-unstyled mb-4">
-                                        <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Tổng tiền hàng</strong><strong>${sessionScope.cart.getTotalMoney()}đ</strong></li>
+                                        <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Tổng tiền hàng</strong><strong>${o.getTotalMoney()}đ</strong></li>
                                         <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Phí vận chuyển</strong><strong>Free ship</strong></li>
                                         <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Tổng thanh toán</strong>
-                                            <h5 class="font-weight-bold">${sessionScope.cart.getTotalMoney()}đ</h5>
+                                            <h5 class="font-weight-bold">${o.getTotalMoney()}đ</h5>
                                         </li>
                                     </ul>
                                     <form action="checkout" method="POST">
-                                        <input type="submit" onclick="purchasesuccess()" class="btn btn-dark rounded-pill py-2 btn-block"  value="Mua hàng">
+                                        <input type="submit" onclick="purchase()" class="btn btn-dark rounded-pill py-2 btn-block"  value="Mua hàng">
                                     </form>
                                 </div>
                             </div>
@@ -126,19 +128,20 @@
         <%@ include file="Footer.jsp"%>
         <div class="modal fade" id="modal_box" role="dialog"></div>
         <script>
-                                            function purchasesuccess() {
-                                                // Assume you have a variable indicating the success of the purchase
-                                                var purchaseSuccess = <%= request.getAttribute("purchaseSuccess") %>;
-
-                                                if (purchaseSuccess) {
-                                                    // Display a success message
-                                                    alert("Purchase failed. Please try again.");
-                                                    // Redirect to the cart or another page if needed
-                                                    window.location = "cart";
-                                                } else {
-                                                    // Handle the case where the purchase was not successful (optional)
-                                                    alert("Purchase successful! Thank you for shopping with us.");
-                                                }
+                                            function purchase() {
+                                                $.ajax({
+                                                    type: "POST",
+                                                    url: "checkout",
+                                                    success: function (response) {
+                                                        // Xử lý kết quả trả về nếu cần
+                                                        // Ví dụ: Chuyển hướng đến trang xác nhận đơn hàng
+                                                        window.location = "confirmation.jsp";
+                                                    },
+                                                    error: function () {
+                                                        // Xử lý lỗi nếu cần
+                                                        alert("Đã xảy ra lỗi. Vui lòng thử lại sau.");
+                                                    }
+                                                });
                                             }
         </script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

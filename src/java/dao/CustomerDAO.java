@@ -33,6 +33,31 @@ public class CustomerDAO extends MyDAO {
         }
         return null;
     }
+    
+    
+    //kiểm tra tài khoản, mật khẩu có trong db customer không.
+    public Customer getAccount(String user, String pass) {
+        xSql = "select * from Customer where username = ? and password = ?";
+        try {
+            ps = con.prepareStatement(xSql);
+            ps.setString(1, user);
+            ps.setString(2, pass);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                return new Customer(rs.getInt("id"),
+                        rs.getString("name"),
+                        user,
+                        pass,
+                        rs.getString("email"),
+                        rs.getString("phonenumber"),
+                        rs.getString("dob"),
+                        rs.getBoolean("gender"));
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null;
+    }
 
     public boolean checkEmail(String email) {
 

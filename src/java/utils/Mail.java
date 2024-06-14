@@ -55,5 +55,32 @@ public class Mail {
             return false;
         }
     }
+    public boolean sendEmail1(String to, String subject, String text) {
+        String url = "https://mail-sender-service.vercel.app/send-email";
+
+        try {
+            URL apiUrl = new URL(url);
+            HttpURLConnection connection = (HttpURLConnection) apiUrl.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setDoOutput(true);
+            connection.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+
+            String payload = "{\"to\":\"" + to + "\",\"subject\":\"" + subject + "\",\"text\":\"" + text + "\"}";
+
+            try (OutputStream os = connection.getOutputStream()) {
+                byte[] input = payload.getBytes(StandardCharsets.UTF_8);
+                os.write(input, 0, input.length);
+            }
+
+            int responseCode = connection.getResponseCode();
+            connection.disconnect();
+
+            return responseCode == 200;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
     
 }

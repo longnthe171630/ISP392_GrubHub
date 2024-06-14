@@ -6,21 +6,20 @@ package model;
 
 /**
  *
- * @author Long1
+ * @author manh0
  */
 public class OrderDetails {
+
     private int id, order_id, product_id, quantity;
-    private float price;
 
     public OrderDetails() {
     }
 
-    public OrderDetails(int id, int order_id, int product_id, int quantity, float price) {
+    public OrderDetails(int id, int order_id, int product_id, int quantity) {
         this.id = id;
         this.order_id = order_id;
         this.product_id = product_id;
         this.quantity = quantity;
-        this.price = price;
     }
 
     public int getId() {
@@ -55,18 +54,11 @@ public class OrderDetails {
         this.quantity = quantity;
     }
 
-    public float getPrice() {
-        return price;
-    }
-
-    public void setPrice(float price) {
-        this.price = price;
-    }
-
     @Override
     public String toString() {
-        return "OrderDetails{" + "id=" + id + ", order_id=" + order_id + ", product_id=" + product_id + ", quantity=" + quantity + ", price=" + price + '}';
+        return "OrderDetail{" + "id=" + id + ", order_id=" + order_id + ", product_id=" + product_id + ", quantity=" + quantity + '}';
     }
-    
-    
+
+   
+
 }

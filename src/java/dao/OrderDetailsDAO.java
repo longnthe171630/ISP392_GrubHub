@@ -31,8 +31,7 @@ public class OrderDetailsDAO extends MyDAO{
                 xOrder_Id = rs.getInt("order_id");
                 xProduct_Id = rs.getInt("product_id");
                 xQuantity = rs.getInt("quantity");
-                xPrice = rs.getFloat("price");
-                x = new OrderDetails(xId, xOrder_Id, xProduct_Id, xQuantity, xPrice);
+                x = new OrderDetails(xId, xOrder_Id, xProduct_Id, xQuantity);
                 t.add(x);
             }
             rs.close();
@@ -62,7 +61,7 @@ public class OrderDetailsDAO extends MyDAO{
                 xQuantity = rs.getInt("quantity");
                 xPrice = rs.getFloat("price");
   
-                return new OrderDetails(xId, xOrder_id, xProduct_id, xQuantity, xPrice);
+                return new OrderDetails(xId, xOrder_id, xProduct_id, xQuantity);
             }
         } catch (Exception e) {
             e.printStackTrace();

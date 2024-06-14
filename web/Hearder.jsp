@@ -65,15 +65,15 @@
                 <a href="About.jsp">About</a>
                 <a href="Contact.jsp">Contact</a>
 
-                <c:if test="${sessionScope.acc != null}">
-                    <a class="" href="" >Hello ${sessionScope.acc.userName}</a>
+                <c:if test="${sessionScope.account != null}">
+                    <a class="" href="" >Hello ${sessionScope.account.userName}</a>
                 </c:if>
             </nav>
             <c:set var="size" value="${sessionScope.size}"/>
             <div class="icons">
                 <i class="fas fa-bars" id="menu-bars"></i>
                 <i class="fas fa-search" id="search-icon"></i>
-                <a href="cart" class="fas fa-shopping-cart">
+                <a href="show" class="fas fa-shopping-cart">
                     <span id="cartCount">${sessionScope.cart.items.size()}</span>
                 </a>
 

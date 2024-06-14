@@ -66,6 +66,34 @@ public class Cart {
         }
         return total;
     }
+    
+     private Product getProductById(int id, List<Product> list) {
+        for (Product i : list) {
+            if (i.getId() == id) {
+                return i;
+            }
+        }
+        return null;
+    }
+
+    public Cart(String txt, List<Product> list) {
+        items = new ArrayList<>();
+        try {
+            if (txt != null && txt.length() != 0) {
+                String[] s = txt.split("/");
+                for (String i : s) {
+                    String[] n = i.split(":");
+                    int id = Integer.parseInt(n[0]);
+                    int quantity = Integer.parseInt(n[1]);
+                    Product p = getProductById(id, list);
+                    CartItem t = new CartItem(p, quantity, p.getPrice());
+                    addItem(t);
+                }
+            }
+        } catch (NumberFormatException e) {
+            System.out.println(e);
+        }
+    }
 
     public Cart(int cartId, int quantity, int customerId) {
         this.cartId = cartId;
