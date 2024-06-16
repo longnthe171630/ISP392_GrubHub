@@ -5,7 +5,6 @@
 
 package controller;
 
-import dao.AddressDAO;
 import dao.DeliveryDAO;
 import dao.OrderDAO;
 import java.io.IOException;
@@ -15,45 +14,44 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
-import model.Address;
-import model.Delivery;
-import model.Order;
 
 /**
  *
  * @author Long1
  */
-@WebServlet(name="DeliveryOrdersServlet", urlPatterns={"/deliverydashboard"})
-public class DeliveryDashboardServlet extends HttpServlet {
-   
+@WebServlet(name="DeliveryStatusServlet", urlPatterns={"/deliverystatus"})
+public class DeliveryStatusServlet extends HttpServlet {
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-
-        DeliveryDAO dao = new DeliveryDAO();
-        List<Delivery> list = dao.getDeliveryByStatus();
         
-        request.setAttribute("list", list);
-        request.getRequestDispatcher("deliverydashboard.jsp").forward(request, response);
     } 
 
-    
+    /** 
+     * Handles the HTTP <code>POST</code> method.
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        int order_id = Integer.parseInt(request.getParameter("order_id"));
+        String action = request.getParameter("action");
+        int order_id = Integer.parseInt(request.getParameter("id"));
         
-        DeliveryDAO deliveryDAO = new DeliveryDAO();
-        OrderDAO orderDAO = new OrderDAO();
-        Delivery delivery1 = deliveryDAO.getDeliveryByOrderId(order_id);
-        Order order1 = orderDAO.getRestaurant_Customer_ByOrderId(order_id);
-        Order order2 = orderDAO.getOrderById(order_id);
+        OrderDAO order = new OrderDAO();
+        DeliveryDAO delivery = new DeliveryDAO();
         
-        request.setAttribute("delivery1", delivery1);
-        request.setAttribute("order1", order1);
-        request.setAttribute("order2", order2);
-        request.getRequestDispatcher("deliverystatus.jsp").forward(request, response);
+        if ("accept".equals(action)) {
+            order.updateStatusOrderToDelivery(order_id);
+            delivery.updateStatusDelivery(order_id);
+            response.sendRedirect("deliverydashboard");
+        } else if ("reject".equals(action)) {
+            response.sendRedirect("order");
+            
+        }
     }
 
     /** 

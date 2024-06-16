@@ -6,6 +6,7 @@
 package controller;
 
 import dao.CustomerDAO;
+import dao.DeliveryDAO;
 import dao.OrderDAO;
 import dao.OrderDetailsDAO;
 import dao.ProductDAO;
@@ -17,6 +18,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
+import model.Address;
 import model.Order;
 import model.OrderDetails;
 
@@ -27,38 +29,6 @@ import model.OrderDetails;
 @WebServlet(name="OrderServlet", urlPatterns={"/order"})
 public class DeliveryOrderServlet extends HttpServlet {
    
-    /** 
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet OrderServlet</title>");  
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet OrderServlet at " + request.getContextPath () + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
-    } 
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /** 
-     * Handles the HTTP <code>GET</code> method.
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
@@ -77,6 +47,7 @@ public class DeliveryOrderServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
@@ -85,6 +56,24 @@ public class DeliveryOrderServlet extends HttpServlet {
         OrderDetails orderdetails = dao1.getOrderDetailsByOrder(order_id);
         ProductDAO dao2 = new ProductDAO();
         String product = dao2.getNameProductById(orderdetails.getProduct_id());
+
+        DeliveryDAO dao3 = new DeliveryDAO();
+        float ship_price = dao3.getShipPricByOrderId(order_id);
+
+        OrderDAO orderDAO = new OrderDAO();
+        List<Order> order = orderDAO.getAddressRestaurant_CustomerWithId();
+        
+        Order order1 = orderDAO.getOrderById(order_id);
+        Address fromAddress = order1.getFromAddress();
+        Address toAddress = order1.getToAddress();
+
+        // Tạo URL của Google Maps Directions API với thông tin địa chỉ xuất phát và đích đến
+        String directionsURL = "https://www.google.com/maps/embed/v1/directions?key=AIzaSyAOVYRIgupAurZup5y1PRh8Ismb1A3lLao&origin=" + fromAddress + "&destination=" + toAddress;
+        
+        request.setAttribute("directionsURL", directionsURL);
+        request.setAttribute("order", order);
+        request.setAttribute("order1", order1);
+        request.setAttribute("ship_price", ship_price);
         request.setAttribute("productname", product);
         request.setAttribute("orderdetails", orderdetails);
         request.getRequestDispatcher("deliveryorderdetails.jsp").forward(request, response);

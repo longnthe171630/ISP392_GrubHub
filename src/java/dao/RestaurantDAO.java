@@ -231,9 +231,9 @@ public class RestaurantDAO extends MyDAO {
         try {
             RestaurantDAO dao = new RestaurantDAO();
             List<Restaurant> list = dao.getRestaurants();
-            
+
             Restaurant r = dao.getRestaurantById(1);
-            for(Restaurant o : list){
+            for (Restaurant o : list) {
                 System.out.println(o);
             }
             System.out.println(r);

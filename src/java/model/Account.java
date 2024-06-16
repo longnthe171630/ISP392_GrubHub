@@ -9,9 +9,12 @@ package model;
  * @author Long1
  */
 public class Account {
+
     private int id;
     private String username, password, email, phonenumber;
     private int role;
+    private boolean active;
+    private String image;
 
     public Account() {
     }
@@ -25,14 +28,18 @@ public class Account {
         this.role = role;
     }
 
-    public Account(String username, String password, String email, String phonenumber, int role) {
+    
+    
+    public Account(int id, String username, String password, String email, String phonenumber, int role, boolean active, String image) {
+        this.id = id;
         this.username = username;
         this.password = password;
         this.email = email;
         this.phonenumber = phonenumber;
         this.role = role;
+        this.active = active;
+        this.image = image;
     }
-    
 
     public int getId() {
         return id;
@@ -40,14 +47,6 @@ public class Account {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public int getRole() {
-        return role;
-    }
-
-    public void setRole(int role) {
-        this.role = role;
     }
 
     public String getUsername() {
@@ -81,6 +80,35 @@ public class Account {
     public void setPhonenumber(String phonenumber) {
         this.phonenumber = phonenumber;
     }
-    
-    
+
+    public int getRole() {
+        return role;
+    }
+
+    public void setRole(int role) {
+        this.role = role;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    @Override
+    public String toString() {
+        return "Account{" + "id=" + id + ", username=" + username + ", password=" + password + ", email=" + email + ", phonenumber=" + phonenumber + ", role=" + role + ", active=" + active + ", image=" + image + '}';
+    }
+
 }
+

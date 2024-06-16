@@ -8,7 +8,7 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Delivery DashBoard</title>
+        <title>Delivery</title>
         <!-- ======= Styles ====== -->
         <link rel="stylesheet" href="css/style_ship.css">
 
@@ -33,7 +33,7 @@
                             <span class="icon">
                                 <ion-icon name="home-outline"></ion-icon>
                             </span>
-                            <span class="title">Dashboard</span>
+                            <span class="title">Bảng điều khiển</span>
                         </a>
                     </li>
 
@@ -42,7 +42,7 @@
                             <span class="icon">
                                 <ion-icon name="cart-outline"></ion-icon>
                             </span>
-                            <span class="title">Orders</span>
+                            <span class="title">Đơn hàng</span>
                         </a>
                     </li>
 
@@ -51,7 +51,7 @@
                             <span class="icon">
                                 <ion-icon name="time-outline"></ion-icon>
                             </span>
-                            <span class="title">History</span>
+                            <span class="title">Lịch sử</span>
                         </a>
                     </li>
 
@@ -60,7 +60,7 @@
                             <span class="icon">
                                 <ion-icon name="chatbubble-outline"></ion-icon>
                             </span>
-                            <span class="title">Messages</span>
+                            <span class="title">Tin nhắn</span>
                         </a>
                     </li>
 
@@ -69,7 +69,7 @@
                             <span class="icon">
                                 <ion-icon name="help-outline"></ion-icon>
                             </span>
-                            <span class="title">Help</span>
+                            <span class="title">Trợ giúp</span>
                         </a>
                     </li>
                 </ul>
@@ -84,7 +84,7 @@
 
                     <div class="search">
                         <label>
-                            <input type="text" placeholder="Search here">
+                            <input type="text" placeholder="Tìm kiếm">
                             <ion-icon name="search-outline"></ion-icon>
                         </label>
                     </div>
@@ -92,9 +92,9 @@
                     <div class="avatar-container">
                         <img src="images/icon/avatar1.jpg" alt="Avatar" class="avatar" onclick="toggleDropdown()">
                         <div id="dropdown" class="dropdown-content">
-                            <a href="profile">Profile</a>
-                            <a href="settings">Setting</a>
-                            <a href="logout">Logout</a>
+                            <a href="Showinfo.jsp">Hồ sơ</a>
+                            <a href="settings">Cài đặt</a>
+                            <a href="logout">Đăng xuất</a>
                         </div>
                     </div>
                 </div>
@@ -106,7 +106,6 @@
                             <div class="numbers">1</div>
                             <div class="cardName">Success</div>
                         </div>
-
                         <div class="iconBx">
                             <ion-icon name="checkmark-circle-outline"></ion-icon>
                         </div>
@@ -117,7 +116,6 @@
                             <div class="numbers">1</div>
                             <div class="cardName">Delivering</div>
                         </div>
-
                         <div class="iconBx">
                             <ion-icon name="bicycle-outline"></ion-icon>
                         </div>
@@ -128,7 +126,6 @@
                             <div class="numbers">1</div>
                             <div class="cardName">Cancel</div>
                         </div>
-
                         <div class="iconBx" style = "red">
                             <ion-icon name="close-circle-outline"></ion-icon>
                         </div>
@@ -139,7 +136,6 @@
                             <div class="numbers">100K</div>
                             <div class="cardName">Earning</div>
                         </div>
-
                         <div class="iconBx">
                             <ion-icon name="cash-outline"></ion-icon>
                         </div>
@@ -151,18 +147,17 @@
                     <div class="details">
                         <div class="recentOrders">
                             <div class="cardHeader">
-                                <h2>All Orders</h2>
+                                <h2>Tất cả đơn hàng</h2>
                             </div>
                             <table>
                                 <thead>
                                     <tr>
-                                        <td>ID</td>
-                                        <td>Restaurant ID</td>
-<!--                                        <td>Delivery ID</td>-->
-                                        <td>Customer ID</td>
-                                        <td>Total Amount</td>
-                                        <td>Status</td>
-                                        <td>Order Date</td>
+                                        <td>Điểm nhận</td>
+                                        <td>Điểm giao</td>
+                                        <td>Tổng thu</td>
+                                        <td>Trạng thái</td>
+                                        <td>Ngày đặt hàng</td>
+                                        >>>>>>> Stashed changes
                                     </tr>
                                 </thead>
 
@@ -171,7 +166,6 @@
                                         <tr onclick="openModal(${d.id})" style="cursor: pointer;">
                                             <td>${d.id}</td>
                                             <td>${d.restaurant_id}</td>
-<!--                                            <td>${d.delivery_id}</td>-->
                                             <td>${d.customer_id}</td>
                                             <td>${d.total_amount}</td>
                                             <td>${d.status}</td>
@@ -200,59 +194,59 @@
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- =========== Scripts =========  -->
-        <script src="js/main.js"></script>
+    <!-- =========== Scripts =========  -->
 
-        <!-- ====== ionicons ======= -->
-        <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
-        <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
-        <script>
-                                            function toggleDropdown() {
-                                                var dropdown = document.getElementById("dropdown");
-                                                if (dropdown.style.display === "block") {
-                                                    dropdown.style.display = "none";
-                                                } else {
-                                                    dropdown.style.display = "block";
-                                                }
+    <!-- ====== ionicons ======= -->
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <script>
+                                        function toggleDropdown() {
+                                            var dropdown = document.getElementById("dropdown");
+                                            if (dropdown.style.display === "block") {
+                                                dropdown.style.display = "none";
+                                            } else {
+                                                dropdown.style.display = "block";
                                             }
+                                        }
 
-                                            // Đóng dropdown nếu người dùng nhấn ngoài nó
-                                            window.onclick = function (event) {
-                                                if (!event.target.matches('.avatar')) {
-                                                    var dropdowns = document.getElementsByClassName("dropdown-content");
-                                                    for (var i = 0; i < dropdowns.length; i++) {
-                                                        var openDropdown = dropdowns[i];
-                                                        if (openDropdown.style.display === "block") {
-                                                            openDropdown.style.display = "none";
-                                                        }
+                                        // Đóng dropdown nếu người dùng nhấn ngoài nó
+                                        window.onclick = function (event) {
+                                            if (!event.target.matches('.avatar')) {
+                                                var dropdowns = document.getElementsByClassName("dropdown-content");
+                                                for (var i = 0; i < dropdowns.length; i++) {
+                                                    var openDropdown = dropdowns[i];
+                                                    if (openDropdown.style.display === "block") {
+                                                        openDropdown.style.display = "none";
                                                     }
                                                 }
                                             }
-                                            //Mở modal                
-                                            function openModal(id) {
-                                                fetch('order', {
-                                                    method: 'POST',
-                                                    headers: {
-                                                        'Content-Type': 'application/x-www-form-urlencoded',
-                                                    },
-                                                    body: 'id=' + id
-                                                })
-                                                        .then(response => response.text())
-                                                        .then(html => {
-                                                            document.getElementById('modalContent').innerHTML = html;
-                                                            var modal = document.getElementById("myModal");
-                                                            modal.style.display = "block";
-                                                        })
-                                                        .catch(error => console.error('Error:', error));
-                                            }
+                                        }
+                                        //Mở modal                
+                                        function openModal(id) {
+                                            fetch('order', {
+                                                method: 'POST',
+                                                headers: {
+                                                    'Content-Type': 'application/x-www-form-urlencoded',
+                                                },
+                                                body: 'id=' + id
+                                            })
+                                                    .then(response => response.text())
+                                                    .then(html => {
+                                                        document.getElementById('modalContent').innerHTML = html;
+                                                        var modal = document.getElementById("myModal");
+                                                        modal.style.display = "block";
+                                                    })
+                                                    .catch(error => console.error('Error:', error));
+                                        }
 
-                                            // Đóng modal
-                                            function closeModal() {
-                                                var modal = document.getElementById("myModal");
-                                                modal.style.display = "none";
-                                            }
-        </script>
-    </body>
+                                        // Đóng modal
+                                        function closeModal() {
+                                            var modal = document.getElementById("myModal");
+                                            modal.style.display = "none";
+                                        }
+    </script>
+</body>
 
 </html>

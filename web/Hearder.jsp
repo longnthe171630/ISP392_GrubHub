@@ -1,3 +1,4 @@
+
 <%-- 
     Document   : Hearder
     Created on : Jun 7, 2024, 10:59:47 AM
@@ -77,13 +78,13 @@
                     <span id="cartCount">${sessionScope.cart.items.size()}</span>
                 </a>
 
-                <c:if test="${sessionScope.acc == null}">
-                    <a href="cuslogin" class="login-btn">login</a>
+                <c:if test="${sessionScope.customer == null && sessionScope.account == null}">
+                    <a href="cuslogin" class="login-btn">Login</a>
                 </c:if>               
-                <c:if test="${sessionScope.acc != null}">
-                    <a href="logout" class="login-btn">logout</a>
-                </c:if>
-
+                <c:if test="${sessionScope.customer != null || sessionScope.account != null}">
+                    <a href="logout" class="login-btn">Logout</a>
+                </c:if>              
+                    
             </div> 
 
         </header>
@@ -97,3 +98,4 @@
         </form>
     </body>
 </html>
+
