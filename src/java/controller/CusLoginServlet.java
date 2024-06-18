@@ -1,129 +1,109 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package controller;
 
+import dao.CartDAO;
 import dao.CustomerDAO;
-import java.io.IOException;
-import java.io.PrintWriter;
+import model.Cart;
+import model.CartItem;
+import model.Customer;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import model.Customer;
 
-/**
- *
- * @author Admin
- */
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 public class CusLoginServlet extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //processRequest(request, response);
-        //b1 get user pass tu cookie
         String user = request.getParameter("username");
         String pass = request.getParameter("password");
+
         CustomerDAO customerDAO = new CustomerDAO();
         Customer a = customerDAO.getAccount(user, pass);
-        if(a!=null){
-            String er="username: " + user +"and password: " + pass + "don't exsited";
+
+        if (a == null) {
+            String er = "Username: " + user + " and password: " + pass + " don't exist";
             request.setAttribute("error", er);
             request.getRequestDispatcher("LoginCus.jsp").forward(request, response);
-            request.getRequestDispatcher("home").forward(request, response);
-        }
-        else{
+        } else {
             HttpSession session = request.getSession(true);
             session.setAttribute("account", a);
-        }
-//        Cookie arr[] = request.getCookies();
-//        if (arr != null) {
-//            for (Cookie o : arr) {
-//                if (o.getName().equals("userA")) {
-//                    request.setAttribute("username", o.getValue());
-//                }
-//                if (o.getName().equals("passA")) {
-//                    request.setAttribute("password", o.getValue());
-//                }
-//            }
-//        }
-//
-//        //b2 set user and pass vao login form
-//        request.getRequestDispatcher("LoginCus.jsp").forward(request, response);
 
+            // Retrieve cart items for the customer
+            CartDAO dao = new CartDAO();
+            List<CartItem> cartItems = dao.getProductsInCart(a.getId());
+            Cart cart = new Cart(new ArrayList<>(cartItems)); // Initialize Cart with ArrayList
+
+            session.setAttribute("cart", cart);
+
+            // Handling cookies for remembering username and password
+            Cookie[] arr = request.getCookies();
+            if (arr != null) {
+                for (Cookie o : arr) {
+                    if (o.getName().equals("userA")) {
+                        request.setAttribute("username", o.getValue());
+                    }
+                    if (o.getName().equals("passA")) {
+                        request.setAttribute("password", o.getValue());
+                    }
+                }
+            }
+
+            request.getRequestDispatcher("home").forward(request, response);
+        }
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //processRequest(request, response);
         String user = request.getParameter("username");
         String pass = request.getParameter("password");
         String remember = request.getParameter("remember");
-//        CustomerDAO accountDAO = new AccountDAO();
+
         CustomerDAO customerDAO = new CustomerDAO();
-//        Account a = accountDAO.checkAccount(user, pass);
         Customer c = customerDAO.getAccount(user, pass);
+
         if (c == null) {
-            request.setAttribute("alert", "Wrong user or password!");
+            request.setAttribute("alert", "Wrong username or password!");
             request.getRequestDispatcher("LoginCus.jsp").forward(request, response);
         } else {
             HttpSession session = request.getSession();
             session.setAttribute("account", c);
-            //luu account len cookie
-            Cookie u = new Cookie("userA", user);
-            Cookie p = new Cookie("passA", pass);
-            u.setMaxAge(60);
-            if (remember != null) {
-                p.setMaxAge(60);
-            } else {
-                p.setMaxAge(0);
-            }
-            response.addCookie(u);//luu len trinh duyet
-            response.addCookie(p);
-            response.sendRedirect("home");
 
-            /**
-             * Returns a short description of the servlet.
-             *
-             * @return a String containing servlet description
-             */
-        }// </editor-fold>
+            // Retrieve cart items for the customer
+            CartDAO dao = new CartDAO();
+            List<CartItem> cartItems = dao.getProductsInCart(c.getId());
+            Cart cart = new Cart(new ArrayList<>(cartItems)); // Initialize Cart with ArrayList
+
+            session.setAttribute("cart", cart);
+
+            // Setting cookies for remembering username and password
+            Cookie userCookie = new Cookie("userA", user);
+            Cookie passCookie = new Cookie("passA", pass);
+            userCookie.setMaxAge(60); // Set expiry in seconds
+            passCookie.setMaxAge(remember != null ? 60 : 0); // Set expiry only if "remember" is checked
+
+            response.addCookie(userCookie);
+            response.addCookie(passCookie);
+
+            response.sendRedirect("home");
+        }
+    }
+
+    @Override
+    public String getServletInfo() {
+        return "Customer Login Servlet";
     }
 }

@@ -1,7 +1,5 @@
 package dao;
 
-
-
 import dao.MyDAO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,16 +10,15 @@ import java.util.List;
 import model.CartItem;
 import model.Product;
 
-public class CartDAO extends MyDAO{
-
+public class CartDAO extends MyDAO {
 
     public List<CartItem> getProductsInCart(int customerId) {
         List<CartItem> cartItems = new ArrayList<>();
         xSql = """
-           SELECT p.product_id, p.name, p.price, p.description, p.image, pc.quantity
+           SELECT p.id, p.name, p.price, p.description, p.image, pc.quantity
            FROM product_cart pc 
-           JOIN product p ON pc.product_id = p.product_id
-           JOIN Cart c ON pc.cart_id = c.cart_id 
+           JOIN product p ON pc.product_id = p.id
+           JOIN Cart c ON pc.cart_id = c.id 
            WHERE c.customer_id = ?""";
 
         try {
@@ -31,7 +28,7 @@ public class CartDAO extends MyDAO{
 
             while (rs.next()) {
                 Product product = new Product();
-                product.setId(rs.getInt("product_id"));
+                product.setId(rs.getInt("id"));
                 product.setName(rs.getString("name"));
                 product.setPrice(rs.getInt("price"));
                 product.setDescription(rs.getString("description"));
@@ -53,17 +50,29 @@ public class CartDAO extends MyDAO{
 
     public void addProductToCart(int customerId, int productId, int quantity) {
         try {
+            // Get product details including restaurant_id
+            xSql = "SELECT p.restaurant_id FROM product p WHERE p.id = ?";
+            ps = con.prepareStatement(xSql);
+            ps.setInt(1, productId);
+            rs = ps.executeQuery();
+            int restaurantId;
+            if (rs.next()) {
+                restaurantId = rs.getInt("restaurant_id");
+            } else {
+                throw new SQLException("Product not found with ID: " + productId);
+            }
+
             // Check if cart exists for the customer
-            xSql = "SELECT cart_id FROM Cart WHERE customer_id = ?";
+            xSql = "SELECT id FROM Cart WHERE customer_id = ?";
             ps = con.prepareStatement(xSql);
             ps.setInt(1, customerId);
             rs = ps.executeQuery();
             int cartId;
             if (rs.next()) {
-                cartId = rs.getInt("cart_id");
+                cartId = rs.getInt("id");
             } else {
                 // Create a new cart if it doesn't exist
-                xSql = "INSERT INTO Cart (customer_id, quantity) VALUES (?, 0)";
+                xSql = "INSERT INTO Cart (customer_id) VALUES (?)";
                 ps = con.prepareStatement(xSql, PreparedStatement.RETURN_GENERATED_KEYS);
                 ps.setInt(1, customerId);
                 ps.executeUpdate();
@@ -105,12 +114,7 @@ public class CartDAO extends MyDAO{
 
     public void updateCartQuantity(int customerId, int productId, int quantity) {
         try {
-            xSql = """
-                UPDATE product_cart pc
-                SET pc.quantity = ?
-                FROM product_cart pc
-                JOIN Cart c ON pc.cart_id = c.cart_id
-                WHERE c.customer_id = ? AND pc.product_id = ?""";
+            xSql = "UPDATE Product_cart SET quantity = ? WHERE cart_id = (SELECT id FROM Cart WHERE customer_id = ?) AND product_id = ?";
             ps = con.prepareStatement(xSql);
             ps.setInt(1, quantity);
             ps.setInt(2, customerId);
@@ -122,12 +126,37 @@ public class CartDAO extends MyDAO{
         }
     }
 
+    public void clearCart(int customerId) {
+        String deleteFromProductCartQuery = "DELETE FROM Product_Cart WHERE cart_id IN (SELECT id FROM Cart WHERE customer_id = ?)";
+        String deleteFromCartQuery = "DELETE FROM Cart WHERE customer_id = ?";
+
+        try {
+            con.setAutoCommit(false);
+
+            // Delete from Product_Cart table
+            try (PreparedStatement ps = con.prepareStatement(deleteFromProductCartQuery)) {
+                ps.setInt(1, customerId);
+                ps.executeUpdate();
+            }
+
+            // Delete from Cart table
+            try (PreparedStatement ps = con.prepareStatement(deleteFromCartQuery)) {
+                ps.setInt(1, customerId);
+                ps.executeUpdate();
+            }
+
+            con.commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void deleteProductFromCart(int customerId, int productId) {
         try {
             xSql = """
                 DELETE pc
                 FROM product_cart pc
-                JOIN Cart c ON pc.cart_id = c.cart_id
+                JOIN Cart c ON pc.cart_id = c.id
                 WHERE c.customer_id = ? AND pc.product_id = ?""";
             ps = con.prepareStatement(xSql);
             ps.setInt(1, customerId);
@@ -140,14 +169,17 @@ public class CartDAO extends MyDAO{
     }
 
     public static void main(String[] args) {
-        try {
-            CartDAO dao = new CartDAO();
-            List<CartItem> list = dao.getProductsInCart(2);
-            for (CartItem b : list) {
-                System.out.println(b);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        CartDAO cartDAO = new CartDAO();
+
+        // Thiết lập các giá trị đầu vào để kiểm tra
+        int customerId = 1; // ID của khách hàng
+        int productId = 1;  // ID của sản phẩm
+        int quantity = 2;   // Số lượng sản phẩm mới
+
+        // Cập nhật số lượng sản phẩm trong giỏ hàng
+        cartDAO.updateCartQuantity(customerId, productId, quantity);
+
+        // In ra thông báo để xác nhận việc cập nhật
+        System.out.println("Cart quantity updated successfully.");
     }
 }

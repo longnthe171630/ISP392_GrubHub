@@ -206,13 +206,12 @@ public class ProductDAO extends MyDAO {
         return (t);
     }
 
-    public List<Product> getProductByCID(String cproduct_id, int index) {
+    public List<Product> getProductByCID(String cproduct_id) {
         List<Product> t = new ArrayList<>();
         xSql = "SELECT * FROM Product WHERE category_id = ?";
         try {
             ps = con.prepareStatement(xSql);
             ps.setString(1, cproduct_id);
-            ps.setInt(2, (index - 1) * 9);
             rs = ps.executeQuery();
             while (rs.next()) {
                 int xProductId = rs.getInt("id");

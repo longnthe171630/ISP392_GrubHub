@@ -1,13 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package controller;
 
+import dao.CartDAO;
 import dao.OrderDAO;
-import dao.ProductDAO;
-import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.Cookie;
@@ -15,108 +9,71 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.sql.SQLException;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import model.Cart;
+import model.CartItem;
 import model.Customer;
-import model.Product;
 
-/**
- *
- * @author manh0
- */
+import java.io.IOException;
+import java.util.List;
+
 @WebServlet(name = "CheckoutServlet", urlPatterns = {"/checkout"})
 public class CheckoutServlet extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet CheckoutServlet</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet CheckoutServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
-    }
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        ProductDAO dao = new ProductDAO();
-        List<Product> list = dao.getProducts();
-        Cookie[] arr = request.getCookies();
-        String txt = "";
-        if (arr != null) {
-            for (Cookie o : arr) {
-                if (o.getName().equals("cart")) {
-                    txt += o.getValue();
+        HttpSession session = request.getSession();
+        Customer customer = (Customer) session.getAttribute("account");
+
+        if (customer == null) {
+            response.sendRedirect("LoginCus.jsp");
+            return;
+        }
+
+        CartDAO cartDAO = new CartDAO();
+        List<CartItem> cartItems = cartDAO.getProductsInCart(customer.getId());
+
+        // Debug: Print cart items
+        for (CartItem item : cartItems) {
+            System.out.println("CartItem: " + item.getProduct().getName() + ", Quantity: " + item.getQuantity() + ", Price: " + item.getPrice());
+        }
+
+        Cookie[] cookies = request.getCookies();
+        String cookieCartData = "";
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("cart")) {
+                    cookieCartData += cookie.getValue();
                 }
             }
         }
-        Cart cart = new Cart(txt, list);
-        HttpSession session = request.getSession();
-        Customer a = (Customer)session.getAttribute("account");
-        if(a==null){
-            response.sendRedirect("LoginCus.jsp");
-        }
-        else{
-            OrderDAO d = new OrderDAO();
-            d.addOrder(a, cart);
-            Cookie c = new Cookie("cart","");
-            c.setMaxAge(0);
-            response.addCookie(c);
-            request.getRequestDispatcher("home").forward(request, response);
-        }
+
+        Cart cart = new Cart(cookieCartData, cartItems);
+
+        // Debug: Print total money
+        double totalMoney = cart.getTotalMoney();
+        System.out.println("Total money in cart: " + totalMoney);
+
+        OrderDAO orderDAO = new OrderDAO();
+        orderDAO.addOrder(customer, cart);
+
+        // Clear the session cart
+        session.setAttribute("cart", new Cart());
+
+        // Clear the cart cookie
+        Cookie cookie = new Cookie("cart", "");
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+
+        // Debug: Check if cart is cleared
+        Cart clearedCart = (Cart) session.getAttribute("cart");
+        System.out.println("Cleared cart total money: " + clearedCart.getTotalMoney());
+        cartDAO.clearCart(customer.getId());
+        request.getRequestDispatcher("home").forward(request, response);
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
     @Override
     public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
+        return "Handles the checkout process and clears the cart";
+    }
 }

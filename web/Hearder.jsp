@@ -74,7 +74,7 @@
                 <i class="fas fa-bars" id="menu-bars"></i>
                 <i class="fas fa-search" id="search-icon"></i>
                 <a href="show" class="fas fa-shopping-cart">
-                    <span id="cartCount">${sessionScope.cart.items.size()}</span>
+                    <span id="cartSize">${sessionScope.cart.items.size()}</span>
                 </a>
 
                 <c:if test="${sessionScope.customer == null && sessionScope.account == null}">

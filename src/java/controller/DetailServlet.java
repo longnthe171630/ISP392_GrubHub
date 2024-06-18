@@ -40,15 +40,15 @@ public class DetailServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String id = request.getParameter("product_id");
-        String r_id = request.getParameter("id");
+        String restaurantId = (request.getParameter("id"));
         ProductDAO dao = new ProductDAO();
         CategoryDAO dao2 = new CategoryDAO();
         RestaurantDAO dao3 = new RestaurantDAO();
         Product p = dao.getProduct(id);
-        Restaurant r = dao3.getRestaurant(r_id);
+        Restaurant restaurant = dao3.getRestaurantByPID(restaurantId);
         List<Category> listC = dao2.getCategorys();
         
-        request.setAttribute("restaurant", r);
+        request.setAttribute("restaurant", restaurant);
         request.setAttribute("detail", p);
         request.setAttribute("listCC", listC);
         request.getRequestDispatcher("Detail.jsp").forward(request, response);

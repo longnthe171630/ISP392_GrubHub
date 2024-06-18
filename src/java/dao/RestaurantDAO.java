@@ -81,30 +81,35 @@ public class RestaurantDAO extends MyDAO {
         return (t);
     }
 
-    public List<Restaurant> getRestaurantByPID(String product_id) {
-        List<Restaurant> t = new ArrayList<>();
-        xSql = "SELECT * FROM Restaurant WHERE product_id = ?";
+      public Restaurant getRestaurantByPID(String product_id) {
+        Restaurant restaurant = null;
+        String sql = "SELECT r.id, r.name, r.phonenumber, r.address_id, r.restaurant_rating, r.account_id \n"
+                + "                     FROM Restaurant r \n"
+                + "                     JOIN Product p ON r.id = p.restaurant_id \n"
+                + "                     WHERE p.id = ?";
         try {
-            ps = con.prepareStatement(xSql);
+            ps = con.prepareStatement(sql);
             ps.setString(1, product_id);
             rs = ps.executeQuery();
-            while (rs.next()) {
-                int xRestaurantId = rs.getInt("id");
-                String xName = rs.getString("name");
-                Address a = ad.getAddressById(rs.getInt("address_id"));
-                String xPhonenumber = rs.getString("phonenumber");
-                int xRestaurantRating = rs.getInt("restaurant_id");
-                int xAccountId = rs.getInt("account_id");
+            if (rs.next()) {
+                int restaurantId = rs.getInt("id");
+                String name = rs.getString("name");
+                String phoneNumber = rs.getString("phonenumber");
+                int addressId = rs.getInt("address_id");
+                int restaurantRating = rs.getInt("restaurant_rating");
+                int accountId = rs.getInt("account_id");
 
-                Restaurant x = new Restaurant(xRestaurantId, xName, xPhonenumber, a, xRestaurantRating, xAccountId);
-                t.add(x);
+                // Assuming there's a method to fetch Address by id
+                Address address = ad.getAddressById(addressId);
+
+                restaurant = new Restaurant(restaurantId, name, phoneNumber, address, restaurantRating, accountId);
             }
             rs.close();
             ps.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return t;
+        return restaurant;
     }
 
     public Restaurant getRestaurant(int RestaurantId) {

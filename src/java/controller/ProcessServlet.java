@@ -1,160 +1,170 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package controller;
 
+import dao.CartDAO;
 import dao.ProductDAO;
-import java.io.IOException;
-import java.io.PrintWriter;
+import model.Cart;
+import model.CartItem;
+import model.Product;
+import model.Customer;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.util.List;
-import model.Cart;
-import model.CartItem;
-import model.Product;
 
-/**
- *
- * @author manh0
- */
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 public class ProcessServlet extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet ProcessServlet</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet ProcessServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        ProductDAO dao = new ProductDAO();
-        List<Product> list = dao.getProducts();
-        Cookie[] arr = request.getCookies();
-        String txt = "";
-        if (arr != null) {
-            for (Cookie o : arr) {
-                if (o.getName().equals("cart")) {
-                    txt += o.getValue();
-                    o.setMaxAge(0);
-                    response.addCookie(o);
-                }
-            }
+        updateCart(request, response);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        deleteFromCart(request, response);
+    }
+
+    private void updateCart(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
+        if (session == null) {
+            response.sendRedirect("LoginCus.jsp"); // Redirect to login if session is null
+            return;
         }
-        Cart cart = new Cart(txt, list);
-        String num_raw = request.getParameter("num");
-        String id_raw = request.getParameter("id");
-        int id, num = 0;
+
+        Customer customer = (Customer) session.getAttribute("account");
+        int customerId = customer.getId();
+        int id, num;
         try {
-            id = Integer.parseInt(id_raw);
-            Product p = dao.getProduct(id);
-            int numStore = p.getQuantity();
-            num = Integer.parseInt(num_raw);
-            if (num == -1 && (cart.getQuantityByID(id) <= 1)) {
-                cart.removeItem(id);
-            } else {
-                if ((num == 1) && cart.getQuantityByID(id) >= numStore) {
-                    num = 0;
-                }
-                double price = p.getPrice();
-                CartItem t = new CartItem(p, num,(int) price);
-                cart.addItem(t);
-            }
+            id = Integer.parseInt(request.getParameter("id"));
+            num = Integer.parseInt(request.getParameter("num"));
         } catch (NumberFormatException e) {
-            System.out.println(e);
+            response.sendRedirect("Cart.jsp"); // Handle invalid input
+            return;
         }
-        List<CartItem> items = cart.getItems();
-        txt = "";
-        if (!items.isEmpty()) {
-            txt = items.get(0).getProduct().getId() + ":"
-                    + items.get(0).getQuantity();
-            for (int i = 1; i < items.size(); i++) {
-                txt += "/" + items.get(i).getProduct().getId() + ":"
-                        + items.get(i).getQuantity();
+
+        ProductDAO productDAO = new ProductDAO();
+        Product product = productDAO.getProduct(id);
+        if (product == null) {
+            response.sendRedirect("Cart.jsp"); // Handle non-existing product
+            return;
+        }
+
+        CartDAO cartDAO = new CartDAO();
+        Cart cart = getCartFromSessionOrCookie(request, response, productDAO);
+
+        if (num == -1 && cart.getQuantityByID(id) <= 1) {
+            cart.removeItem(id);
+            cartDAO.deleteProductFromCart(customerId, id);
+        } else {
+            int numStore = product.getQuantity();
+            if (num == 1 && cart.getQuantityByID(id) >= numStore) {
+                num = 0;
             }
+            double price = product.getPrice();
+            CartItem cartItem = new CartItem(product, num, (int) price);
+            cart.addItem(cartItem);
+            cartDAO.updateCartQuantity(customerId, id, cart.getQuantityByID(id));
         }
-        Cookie c = new Cookie("cart", txt);
-        c.setMaxAge(2 * 24 * 60 * 60);
-        response.addCookie(c);
+
+        updateCartCookie(response, cart);
+
         request.setAttribute("cart", cart);
         request.getRequestDispatcher("Cart.jsp").forward(request, response);
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    private void deleteFromCart(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        ProductDAO dao = new ProductDAO();
-        List<Product> list = dao.getProducts();
-        Cookie[] arr = request.getCookies();
-        String txt = "";
-        if (arr != null) {
-            for (Cookie o : arr) {
-                if (o.getName().equals("cart")) {
-                    txt += o.getValue();
-                    o.setMaxAge(0);
-                    response.addCookie(o);
-                }
-            }
+        HttpSession session = request.getSession(false);
+        if (session == null) {
+            response.sendRedirect("CusLogin.jsp"); // Redirect to login if session is null
+            return;
         }
-        Cart cart = new Cart(txt, list);
-        int id = Integer.parseInt(request.getParameter("id"));
+
+        Customer customer = (Customer) session.getAttribute("account");
+        int customerId = customer.getId();
+        int id;
+        try {
+            id = Integer.parseInt(request.getParameter("id"));
+        } catch (NumberFormatException e) {
+            response.sendRedirect("Cart.jsp"); // Handle invalid input
+            return;
+        }
+
+        CartDAO cartDAO = new CartDAO();
+        cartDAO.deleteProductFromCart(customerId, id);
+
+        Cart cart = getCartFromSessionOrCookie(request, response, null);
+
         cart.removeItem(id);
 
+        updateCartCookie(response, cart);
+
         request.setAttribute("cart", cart);
-        request.setAttribute("size", cart.getItems().size());
-        request.getRequestDispatcher("cart.jsp").forward(request, response);
+        request.getRequestDispatcher("Cart.jsp").forward(request, response);
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
+    private Cart getCartFromSessionOrCookie(HttpServletRequest request, HttpServletResponse response, ProductDAO productDAO)
+            throws IOException {
+        HttpSession session = request.getSession(false);
+        Cart cart = new Cart();
+
+        if (session != null) {
+            cart = (Cart) session.getAttribute("cart");
+        }
+
+        if (cart == null || cart.getItems().isEmpty()) {
+            String txt = "";
+            Cookie[] arr = request.getCookies();
+            if (arr != null) {
+                for (Cookie o : arr) {
+                    if (o.getName().equals("cart")) {
+                        txt += o.getValue();
+                    }
+                }
+            }
+            // Assuming productList is obtained from ProductDAO
+            List<Product> productList = productDAO != null ? productDAO.getProducts() : null;
+
+            // Convert List<Product> to List<CartItem>
+            List<CartItem> cartItemList = new ArrayList<>();
+            if (productList != null) {
+                for (Product product : productList) {
+                    // Create a CartItem object for each Product
+                    CartItem cartItem = new CartItem(product, 1); // Assuming initial quantity is 1, adjust as needed
+                    cartItemList.add(cartItem);
+                }
+            }
+
+            // Initialize Cart with the List<CartItem>
+            cart = new Cart(txt, cartItemList);
+        }
+
+        return cart;
+    }
+
+    private void updateCartCookie(HttpServletResponse response, Cart cart) {
+        String txt = cart.serialize();
+        Cookie c = new Cookie("cart", txt);
+        c.setMaxAge(2 * 24 * 60 * 60);
+        response.addCookie(c);
+    }
+
     @Override
     public String getServletInfo() {
         return "Short description";
-    }// </editor-fold>
-
+    }
 }

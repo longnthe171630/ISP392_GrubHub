@@ -47,9 +47,15 @@ public class CategoryServlet extends HttpServlet {
         //da lay dc category id ve roi
         ProductDAO dao = new ProductDAO();
         CategoryDAO dao2 = new CategoryDAO();
-        List<Product> list = dao.getProductByCID(cateID, index);
+        List<Product> list = dao.getProductByCID(cateID);
         List<Category> listC = dao2.getCategorys();
-        
+        List<Product> listPP = dao.getProducTop9(index);
+        int cnt = dao.getTotalProduct();
+        int endPage = cnt / 9;
+        if (cnt % 9 != 0) {
+            endPage++;
+        }
+        request.setAttribute("listPP", listPP);
         request.setAttribute("listP", list);
         request.setAttribute("listCC", listC);
         request.setAttribute("tag", cateID);

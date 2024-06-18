@@ -84,7 +84,11 @@
                                         <i class="fas fa-star-half-alt"></i>
                                     </div>
                                     <p><span>${product.price} đ</span></p>
-                                    <a href="#" class="btn">add to cart</a>
+                                    <form action="show" method="post">
+                                        <input type="hidden" name="id" value="${product.id}"/>
+                                        <input type="hidden" name="num" value="1"/>
+                                        <input type="button" onclick="buy('${product.id}')" class="btn" value="Add to cart" />
+                                    </form>
                                 </div>
                             </c:forEach>
                         </div>
@@ -95,7 +99,14 @@
 
 
         <jsp:include page="Footer.jsp"></jsp:include>
-        
+
+        <script type="text/javascript">
+            function buy(id) {
+                var m = document.f.num.value;
+                document.f.action = "buy?id=" + id + "&num=" + m;
+                document.f.submit();
+            }
+        </script>
         <script>
             function goBack() {
                 window.history.back();

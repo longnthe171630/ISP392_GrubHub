@@ -8,10 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 import model.Address;
 import model.CartItem;
+import model.Category;
 import model.Customer;
 import model.Email;
 import model.Order;
 import model.Product;
+import model.Restaurant;
 import utils.Mail;
 
 /**
@@ -20,105 +22,89 @@ import utils.Mail;
  */
 public class OrderDAO extends MyDAO {
 
-    public List<Order> getOrder() {
-        List<Order> t = new ArrayList<>();
-        xSql = "select * from [Order]";
-        int xId;
-        int xRestaurant_Id;
-        int xDelivery_Id;
-        int xCustomer_Id;
-        int xTotal_amount;
-        String xStatus;
-        java.sql.Date xOrder_date;
-        Order x;
-        try {
-            ps = con.prepareStatement(xSql);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                xId = rs.getInt("id");
-                xRestaurant_Id = rs.getInt("restaurant_id");
-                xCustomer_Id = rs.getInt("customer_id");
-                xTotal_amount = rs.getInt("total_amount");
-                xStatus = rs.getString("status");
-                xOrder_date = rs.getDate("order_date");
+    private CategoryDAO cd = new CategoryDAO();
+    private RestaurantDAO rt = new RestaurantDAO();
 
-                x = new Order(xId, xRestaurant_Id, xCustomer_Id, xTotal_amount, xStatus, xOrder_date);
-                t.add(x);
-            }
-            rs.close();
-            ps.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return (t);
-    }
-
-    public int getNumberOrders() {
-        try {
-            String sql = "SELECT COUNT(*) FROM Orders";
-            ps = connection.prepareStatement(sql);
-            rs = ps.executeQuery();
-            if (rs.next()) {
-                int number = rs.getInt(1);
-                return number;
-            }
-        } catch (Exception e) {
-        }
-        return 1;
-    }
-
-    public void addOrder(Customer u, Cart cart) {
-        String xSql;
+    public void addOrder(Customer customer, Cart cart) {
+        String sql;
         ps = null;
+        rs = null;
 
         try {
+            // Start transaction
+            con.setAutoCommit(false);
 
-            // Insert order into 'order' table
+            // Insert order into 'Order' table
             LocalDate curDate = LocalDate.now();
             Date date = Date.valueOf(curDate); // Convert LocalDate to java.sql.Date
 
-            xSql = "insert into [Order] (restaurant_id, customer_id, total_amount,status, order_date ) values (?, ?, ?, ?, ?)";
-            ps = con.prepareStatement(xSql);
-            ps.setInt(1, 1);
-            ps.setInt(2, u.getId());
+            sql = "INSERT INTO [Order] (restaurant_id, customer_id, total_amount, status, order_date) VALUES (?, ?, ?, ?, ?)";
+            ps = con.prepareStatement(sql, ps.RETURN_GENERATED_KEYS);
+            ps.setInt(1, 1); // Assuming restaurant_id is 1
+            ps.setInt(2, customer.getId());
             ps.setDouble(3, cart.getTotalMoney());
             ps.setString(4, "Đang xử lí");
             ps.setDate(5, date);
 
+            System.out.println("Executing query: " + ps.toString());
             ps.executeUpdate();
 
             // Retrieve the generated order ID
-            xSql = "select top 1 id from [Order] order by id desc";
-            ps = con.prepareStatement(xSql);
-            rs = ps.executeQuery();
-            int oid = 0;
+            rs = ps.getGeneratedKeys();
+            int orderId = 0;
             if (rs.next()) {
-                oid = rs.getInt(1);
+                orderId = rs.getInt(1);
             }
-            rs.close();
 
-            // Insert order details into 'orderdetails' table
-            xSql = "insert into Orderdetails (order_id, product_id, quantity, price) values (?, ?, ?, ?)";
-            ps = con.prepareStatement(xSql);
-            for (CartItem i : cart.getItems()) {
-                ps.setInt(1, oid);
-                ps.setInt(2, i.getProduct().getId());
-                ps.setInt(3, i.getQuantity());
-                ps.setDouble(4, i.getPrice());
+            // Insert order details into 'Orderdetails' table
+            sql = "INSERT INTO Orderdetails (order_id, product_id, quantity, price) VALUES (?, ?, ?, ?)";
+            ps = con.prepareStatement(sql);
+            for (CartItem item : cart.getItems()) {
+                ps.setInt(1, orderId);
+                ps.setInt(2, item.getProduct().getId());
+                ps.setInt(3, item.getQuantity());
+                ps.setDouble(4, item.getPrice());
+                System.out.println("Inserting order detail: " + ps.toString());
                 ps.executeUpdate();
             }
 
             // Update product quantity
-            xSql = "update product set quantity = quantity - ? where id = ?";
-            ps = con.prepareStatement(xSql);
-            for (CartItem i : cart.getItems()) {
-                ps.setInt(1, i.getQuantity());
-                ps.setInt(2, i.getProduct().getId());
+            sql = "UPDATE product SET quantity = quantity - ? WHERE id = ?";
+            ps = con.prepareStatement(sql);
+            for (CartItem item : cart.getItems()) {
+                ps.setInt(1, item.getQuantity());
+                ps.setInt(2, item.getProduct().getId());
+                System.out.println("Updating product quantity: " + ps.toString());
                 ps.executeUpdate();
             }
-          sendOrderConfirmationEmail(u, cart);
+
+            // Commit transaction
+            con.commit();
+
+            sendOrderConfirmationEmail(customer, cart);
+
         } catch (SQLException e) {
-            e.printStackTrace(); // Log or handle SQLException
+            try {
+                // Rollback transaction on error
+                con.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+            e.printStackTrace();
+        } finally {
+            try {
+                // Restore auto-commit mode
+                con.setAutoCommit(true);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            // Clean up
+            if (rs != null) try {
+                rs.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -136,32 +122,6 @@ public class OrderDAO extends MyDAO {
             System.out.println("Failed to send order confirmation email.");
         }
     }
-
-//
-//    public static void main(String[] args) {
-//        OrderDAO orderDAO = new OrderDAO();
-//        ProductDAO dao = new ProductDAO();
-//
-//        // Assume that the ProductDAO can retrieve products from the database
-//        List<Product> productList = dao.getProducts();
-//
-//        // Select a product from the productList to add to the cart
-//        Product product = productList.get(0); // Select the first product for simplicity
-//
-//        // Create a CartItem
-//        CartItem cartItem = new CartItem(product, 1, product.getPrice()); // Example: quantity = 1
-//
-//        // Create a Cart and add the CartItem to it
-//        Cart cart = new Cart();
-//        cart.addItem(cartItem);
-//
-//        Customer customer = new Customer();
-//        customer.setId(1); // Set ID of the customer
-//        customer.setEmail("manh07051@gmail.com"); // Set email of the customer
-//
-//        // Call the addOrder method and pass the customer and cart
-//        orderDAO.addOrder(customer, cart);
-//    }
 
     public List<Order> getAddressRestaurant_CustomerWithId() {
         List<Order> orders = new ArrayList<>();
@@ -283,19 +243,61 @@ public class OrderDAO extends MyDAO {
         }
         return (t);
     }
-    
-    public static void main(String[] args) {
-        OrderDAO d = new OrderDAO();
-        List<Order> lo = d.getAddressRestaurant_CustomerWithId();
-        if (lo == null) {
-            System.out.println("List empty");
-        } else {
-            for (Order o : lo) {
-                System.out.println(o);
 
+    public List<Product> getTopOrderedProducts() {
+        List<Product> topProducts = new ArrayList<>();
+        String sql = """
+                    SELECT TOP 5 p.id, p.name, p.price,p.quantity, p.rating,p.description,p.image,p.create_date,p.restaurant_id,p.category_id,p.status  ,SUM(od.quantity) AS total_quantity
+                    FROM Orderdetails od
+                    JOIN product p ON od.product_id = p.id
+                    GROUP BY p.id, p.name, p.price,p.quantity, p.rating,p.description,p.image,p.create_date,p.restaurant_id,p.category_id,p.status
+                    ORDER BY total_quantity DESC;""";
+
+        try {
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int xProductId = rs.getInt("id");
+                String xName = rs.getString("name");
+                int xPrice = rs.getInt("price");
+                float xRating = rs.getFloat("rating");
+                String xDescription = rs.getString("description");
+                String xImage = rs.getString("image");
+                boolean xStatus = rs.getBoolean("status");
+                java.util.Date xCreate_date = rs.getDate("create_date");
+                int xQuantity = rs.getInt("quantity");
+                Restaurant s = rt.getRestaurantById(rs.getInt("restaurant_id"));
+                Category c = cd.getCategoryId(rs.getInt("category_id"));
+
+                Product x = new Product(xProductId, xName, xPrice, xQuantity, xDescription, xImage, xStatus, xRating, xCreate_date, s, c);
+                topProducts.add(x);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
         }
-//        d.getAddressRestaurant_CustomerWithId();
-//        d.getOrderById(1);
+
+        return topProducts;
+    }
+
+    public static void main(String[] args) {
+        ProductDAO dao = new ProductDAO();
+        OrderDAO dao1 = new OrderDAO();
+        List<Product> list = dao1.getTopOrderedProducts();
+        for (Product product : list) {
+            System.out.println(product);
+        }
     }
 }

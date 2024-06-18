@@ -8,6 +8,9 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <link rel = "icon" 
+              href="images/icon/logo.png" 
+              type="image/x-icon">
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -27,24 +30,7 @@
 
         <!-- header section starts      -->
 
-        <header>
-            <a href="home" class="logo"><i class="fas fa-utensils"></i>GrubHub</a>
-
-            <nav class="navbar">
-                <a class="active" href="home">home</a>
-                <a href="About.jsp">about</a>
-                <a href="Contact.jsp">contact</a>
-            </nav>
-
-            <div class="icons">
-                <i class="fas fa-bars" id="menu-bars"></i>
-                <i class="fas fa-search" id="search-icon"></i>
-                <a href="#" class="fas fa-shopping-cart"></a>
-                <a href="login" class="login-btn">login</a>
-
-            </div> 
-
-        </header>
+        <jsp:include page="Hearder.jsp"></jsp:include>
 
         <!-- header section ends-->
 

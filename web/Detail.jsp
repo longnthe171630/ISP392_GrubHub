@@ -47,43 +47,29 @@
 
     </head>
     <body>
-        <header>
-            <a href="home" class="logo"><i class="fas fa-utensils"></i>GrubHub</a>
-            <nav class="navbar">
-                <a class="active" href="home">home</a>
-                <a href="About.jsp">about</a>
-                <a href="Contact.jsp">contact</a>
-            </nav>
-            <div class="icons">
-                <i class="fas fa-bars" id="menu-bars"></i>
-                <i class="fas fa-search" id="search-icon"></i>
-                <a href="#" class="fas fa-heart"></a>
-                <a href="#" class="fas fa-shopping-cart"></a>
-                <a href="login" class="login-btn">login</a>
-            </div> 
-        </header>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <div class="back-button">
-            <button onclick="goBack()">Back</button>
-        </div>
-        <div class="container">
+        <jsp:include page="Hearder.jsp"></jsp:include>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <div class="back-button">
+                <button onclick="goBack()">Back</button>
+            </div>
+            <div class="container">
 
-            <div class="row">
-                <div class="col-sm-9">
-                    <div class="container">
-                        <div class="card">
-                            <div class="row">
-                                <aside class="col-sm-5 border-right">
-                                    <article class="gallery-wrap"> 
-                                        <div class="img-big-wrap">
-                                            <div>
-                                                <a href="#"><img src="images/Product/${detail.image}" alt="${detail.name}"></a>
+                <div class="row">
+                    <div class="col-sm-9">
+                        <div class="container">
+                            <div class="card">
+                                <div class="row">
+                                    <aside class="col-sm-5 border-right">
+                                        <article class="gallery-wrap"> 
+                                            <div class="img-big-wrap">
+                                                <div>
+                                                    <a href="#"><img src="images/Product/${detail.image}" alt="${detail.name}"></a>
                                             </div>
                                         </div>
                                         <div class="img-small-wrap">
@@ -102,22 +88,32 @@
                                             <dt>Description</dt>
                                             <dd><p>${detail.description}</p></dd>
                                             <div class="container">
-                                                <!--                                                <div class="row">
-                                                
-                                                                                                    <div class="box">
-                                                                                                        <a href="restaurant?id=${restaurant.id}" class="fas fa-eye"></a>
-                                                                                                        <a href="#" class="fas fa-heart"></a>
-                                                                                                        <h3>${restaurant.name}</h3>
-                                                                                                        <div class="stars">
-                                                                                                            <i class="fas fa-star"></i>
-                                                                                                            <i class="fas fa-star"></i>
-                                                                                                            <i class="fas fa-star"></i>
-                                                                                                            <i class="fas fa-star"></i>
-                                                                                                            <i class="fas fa-star-half-alt"></i>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                
-                                                                                                </div>-->
+                                                <div class="row">
+                                                    <jsp:useBean id="db" class="dao.RestaurantDAO"/>
+                                                    <c:set var="restaurant" value="${db.getRestaurantByPID(detail.id)}"/>
+
+                                                    <div class="box col-sm-12">
+                                                        <a href="restaurantDetails?id=${restaurant.id}">
+                                                            <h3>${restaurant.name}</h3></a>
+                                                        <div class="stars">
+                                                            <c:forEach var="i" begin="1" end="5">
+                                                                <c:choose>
+                                                                    <c:when test="${i <= restaurant.restaurant_rating}">
+                                                                        <i class="fas fa-star"></i>
+                                                                    </c:when>
+                                                                    <c:when test="${i > restaurant.restaurant_rating and i <= restaurant.restaurant_rating}">
+                                                                        <i class="fas fa-star-half-alt"></i>
+                                                                    </c:when>
+                                                                    <c:otherwise>
+                                                                        <i class="far fa-star"></i>
+                                                                    </c:otherwise>
+                                                                </c:choose>
+                                                            </c:forEach>
+                                                        </div>
+                                                    </div>
+
+
+                                                </div>
                                             </div>
                                         </dl>
                                         <hr>
@@ -138,10 +134,10 @@
                                         <hr>
 
 
-                                        <form action="buy" method="post">
-                                            <input type="hidden" name="product_id" value="${detail.id}">
-                                            <input type="number" name="num" value="1" min="0" max="${o.quantity}" style="display:none">
-                                            <input type="submit" class="btn btn-lg btn-outline-primary text-uppercase" value="Add to cart"/>
+                                        <form action="show" method="post">
+                                            <input type="hidden" name="id" value="${detail.id}"/>
+                                            <input type="hidden" name="num" value="1"/>
+                                            <input type="button" onclick="buy('${detail.id}')" class="btn" value="Add to cart" />
                                         </form>
                                     </article>
                                 </aside>
@@ -154,6 +150,13 @@
         <script>
             function goBack() {
                 window.history.back();
+            }
+        </script>
+        <script type="text/javascript">
+            function buy(id) {
+                var m = document.f.num.value;
+                document.f.action = "buy?id=" + id + "&num=" + m;
+                document.f.submit();
             }
         </script>
         <jsp:include page="Footer.jsp"></jsp:include>

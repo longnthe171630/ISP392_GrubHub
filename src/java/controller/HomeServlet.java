@@ -4,18 +4,27 @@
  */
 package controller;
 
+import dao.CartDAO;
 import model.Category;
 import dao.CategoryDAO;
+import dao.OrderDAO;
 import model.Product;
 import dao.ProductDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
+import model.Cart;
+import model.CartItem;
+import model.Customer;
 
 /**
  *
@@ -44,6 +53,7 @@ public class HomeServlet extends HttpServlet {
 
         ProductDAO dao = new ProductDAO();
         CategoryDAO dao2 = new CategoryDAO();
+        OrderDAO dao3 = new OrderDAO();
         List<Product> list = dao.getProducts();
         List<Category> listC = dao2.getCategorys();
         List<Product> listPC = dao.getProducts2();
@@ -53,8 +63,11 @@ public class HomeServlet extends HttpServlet {
         if (cnt % 9 != 0) {
             endPage++;
         }
+        List<Product> listTop5 = dao3.getTopOrderedProducts();
+        
         request.setAttribute("endP", endPage);
         //b2: set data to jsp
+        request.setAttribute("listTop5", listTop5);
         request.setAttribute("listPP", listPP);
         request.setAttribute("listP", list);
         request.setAttribute("listPC", listPC);
