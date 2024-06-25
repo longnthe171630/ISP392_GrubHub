@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -27,8 +28,8 @@
                         <span class="text">Dashboard</span>
                     </a>
                 </li>
-                <li href="admin?action=cus">
-                    <a>
+                <li >
+                    <a href="admin?action=cus">
                     <i class='bx bxs-user'></i>
                     <span class="text">Customer Account</span>
                     </a>
@@ -37,6 +38,12 @@
                     <a>
                         <i class='bx bx-restaurant'></i>
                         <span class="text">Restaurant Account</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="admin?action=deli">
+                        <i class='bx bxs-message-dots' ></i>
+                        <span class="text">Delivery</span>
                     </a>
                 </li>
                 <li>
@@ -112,24 +119,42 @@
                     </div>
 
                 </div>
+                <div class="table-data">
+                    <div class="order">
+                        <div class="head">
+                            <h3>List User</h3>
+                            <i class='bx bx-search' ></i>
+                            <i class='bx bx-filter' ></i>
+                        </div>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Username</th>
+                                    <th>Email</th>
+                                    <th>Phonenumber</th>
+                                </tr>
+                            </thead>
+                            <tbody>
 
-                <ul class="box-info">
-                    <li>
-                        <i class='bx bxs-calendar-check' ></i>
-                        <span class="text">
-                            <h3>1020</h3>
-                            <p>Order</p>
-                        </span>
-                    </li>
-                    <li>
-                        <i class='bx bxs-group' ></i>
-                        <span class="text">
-                            <h3>2834</h3>
-                            <p>User</p>
-                        </span>
-                    </li>
+                            <c:forEach items="${requestScope.listBan}" var="o">
+                                    <tr>
+                                        <td>${o.id}</td>
+                                        <td>${o.username}</td>
+                                        <td>${o.email}</td>
+                                        <td>${o.phonenumber}</td>   
+                                        <td>
+                                            <a href="admin?action=unban&accountId=${o.id}" class="ban-btn">Un-Ban</a> <!-- Thêm nút Ban vào m?i dòng -->
+                                        </td>
+                                    </tr>
+                                </c:forEach>
 
-                </ul>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
 
 
 

@@ -227,22 +227,24 @@ public class RestaurantDAO extends MyDAO {
             e.printStackTrace();
         }
     }
+
     public List<Restaurant> getListRestaurant() {
         List<Restaurant> list = new ArrayList<>();
         try {
-            String sql = "select r.id, r.name, r.phonenumber, a.details, a.state, a.street " +
-                         "from Restaurant r " +
-                         "join Address a on a.id = r.address_id";
+            String sql = "select r.id, r.name, ac.phonenumber, a.details, a.state, a.street \n"
+                    + "from Restaurant r \n"
+                    + "join Account ac on ac.id= r.account_id  \n"
+                    + "join Address a on a.id = ac.address_id";
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
 
             while (rs.next()) {
-                int xId= rs.getInt("id");
-                String xName=rs.getString("name");
-                String xPhonenumber=rs.getString("phonenumber");
-                String xDetail=rs.getString("details");
-                String xState=rs.getString("state");
-                String xStreet=rs.getString("street");
+                int xId = rs.getInt("id");
+                String xName = rs.getString("name");
+                String xPhonenumber = rs.getString("phonenumber");
+                String xDetail = rs.getString("details");
+                String xState = rs.getString("state");
+                String xStreet = rs.getString("street");
                 Restaurant a = new Restaurant(xId, xName, xPhonenumber, xDetail, xState, xStreet);
                 list.add(a);
             }
@@ -256,9 +258,9 @@ public class RestaurantDAO extends MyDAO {
         try {
             RestaurantDAO dao = new RestaurantDAO();
             List<Restaurant> list = dao.getRestaurants();
-            
+
             Restaurant r = dao.getRestaurantById(1);
-            for(Restaurant o : list){
+            for (Restaurant o : list) {
                 System.out.println(o);
             }
             System.out.println(r);

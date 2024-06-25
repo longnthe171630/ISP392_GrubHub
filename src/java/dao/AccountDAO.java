@@ -18,7 +18,7 @@ import model.Account;
  * @author Long1
  */
 public class AccountDAO extends MyDAO {
-    
+
     //kiểm tra tài khoản
     public Account checkAccount(String username, String password) {
         String sql = "SELECT * FROM Account where username = ? and password = ?";
@@ -216,12 +216,12 @@ public class AccountDAO extends MyDAO {
 
     public void ResetToken(int id) {
         String xSql = "UPDATE account SET token = '' WHERE id = ?";
-        
+
         try {
             ps = con.prepareStatement(xSql);
             ps.setInt(1, id);
             ps.executeUpdate();
-            
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -233,7 +233,7 @@ public class AccountDAO extends MyDAO {
             ps = con.prepareStatement(xSql);
             ps.setString(1, email);
             ps.setString(2, token);
-            
+
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     return rs.getString("email");
@@ -244,10 +244,11 @@ public class AccountDAO extends MyDAO {
         }
         return null;
     }
+
     public List<Account> getListAccount() {
         List<Account> list = new ArrayList<>();
-        String sql = "select * from Account";
-        
+        String sql = "select * from Account where active=1";
+
         Account a;
         try {
             ps = con.prepareStatement(sql);
@@ -260,7 +261,55 @@ public class AccountDAO extends MyDAO {
                 String xEmail = rs.getString("email");
                 String xPhonenumber = rs.getString("phonenumber");
                 int xRole = rs.getInt("role");
-                a = new Account (xId, xUsername, xPassword, xEmail, xPhonenumber, xRole);
+                a = new Account(xId, xUsername, xPassword, xEmail, xPhonenumber, xRole);
+                list.add(a);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return list;
+    }
+
+    public void banAccount(int accountId) {
+        String sql = "UPDATE Account SET active =0 where id= ?";
+        try {
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, accountId); //Thiếu dòng này để set giá trị cho dấu ?
+            ps.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
+     public void unbanAccount(int accountId) {
+        String sql = "UPDATE Account SET active =1 where id= ?";
+        try {
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, accountId); //Thiếu dòng này để set giá trị cho dấu ?
+            ps.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
+
+    public List<Account> getListBanedAccount() {
+        List<Account> list = new ArrayList<>();
+        String sql = "select * from Account where active=0";
+
+        Account a;
+        try {
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                PreparedStatement st = con.prepareStatement(sql);
+                int xId = rs.getInt("id");
+                String xUsername = rs.getString("username");
+                String xPassword = rs.getString("password");
+                String xEmail = rs.getString("email");
+                String xPhonenumber = rs.getString("phonenumber");
+                int xRole = rs.getInt("role");
+                a = new Account(xId, xUsername, xPassword, xEmail, xPhonenumber, xRole);
                 list.add(a);
             }
         } catch (SQLException e) {
@@ -271,19 +320,19 @@ public class AccountDAO extends MyDAO {
 
     public static void main(String[] args) {
         AccountDAO accountDAO = new AccountDAO();
-        List<Account> list= accountDAO.getListAccount();
-        for(Account a: list){
+        List<Account> list = accountDAO.getListBanedAccount();
+        for (Account a : list) {
             System.out.println(a);
         }
         // Kiểm thử hàm getAccountByEmail
-        String emailToTest = "icon0690@gmail.com";
-        Account account = accountDAO.getAccountByEmail(emailToTest);
-
-        if (account != null) {
-            System.out.println("Account found: " + account);
-        } else {
-            System.out.println("No account found with email: " + emailToTest);
-        }
+//        String emailToTest = "icon0690@gmail.com";
+//        Account account = accountDAO.getAccountByEmail(emailToTest);
+//
+//        if (account != null) {
+//            System.out.println("Account found: " + account);
+//        } else {
+//            System.out.println("No account found with email: " + emailToTest);
+//        }
 
     }
 }

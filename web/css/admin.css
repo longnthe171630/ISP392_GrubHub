@@ -456,6 +456,14 @@ body {
 #content main .table-data .order table td {
     padding: 10px 0; /* Giảm padding */
 }
+#content main .table-data .order.ban-btn {
+    border: 5px;
+    background: red; /* Đặt màu nền của nút là đỏ */
+    color: white; /* Đặt màu văn bản của nút là đỏ */
+    padding: 5px 10px; /* Đặt kích thước đệm cho nút */
+    text-decoration: none; /* Loại bỏ gạch chân của liên kết */
+    border-radius: 5px; /* Làm tròn các góc của nút */
+}
 #content main .table-data .order table tr td:first-child {
     display: flex;
     align-items: center;

@@ -15,12 +15,22 @@ public class Delivery {
     private int id;
     private int order_id;
     private int delivery_person_id;
+    private String deliPerson;
     private int ship_price;
     private Date delivery_date;
     private String status;
     private String image;
 
     public Delivery() {
+    }
+
+    public Delivery(int id, int order_id, String deliPerson, int ship_price, Date delivery_date, String status) {
+        this.id = id;
+        this.order_id = order_id;
+        this.deliPerson = deliPerson;
+        this.ship_price = ship_price;
+        this.delivery_date = delivery_date;
+        this.status = status;
     }
 
     public Delivery(int id, int order_id, int delivery_person_id, int ship_price, Date delivery_date, String status, String image) {
@@ -31,6 +41,14 @@ public class Delivery {
         this.delivery_date = delivery_date;
         this.status = status;
         this.image = image;
+    }
+
+    public String getDeliPerson() {
+        return deliPerson;
+    }
+
+    public void setDeliPerson(String deliPerson) {
+        this.deliPerson = deliPerson;
     }
 
     public int getId() {

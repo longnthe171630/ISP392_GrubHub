@@ -41,6 +41,12 @@
                     </a>
                 </li>
                 <li>
+                    <a href="admin?action=deli">
+                        <i class='bx bxs-message-dots' ></i>
+                        <span class="text">Delivery</span>
+                    </a>
+                </li>
+                <li>
                     <a href="admin?action=feed">
                         <i class='bx bxs-message-dots' ></i>
                         <span class="text">Feedback</span>
@@ -134,19 +140,28 @@
                             </thead>
                             <tbody>
 
-                            <c:forEach items="${requestScope.listRes}" var="o">
-                                <tr>
-                                    <td>${o.id}</td>
-                                    <td>${o.name}</td>
-                                    <td>${o.phonenumber}</td>
-                                    <td>${o.details}</td>
-                                    <td>${o.state}</td>
-                                    <td>${o.street}</td>
-                                </tr>
-                            </c:forEach>
+                                <c:forEach items="${requestScope.listRes}" var="o">
+                                    <tr onclick="openModal(${o.id})" style="cursor: pointer;">
+                                    
+                                        <td>${o.id}</td>
+                                        <td>${o.name}</td>
+                                        <td>${o.phonenumber}</td>
+                                        <td>${o.details}</td>
+                                        <td>${o.state}</td>
+                                        <td>${o.street}</td>      
+                                    </tr>
+                                </c:forEach>
 
                             </tbody>
                         </table>
+                        <div id="myModal" class="modal">
+                            <div class="modal-content">
+                                <span class="close" onclick="closeModal();">&times;</span>
+                                <div id="modalContent">
+                                    <!-- N?i dung chi ti?t ??n hàng s? ???c t?i vào ?ây -->
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                 </div>

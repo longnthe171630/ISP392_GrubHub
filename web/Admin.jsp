@@ -42,6 +42,12 @@
                     </a>
                 </li>
                 <li>
+                    <a href="admin?action=deli">
+                        <i class='bx bxs-message-dots' ></i>
+                        <span class="text">Delivery</span>
+                    </a>
+                </li>
+                <li>
                     <a href="admin?action=feed">
                         <i class='bx bxs-message-dots' ></i>
                         <span class="text">Feedback</span>

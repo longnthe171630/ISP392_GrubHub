@@ -13,8 +13,20 @@ public class Account {
     private String username, password, email, phonenumber;
     private int role;
     private String img;
+    private int active;
     public Account() {
+        
     }
+
+    public int getActive() {
+        return active;
+    }
+
+    public void setActive(int active) {
+        this.active = active;
+    }
+                                         
+
 
     public Account(int id, String username, String password, String email, String phonenumber, int role) {
         this.id = id;

@@ -40,6 +40,12 @@
                         <span class="text">Restaurant Account</span>
                     </a>
                 </li>
+                <li>
+                    <a href="admin?action=deli">
+                        <i class='bx bxs-message-dots' ></i>
+                        <span class="text">Delivery</span>
+                    </a>
+                </li>
                 <li class="active">
                     <a href="admin?action=feed">
                         <i class='bx bxs-message-dots' ></i>
