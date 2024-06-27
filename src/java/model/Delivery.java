@@ -14,7 +14,8 @@ public class Delivery {
     private int id, order_id, delivery_person_id;
     private int ship_price;
     private java.sql.Date delivery_date;
-    private String status, image;
+    private String status;
+    private String image;
 
     public Delivery() {
     }
@@ -29,8 +30,6 @@ public class Delivery {
         this.image = image;
     }
 
-    
-    
     public int getId() {
         return id;
     }
@@ -92,4 +91,5 @@ public class Delivery {
         return "Delivery{" + "id=" + id + ", order_id=" + order_id + ", delivery_person_id=" + delivery_person_id + ", ship_price=" + ship_price + ", delivery_date=" + delivery_date + ", status=" + status + ", image=" + image + '}';
     }
 
+    
 }

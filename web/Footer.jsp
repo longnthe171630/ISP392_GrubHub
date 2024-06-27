@@ -24,30 +24,30 @@
 
 
                 <div class="box">
-                    <h3>quick links</h3>
-                    <a href="Home.jsp">home</a>
-                    <a href="About.jsp">about</a>
+                    <h3>Quick links</h3>
+                    <a href="Home.jsp">Home</a>
+                    <a href="About.jsp">About</a>
                     <a href="Contact.jsp">Contact</a>
                 </div>
 
                 <div class="box">
-                    <h3>contact info</h3>
+                    <h3>Contact info</h3>
                     <a href="#">0868105181</a>
                     <a href="#">manhndhe173383@fpt.edu.vn</a>
                     <a href="#">Hòa lạc, Hà Nội </a>
                 </div>
 
                 <div class="box">
-                    <h3>follow us</h3>
-                    <a href="#">facebook</a>
-                    <a href="#">twitter</a>
-                    <a href="#">instagram</a>
-                    <a href="#">linkedin</a>
+                    <h3>Follow us</h3>
+                    <a href="#">Facebook</a>
+                    <a href="#">Twitter</a>
+                    <a href="#">Instagram</a>
+                    <a href="#">Linkedin</a>
                 </div>
 
             </div>
 
-            <div class="credit"> copyright @ 2024 by <span>Group 3 </span> </div>
+            <div class="credit"> Copyright @ 2024 by <span>Group 3 </span> </div>
 
         </section>
     </body>

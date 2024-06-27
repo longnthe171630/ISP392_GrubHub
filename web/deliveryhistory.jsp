@@ -1,5 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -10,7 +11,7 @@
         <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
         <!-- My CSS -->
         <link rel="stylesheet" href="css/style_ship.css">
-        <title>Order</title>
+        <title>Delivery History</title>
     </head>
 
     <body>
@@ -53,7 +54,6 @@
                 </li>
             </ul>
         </section>
-
         <!-- CONTENT -->
         <section id="content">
             <!-- NAVBAR -->
@@ -62,7 +62,7 @@
                 <a href="#" class="nav-link">Categories</a>
                 <form action="#">
                     <div class="form-input">
-                        <input type="search" placeholder="Search">
+                        <input type="search" placeholder="Search...">
                         <button type="submit" class="search-btn"><i class='bx bx-search' ></i></button>
                     </div>
                 </form>
@@ -93,7 +93,7 @@
                             </li>
                             <li><i class='bx bx-chevron-right' ></i></li>
                             <li>
-                                <a class="active" href="deliveryorder">Order</a>
+                                <a class="active" href="deliveryorder">History</a>
                             </li>
                         </ul>
                     </div>
@@ -102,54 +102,66 @@
                         <span class="text">Download PDF</span>
                     </a>
                 </div>
-
                 <!-- ================ Order Details List ================= -->
                 <div class="table-data">
                     <div class="order">
                         <div class="head">
-                            <h3>Order</h3>
-                            <form action="deliveryorder" method = "GET">
+                            <h3>History</h3>
+                            <form action="deliveryhistory" method = "GET">
                                 <div class="form-input">
-                                    <input style ="border-radius: 5px; font-size: 100%;" type="search" name="search" placeholder="Search by zone">
+                                    <input style ="border-radius: 5px; font-size: 100%;" type="search" name="search" placeholder="Search by code">
                                     <button type="submit" class="search-btn"><i class='bx bx-search' ></i></button>
                                 </div>
                             </form>
                             <div class="dropdown-container">
                                 <i class='bx bx-filter' onclick="toggleDropdown('dropdown2')"></i>
                                 <div id="dropdown2" class="dropdown-content-1">
-                                    <a href="#">Newest</a>
-                                    <a href="#">Oldest</a>
+                                    <a href="#">Earliest</a>
+                                    <a href="#">Latest</a>
                                 </div>
                             </div>
                         </div>
                         <p style = "color: red">${err}</p>
                         <table>
-                            <thead>
-                                <tr>
-                                    <td>Code</td>
-                                    <td>From</td>
-                                    <td>To</td>
-                                    <td>Total</td>
-                                    <td>Status</td>
-                                    <td>Order Date</td>
-                                </tr>
-                            </thead>
-                            <tbody>  
-                                <c:forEach var="o" items="${order}">
-                                    <tr onclick="openModal(${o.id})" style="cursor: pointer;">
-                                        <td>${o.id}</td>
-                                        <td>${o.fromAddress}</td>
-                                        <td>${o.toAddress}</td>
-                                        <td>${o.total_amount}</td>
-                                        <td>
-                                            <span class="status waiting">${o.status}</span>
-                                        </td>
-                                        <td>${o.order_date}</td>
-                                    </tr>
-                                </c:forEach>
-                            </tbody>
+                            <c:choose>
+                                <c:when test="${fn:length(list) == 0}">
+                                    <p class="empty-message">You haven't delivered any orders yet!</p>
+                                </c:when>
+                                <c:otherwise>
+                                    <thead>
+                                        <tr>
+                                            <th>Code</th>
+                                            <th>Ship Price</th>
+                                            <th>Delivery Date</th>
+                                            <th>Status</th>
+                                            <th> </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <c:forEach var="d" items="${list}">
+                                            <tr>
+                                                <td>${d.order_id}</td>
+                                                <td>${d.ship_price}</td>
+                                                <td>${d.delivery_date}</td>
+                                                <td>
+                                                    <c:choose>
+                                                        <c:when test="${d.status == 'Đã giao'}">
+                                                            <span class="status completed">${d.status}</span>
+                                                        </c:when>
+                                                        <c:when test="${d.status == 'Không giao được'}">
+                                                            <span class="status pending">${d.status}</span>
+                                                        </c:when>
+                                                    </c:choose>
+                                                </td>
+                                                <td>
+                                                    <button  onclick="openModal(${d.order_id})" style="cursor: pointer;">View</button>
+                                                </td>
+                                            </tr>
+                                        </c:forEach>
+                                    </tbody>
+                                </c:otherwise>
+                            </c:choose>
                         </table>
-
                         <!--                        Phân trang-->
                         <div class="pagination">
                             <c:choose>
@@ -184,7 +196,6 @@
                             </c:choose>
                         </div>
 
-                        <!--                        Mở cửa sổ details-->
                         <div id="myModal" class="modal">
                             <div class="modal-content">
                                 <span class="close" onclick="closeModal();">&times;</span>
@@ -201,19 +212,19 @@
         <!-- CONTENT -->
 
         <script src="js/delivery.js"></script>
-
         <!-- ====== ionicons ======= -->
+
         <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
         <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
         <script>
                                     //Mở modal                
-                                    function openModal(id) {
-                                        fetch('deliveryorder', {
+                                    function openModal(order_id) {
+                                        fetch('deliveryhistory', {
                                             method: 'POST',
                                             headers: {
                                                 'Content-Type': 'application/x-www-form-urlencoded',
                                             },
-                                            body: 'id=' + id
+                                            body: 'order_id=' + order_id
                                         })
                                                 .then(response => response.text())
                                                 .then(html => {

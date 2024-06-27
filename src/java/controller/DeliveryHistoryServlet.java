@@ -4,8 +4,8 @@
  */
 package controller;
 
-import dao.AddressDAO;
 import dao.DeliveryDAO;
+import dao.NotificationDAO;
 import dao.OrderDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -17,18 +17,17 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import model.Account;
-import model.Address;
 import model.Delivery;
+import model.Notification;
 import model.Order;
 
 /**
  *
  * @author Long1
  */
-@WebServlet(name = "DeliveryOrdersServlet", urlPatterns = {"/deliverydashboard"})
-public class DeliveryDashboardServlet extends HttpServlet {
+@WebServlet(name = "DeliveryHistoryServlet", urlPatterns = {"/deliveryhistory"})
+public class DeliveryHistoryServlet extends HttpServlet {
 
-   
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -43,9 +42,9 @@ public class DeliveryDashboardServlet extends HttpServlet {
         String search = request.getParameter("search");
         List<Delivery> list;
         if (search == null || search.trim().isEmpty()) {
-            list = dao.getDeliveryDashboard(id);
+            list = dao.getDeliveryHistory(id);
         } else {
-            list = dao.searchDeliveryDashboard(id, search);
+            list = dao.searchDeliveryHistory(id, search);
             // Kiểm tra nếu không có kết quả tìm kiếm
             if (list.isEmpty()) {
                 request.setAttribute("err", "No matches found, please try again!");
@@ -53,12 +52,7 @@ public class DeliveryDashboardServlet extends HttpServlet {
         }
 
         setupPagination(request, list);
-
-        int totalShip = dao.totalShipPriceByDeliveryPersonId(id);
-        int totalDone = dao.totalDoneByDeliveryPersonId(id);
-        int totalDelivery = dao.totalDeliveryByDeliveryPersonId(id);
-        int totalCancel = dao.totalCancelByDeliveryPersonId(id);
-
+        
         //Hiển thị lỗi
         String err = (String) session.getAttribute("err");
         // Xóa thông báo lỗi sau khi lấy ra để nó chỉ hiển thị một lần
@@ -67,16 +61,20 @@ public class DeliveryDashboardServlet extends HttpServlet {
         if (err != null) {
             request.setAttribute("err", err);
         }
-        //Chuẩn bị data đẩy sang jsp
-        request.setAttribute("account", account);
-        request.setAttribute("totaldone", totalDone);
-        request.setAttribute("totalship", totalShip);
-        request.setAttribute("totaldelivery", totalDelivery);
-        request.setAttribute("totalcancel", totalCancel);
-        request.getRequestDispatcher("deliverydashboard.jsp").forward(request, response);
 
+        //Thiết lập yêu cầu để đẩy data sang jsp
+        request.setAttribute("account", account);
+        request.getRequestDispatcher("deliveryhistory.jsp").forward(request, response);
     }
 
+    /**
+     * Handles the HTTP <code>POST</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -84,17 +82,19 @@ public class DeliveryDashboardServlet extends HttpServlet {
 
         DeliveryDAO deliveryDAO = new DeliveryDAO();
         OrderDAO orderDAO = new OrderDAO();
+        NotificationDAO notice = new NotificationDAO();
         Delivery delivery1 = deliveryDAO.getDeliveryByOrderId(order_id);
         Order order1 = orderDAO.getRestaurant_Customer_ByOrderId(order_id);
         Order order2 = orderDAO.getOrderById(order_id);
+        Notification des = notice.getNoticeByOrderId(order_id);
 
+        request.setAttribute("des", des);
         request.setAttribute("delivery1", delivery1);
         request.setAttribute("order1", order1);
         request.setAttribute("order2", order2);
         request.getRequestDispatcher("deliverystatus.jsp").forward(request, response);
     }
 
-    
     private void setupPagination(HttpServletRequest request, List<Delivery> list) {
         int itemsPerPage = 5;
         int totalItems = list.size();

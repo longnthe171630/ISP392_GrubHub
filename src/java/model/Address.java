@@ -54,7 +54,7 @@ public class Address {
 
     @Override
     public String toString() {
-        return details + "," + street + "," + state;
+        return details + "-" + street + "-" + state;
     }
 
 }

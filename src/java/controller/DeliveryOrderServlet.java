@@ -17,6 +17,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import model.Address;
 import model.Order;
@@ -26,17 +27,40 @@ import model.OrderDetails;
  *
  * @author Long1
  */
-@WebServlet(name="OrderServlet", urlPatterns={"/order"})
+@WebServlet(name = "OrderServlet", urlPatterns = {"/deliveryorder"})
 public class DeliveryOrderServlet extends HttpServlet {
    
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
+
+        //Lấy data bằng session
+        HttpSession session = request.getSession();
+
+        //Lấy dữ liệu từ DAO
         OrderDAO dao = new OrderDAO();
-        List<Order> order = dao.getOrder();
-        CustomerDAO dao3 = new CustomerDAO();
-        //String phoneNumber = dao3.getPhoneNumberByCustomerId();
-        request.setAttribute("order", order);
+        String search = request.getParameter("search");
+        List<Order> orderList;
+        if (search == null || search.trim().isEmpty()) {
+            orderList = dao.getAddressRestaurant_CustomerWithId();
+        } else {
+            orderList = dao.searchAddressRestaurant_CustomerWithId(search.trim());
+            // Kiểm tra nếu không có kết quả tìm kiếm
+            if (orderList.isEmpty()) {
+                request.setAttribute("err", "No matches found, please try again!");
+            }
+        }
+        setupPagination(request, orderList);
+        
+        //Hiển thị lỗi
+        String err = (String) session.getAttribute("err");
+        // Xóa thông báo lỗi sau khi lấy ra để nó chỉ hiển thị một lần
+        session.removeAttribute("err");
+        // Thiết lập thuộc tính cho request để chuyển tiếp đến JSP
+        if (err != null) {
+            request.setAttribute("err", err);
+        }
+        
         request.getRequestDispatcher("deliveryorders.jsp").forward(request, response);
     } 
 
@@ -62,14 +86,14 @@ public class DeliveryOrderServlet extends HttpServlet {
 
         OrderDAO orderDAO = new OrderDAO();
         List<Order> order = orderDAO.getAddressRestaurant_CustomerWithId();
-        
+
         Order order1 = orderDAO.getOrderById(order_id);
         Address fromAddress = order1.getFromAddress();
         Address toAddress = order1.getToAddress();
 
         // Tạo URL của Google Maps Directions API với thông tin địa chỉ xuất phát và đích đến
         String directionsURL = "https://www.google.com/maps/embed/v1/directions?key=AIzaSyAOVYRIgupAurZup5y1PRh8Ismb1A3lLao&origin=" + fromAddress + "&destination=" + toAddress;
-        
+
         request.setAttribute("directionsURL", directionsURL);
         request.setAttribute("order", order);
         request.setAttribute("order1", order1);
@@ -79,13 +103,18 @@ public class DeliveryOrderServlet extends HttpServlet {
         request.getRequestDispatcher("deliveryorderdetails.jsp").forward(request, response);
     }
 
-    /** 
-     * Returns a short description of the servlet.
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
+    private void setupPagination(HttpServletRequest request, List<Order> orderList) {
+        int itemsPerPage = 5;
+        int totalItems = orderList.size();
+        int totalPages = (int) Math.ceil((double) totalItems / itemsPerPage);
+        String pageParam = request.getParameter("page");
+        int currentPage = pageParam != null ? Integer.parseInt(pageParam) : 1;
+        int startIndex = (currentPage - 1) * itemsPerPage;
+        int endIndex = Math.min(startIndex + itemsPerPage, totalItems);
+        List<Order> paginatedList = orderList.subList(startIndex, endIndex);
 
+        request.setAttribute("order", paginatedList);
+        request.setAttribute("totalPages", totalPages);
+        request.setAttribute("currentPage", currentPage);
+    }
 }

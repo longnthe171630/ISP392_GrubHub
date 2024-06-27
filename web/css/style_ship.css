@@ -1,498 +1,576 @@
-/* =========== Google Fonts ============ */
-@import url("https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Poppins:wght@400;500;600;700&display=swap');
 
-/* =============== Globals ============== */
 * {
-    font-family: "Ubuntu", sans-serif;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-:root {
-    --green: #008000;
-    --light-green: #90EE90;
-    --white: #fff;
-    --gray: #f5f5f5;
-    --black1: #222;
-    --black2: #999;
+a {
+    text-decoration: none;
 }
 
-body {
-    min-height: 100vh;
+li {
+    list-style: none;
+}
+
+:root {
+    --poppins: 'Poppins', sans-serif;
+    --lato: 'Lato', sans-serif;
+
+    --light: #F9F9F9;
+    --blue: #3C91E6;
+    --light-blue: #CFE8FF;
+    --grey: #eee;
+    --dark-grey: #AAAAAA;
+    --dark: #342E37;
+    --red: #DB504A;
+    --yellow: #FFCE26;
+    --light-yellow: #FFF2C6;
+    --orange: #FD7238;
+    --light-orange: #FFE0D3;
+    --green: #008000;
+    --light-green: #90EE90;
+}
+
+html {
     overflow-x: hidden;
 }
 
-.container {
-    position: relative;
-    width: 100%;
+body.dark {
+    --light: #0C0C1E;
+    --grey: #060714;
+    --dark: #FBFBFB;
 }
 
-/* =============== Navigation ================ */
-.navigation {
+body {
+    background: var(--grey);
+    overflow-x: hidden;
+}
+
+/* SIDEBAR */
+#sidebar {
     position: fixed;
-    width: 300px;
-    height: 100%;
-    background: var(--green);
-    border-left: 10px solid var(--green);
-    transition: 0.5s;
-    overflow: hidden;
-}
-.navigation.active {
-    width: 80px;
-}
-
-.navigation ul {
-    position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
+    width: 280px;
+    height: 100%;
+    background: var(--light);
+    z-index: 2000;
+    font-family: var(--lato);
+    transition: .3s ease;
+    overflow-x: hidden;
+    scrollbar-width: none;
 }
+/*#sidebar.hide {
+    transform: translateX(-100%);  Di chuyển sidebar ra ngoài màn hình 
+    
+}*/
 
-.navigation ul li {
-    position: relative;
-    width: 100%;
-    list-style: none;
-    border-top-left-radius: 30px;
-    border-bottom-left-radius: 30px;
+#sidebar.webkit-scrollbar {
+    display: none;
+    transition: none; /* Không có hiệu ứng khi ẩn */
 }
-
-.navigation ul li:hover,
-.navigation ul li.hovered {
-    background-color: var(--white);
+#sidebar.hide {
+    width: 60px;
 }
-
-.navigation ul li:nth-child(1) {
-    margin-bottom: 40px;
-    pointer-events: none;
-}
-
-.navigation ul li a {
-    position: relative;
-    display: block;
-    width: 100%;
+#sidebar .brand {
+    font-size: 24px;
+    font-weight: 700;
+    height: 56px;
     display: flex;
-    text-decoration: none;
-    color: var(--white);
+    align-items: center;
+    color: var(--blue);
+    position: sticky;
+    top: 0;
+    left: 0;
+    background: var(--light);
+    z-index: 500;
+    padding-bottom: 20px;
+    box-sizing: content-box;
 }
-.navigation ul li:hover a,
-.navigation ul li.hovered a {
+#sidebar .brand .bx {
+    min-width: 60px;
+    display: flex;
+    justify-content: center;
+}
+#sidebar .side-menu {
+    width: 100%;
+    margin-top: 48px;
+}
+#sidebar .side-menu li {
+    height: 48px;
+    background: transparent;
+    margin-left: 6px;
+    border-radius: 48px 0 0 48px;
+    padding: 4px;
+}
+#sidebar .side-menu li.active {
+    background: var(--grey);
+    position: relative;
+    transition: background 0.3s ease;
+}
+#sidebar .side-menu li.active::before {
+    content: '';
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    top: -40px;
+    right: 0;
+    box-shadow: 20px 20px 0 var(--grey);
+    z-index: -1;
+}
+#sidebar .side-menu li.active::after {
+    content: '';
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    bottom: -40px;
+    right: 0;
+    box-shadow: 20px -20px 0 var(--grey);
+    z-index: -1;
+}
+#sidebar .side-menu li a {
+    width: 100%;
+    height: 100%;
+    background: var(--light);
+    display: flex;
+    align-items: center;
+    border-radius: 48px;
+    font-size: 16px;
+    color: var(--dark);
+    white-space: nowrap;
+    overflow-x: hidden;
+}
+#sidebar .side-menu.top li.active a {
     color: var(--blue);
 }
-
-.navigation ul li a .icon {
-    position: relative;
-    display: block;
-    min-width: 60px;
-    height: 60px;
-    line-height: 75px;
-    text-align: center;
+#sidebar.hide .side-menu li a {
+    width: calc(48px - (4px * 2));
+    transition: width .3s ease;
 }
-.navigation ul li a .icon ion-icon {
-    font-size: 1.75rem;
+#sidebar .side-menu li a.logout {
+    color: var(--red);
 }
-
-.navigation ul li a .title {
-    position: relative;
-    display: block;
-    padding: 0 10px;
-    height: 60px;
-    line-height: 60px;
-    text-align: start;
-    white-space: nowrap;
+#sidebar .side-menu.top li a:hover {
+    color: var(--blue);
 }
-
-/* --------- curve outside ---------- */
-.navigation ul li:hover a::before,
-.navigation ul li.hovered a::before {
-    content: "";
-    position: absolute;
-    right: 0;
-    top: -50px;
-    width: 50px;
-    height: 50px;
-    background-color: transparent;
-    border-radius: 50%;
-    box-shadow: 35px 35px 0 10px var(--white);
-    pointer-events: none;
-}
-.navigation ul li:hover a::after,
-.navigation ul li.hovered a::after {
-    content: "";
-    position: absolute;
-    right: 0;
-    bottom: -50px;
-    width: 50px;
-    height: 50px;
-    background-color: transparent;
-    border-radius: 50%;
-    box-shadow: 35px -35px 0 10px var(--white);
-    pointer-events: none;
-}
-
-/* ===================== Main ===================== */
-.main {
-    position: absolute;
-    width: calc(100% - 300px);
-    left: 300px;
-    min-height: 100vh;
-    background: var(--white);
-    transition: 0.5s;
-}
-.main.active {
-    width: calc(100% - 80px);
-    left: 80px;
-}
-
-.topbar {
-    width: 100%;
-    height: 60px;
+#sidebar .side-menu li a .bx {
+    min-width: calc(60px  - ((4px + 6px) * 2));
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 10px;
+    justify-content: center;
 }
+/* SIDEBAR */
 
-.toggle {
+
+/* CONTENT */
+#content {
     position: relative;
-    width: 60px;
-    height: 60px;
+    width: calc(100% - 280px);
+    left: 280px;
+    transition: .3s ease;
+}
+#sidebar.hide ~ #content {
+    width: calc(100% - 60px);
+    left: 60px;
+}
+/* NAVBAR */
+#content nav {
+    height: 56px;
+    background: var(--light);
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    grid-gap: 24px;
+    font-family: var(--lato);
+    position: sticky;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+#content nav::before {
+    content: '';
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    bottom: -40px;
+    left: 0;
+    border-radius: 50%;
+    box-shadow: -20px -20px 0 var(--light);
+}
+#content nav a {
+    color: var(--dark);
+}
+#content nav .bx.bx-menu {
+    cursor: pointer;
+    color: var(--dark);
+}
+#content nav .nav-link {
+    font-size: 16px;
+    transition: .3s ease;
+}
+#content nav .nav-link:hover {
+    color: var(--blue);
+}
+#content nav form {
+    max-width: 400px;
+    width: 100%;
+    margin-right: auto;
+}
+#content nav form .form-input {
+    display: flex;
+    align-items: center;
+    height: 36px;
+}
+#content nav form .form-input input {
+    flex-grow: 1;
+    padding: 0 16px;
+    height: 100%;
+    border: none;
+    background: var(--grey);
+    border-radius: 36px 0 0 36px;
+    outline: none;
+    width: 100%;
+    color: var(--dark);
+}
+#content nav form .form-input button {
+    width: 36px;
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 2.5rem;
-    cursor: pointer;
-}
-
-.search {
-    position: relative;
-    width: 400px;
-    margin: 0 10px;
-}
-
-.search label {
-    position: relative;
-    width: 100%;
-}
-
-.search label input {
-    width: 100%;
-    height: 40px;
-    border-radius: 40px;
-    padding: 5px 20px;
-    padding-left: 35px;
+    background: var(--blue);
+    color: var(--light);
     font-size: 18px;
+    border: none;
     outline: none;
-    border: 1px solid var(--black2);
-}
-
-.search label ion-icon {
-    position: absolute;
-    top: 0;
-    left: 10px;
-    font-size: 1.2rem;
-}
-
-.user {
-    position: relative;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    overflow: hidden;
+    border-radius: 0 36px 36px 0;
     cursor: pointer;
 }
 
-.user img {
+.notification i {
+    cursor: pointer;
+}
+
+#content nav .notification {
+    font-size: 20px;
+    position: relative;
+}
+#content nav .notification .num {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    top: -6px;
+    right: -6px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid var(--light);
+    background: var(--red);
+    color: var(--light);
+    font-weight: 700;
+    font-size: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    user-select: none;
+}
+#content nav .profile img {
+    width: 36px;
+    height: 36px;
     object-fit: cover;
+    border-radius: 50%;
 }
 
-/* ======================= Cards ====================== */
-.cardBox {
-    position: relative;
+/* NAVBAR */
+
+
+
+
+
+/* MAIN */
+#content main {
     width: 100%;
-    padding: 20px;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-gap: 30px;
+    padding: 36px 24px;
+    font-family: var(--poppins);
+    max-height: calc(100vh - 56px);
+    overflow-y: auto;
+}
+#content main .head-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    grid-gap: 16px;
+    flex-wrap: wrap;
+}
+#content main .head-title .left h1 {
+    font-size: 36px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: var(--dark);
+}
+#content main .head-title .left .breadcrumb {
+    display: flex;
+    align-items: center;
+    grid-gap: 16px;
+}
+#content main .head-title .left .breadcrumb li {
+    color: var(--dark);
+}
+#content main .head-title .left .breadcrumb li a {
+    color: var(--dark-grey);
+    pointer-events: none;
+}
+#content main .head-title .left .breadcrumb li a.active {
+    color: var(--blue);
+    pointer-events: unset;
+}
+#content main .head-title .btn-download {
+    height: 36px;
+    padding: 0 16px;
+    border-radius: 36px;
+    background: var(--blue);
+    color: var(--light);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    grid-gap: 10px;
+    font-weight: 500;
 }
 
-.cardBox .card {
-    position: relative;
-    background: var(--white);
-    padding: 30px;
+
+
+
+#content main .box-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    grid-gap: 24px;
+    margin-top: 36px;
+}
+#content main .box-info li {
+    padding: 24px;
+    background: var(--light);
     border-radius: 20px;
     display: flex;
-    justify-content: space-between;
-    cursor: pointer;
-    box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
+    align-items: center;
+    grid-gap: 24px;
 }
-
-.cardBox .card .numbers {
-    position: relative;
-    font-weight: 500;
-    font-size: 2.5rem;
-    color: var(--blue);
-}
-
-.cardBox .card .cardName {
-    color: var(--black2);
-    font-size: 1.1rem;
-    margin-top: 5px;
-}
-
-.cardBox .card .iconBx {
-    font-size: 3.5rem;
-    color: var(--black2);
-}
-
-.cardBox .card:hover {
-    background: var(--blue);
-}
-.cardBox .card:hover .numbers,
-.cardBox .card:hover .cardName,
-.cardBox .card:hover .iconBx {
-    color: var(--black);
-}
-
-/* ================== Order Details List ============== */
-.details {
-    position: relative;
-    width: 100%;
-    padding: 20px;
-    padding: 10px;
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    grid-gap: 30px;
-    /* margin-top: 10px; */
-}
-
-.detailsOrders {
-    position: relative;
-    width: 150%;
-    height: 150%;
-    padding: 20px;
-    display: grid;
-    grid-template-columns: 1fr; /* Chia lưới với một cột */
-    grid-auto-rows: 1fr; /* Đặt chiều cao các hàng để chúng mở rộng đều nhau */
-    grid-gap: 30px; /* Khoảng cách giữa các phần tử trong grid */
-    border: 1px solid #ccc; /* Thêm viền để dễ nhìn */
-    box-sizing: border-box; /* Đảm bảo padding không ảnh hưởng đến chiều rộng và chiều cao */
-}
-
-.detailsOrders > * {
-    background-color: #f9f9f9; /* Màu nền cho các phần tử bên trong */
-    padding: 10px; /* Khoảng cách trong cho các phần tử bên trong */
-    border: 1px solid #ddd; /* Thêm viền cho các phần tử bên trong */
-    box-sizing: border-box; /* Đảm bảo padding không ảnh hưởng đến chiều rộng và chiều cao */
-    height: 100%; /* Chiều cao của mỗi phần tử con phủ kín chiều cao của grid row */
-}
-
-.details .recentOrders {
-    position: relative; /* Thiết lập vị trí tương đối để có thể sử dụng các thuộc tính top, right, bottom, left dựa trên vị trí ban đầu của phần tử. */
-    /*    display: grid;  Sử dụng Grid Layout, cho phép sắp xếp các phần tử con bên trong theo dạng lưới. */
-    min-height: 500px; /* Đặt chiều cao tối thiểu của phần tử là 500px, giúp đảm bảo phần tử có kích thước cố định đủ lớn. */
-    background: var(--white); /* Thiết lập màu nền của phần tử, ở đây là giá trị của biến CSS `--white`. */
-    /*    display: grid;  Sử dụng Grid Layout, cho phép sắp xếp các phần tử con bên trong theo dạng lưới. */
-    min-height: 500px; /* Đặt chiều cao tối thiểu của phần tử là 500px, giúp đảm bảo phần tử có kích thước cố định đủ lớn. */
-    background: var(--black); /* Thiết lập màu nền của phần tử, ở đây là giá trị của biến CSS `--white`. */
-    padding: 30px; /* Đặt khoảng cách bên trong phần tử là 30px từ tất cả các cạnh (trên, dưới, trái, phải). */
-    box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08); /* Thêm hiệu ứng bóng đổ cho phần tử, với độ mờ và vị trí đổ bóng được xác định bởi các giá trị. */
-    border-radius: 20px; /* Bo tròn các góc của phần tử với bán kính 20px, làm cho các góc không còn sắc nhọn. */
-}
-
-.details .cardHeader {
+#content main .box-info li .bx {
+    width: 80px;
+    height: 80px;
+    border-radius: 10px;
+    font-size: 36px;
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
+    justify-content: center;
+    align-items: center;
 }
-.cardHeader h2 {
-    font-weight: 600;
+#content main .box-info li:nth-child(1) .bx {
+    background: var(--light-blue);
     color: var(--blue);
 }
-.cardHeader .btn {
-    position: relative;
-    padding: 5px 10px;
-    background: var(--blue);
-    text-decoration: none;
-    color: var(--white);
-    ;
-    border-radius: 6px;
+#content main .box-info li:nth-child(2) .bx {
+    background: var(--light-yellow);
+    color: var(--yellow);
+}
+#content main .box-info li:nth-child(3) .bx {
+    background: var(--light-orange);
+    color: var(--orange);
+}
+#content main .box-info li:nth-child(4) .bx {
+    background: var(--light-green);
+    color: var(--green);
+}
+#content main .box-info li .text h3 {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--dark);
+}
+#content main .box-info li .text p {
+    color: var(--dark);
 }
 
-.details table {
+
+#content main .table-data {
+    display: flex;
+    flex-wrap: wrap;
+    grid-gap: 24px;
+    margin-top: 24px;
+    width: 100%;
+    color: var(--dark);
+}
+#content main .table-data > div {
+    border-radius: 20px;
+    background: var(--light);
+    padding: 24px;
+    overflow-x: auto;
+}
+#content main .table-data .head {
+    display: flex;
+    align-items: center;
+    grid-gap: 16px;
+    margin-bottom: 24px;
+}
+#content main .table-data .head h3 {
+    margin-right: auto;
+    font-size: 24px;
+    font-weight: 600;
+}
+#content main .table-data .head .bx {
+    cursor: pointer;
+}
+
+#content main .table-data .order {
+    flex-grow: 1;
+    flex-basis: 500px;
+}
+#content main .table-data .order table {
     width: 100%;
     border-collapse: collapse;
-    position: relative; /* Đặt vị trí tương đối để sử dụng top */
-    top: 20px; /* Di chuyển lên trên 20px */
 }
-.details table thead td {
-    font-weight: 600;
+#content main .table-data .order table th {
+    padding-bottom: 12px;
+    font-size: 13px;
+    text-align: left;
+    border-bottom: 1px solid var(--grey);
 }
-.details .recentOrders table tr {
-    color: var(--black1);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+#content main .table-data .order table td {
+    padding: 16px 0;
 }
-.details .recentOrders table tr:last-child {
-    border-bottom: none;
+#content main .table-data .order table tr td:first-child {
+    display: flex;
+    align-items: center;
+    grid-gap: 12px;
+    padding-left: 6px;
 }
-.details .recentOrders table tbody tr:hover {
-    background: var(--blue);
-    color: var(--green);
-}
-.details .recentOrders table tr td {
-    padding: 10px;
-    text-align: center;
-}
-
-.recentCustomers {
-    position: relative;
-    /*    display: grid;*/
-    background: var(--light-green);
-    color: var(--black1);
-}
-.details .recentOrders table tr td {
-    padding: 10px;
-    text-align: center;
-}
-
-.status-inProgress {
-    color: blue; /* Màu cho trạng thái Đang giao */
-}
-
-.status-delivered {
-    color: green; /* Màu cho trạng thái Đã giao */
-}
-
-.status-return {
-    color: red; /* Màu cho trạng thái Không giao được */
-}
-
-.status-pending {
-    color: gray; /* Màu cho trạng thái Đang chờ */
-}
-
-
-.recentCustomers {
-    position: relative;
-    /*    display: grid;*/
-    min-height: 500px;
-    padding: 20px;
-    background: var(--white);
-    box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
-    border-radius: 20px;
-}
-.recentCustomers .imgBx {
-    position: relative;
-    width: 40px;
-    height: 40px;
-    border-radius: 50px;
-    overflow: hidden;
-}
-.recentCustomers .imgBx img {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+#content main .table-data .order table td img {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
     object-fit: cover;
 }
-.recentCustomers table tr td {
-    padding: 12px 10px;
+#content main .table-data .order table tbody tr:hover {
+    background: var(--grey);
 }
-.recentCustomers table tr td h4 {
-    font-size: 16px;
-    font-weight: 500;
-    line-height: 1.2rem;
+#content main .table-data .order table tr td .status {
+    font-size: 10px;
+    padding: 6px 16px;
+    color: var(--light);
+    border-radius: 20px;
+    font-weight: 700;
 }
-.recentCustomers table tr td h4 span {
-    font-size: 14px;
-    color: var(--black2);
-}
-.recentCustomers table tr:hover {
+#content main .table-data .order table tr td .status.completed {
     background: var(--blue);
-    color: var(--green);
 }
-.recentCustomers table tr:hover td h4 span {
-    color: var(--green);
+#content main .table-data .order table tr td .status.pending {
     background: var(--red);
-    color: var(--red);
 }
-.recentCustomers table tr:hover td h4 span {
-    color: var(--red);
+#content main .table-data .order table tr td .status.process {
+    background: var(--yellow);
+}
+#content main .table-data .order table tr td .status.take {
+    background: var(--green);
+}
+#content main .table-data .order table tr td .status.waiting {
+    background: var(--dark);
 }
 
-/* ====================== Responsive Design ========================== */
-@media (max-width: 991px) {
-    .navigation {
-        left: -300px;
+#content main .table-data .todo {
+    flex-grow: 1;
+    flex-basis: 300px;
+}
+#content main .table-data .todo .todo-list {
+    width: 100%;
+}
+#content main .table-data .todo .todo-list li {
+    width: 100%;
+    margin-bottom: 16px;
+    background: var(--grey);
+    border-radius: 10px;
+    padding: 14px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+#content main .table-data .todo .todo-list li .bx {
+    cursor: pointer;
+}
+#content main .table-data .todo .todo-list li.completed {
+    border-left: 10px solid var(--blue);
+}
+#content main .table-data .todo .todo-list li.not-completed {
+    border-left: 10px solid var(--orange);
+}
+#content main .table-data .todo .todo-list li:last-child {
+    margin-bottom: 0;
+}
+/* MAIN */
+
+/* CONTENT */
+
+
+
+
+@media screen and (max-width: 768px) {
+    #sidebar {
+        width: 200px;
     }
-    .navigation.active {
-        width: 300px;
-        left: 0;
+
+    #content {
+        width: calc(100% - 60px);
+        left: 200px;
     }
-    .main {
+
+    #content nav .nav-link {
+        display: none;
+    }
+}
+
+
+@media screen and (max-width: 576px) {
+    #content nav form .form-input input {
+        display: none;
+    }
+
+    #content nav form .form-input button {
+        width: auto;
+        height: auto;
+        background: transparent;
+        border-radius: none;
+        color: var(--dark);
+    }
+
+    #content nav form.show .form-input input {
+        display: block;
         width: 100%;
-        left: 0;
     }
-    .main.active {
-        left: 300px;
+    #content nav form.show .form-input button {
+        width: 36px;
+        height: 100%;
+        border-radius: 0 36px 36px 0;
+        color: var(--light);
+        background: var(--red);
     }
-    .cardBox {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
 
-@media (max-width: 768px) {
-    .details {
+    #content nav form.show ~ .notification,
+    #content nav form.show ~ .profile {
+        display: none;
+    }
+
+    #content main .box-info {
         grid-template-columns: 1fr;
     }
-    .recentOrders {
-        overflow-x: auto;
+
+    #content main .table-data .head {
+        min-width: 420px;
     }
-    .status.inProgress {
-        white-space: nowrap;
+    #content main .table-data .order table {
+        min-width: 420px;
+    }
+    #content main .table-data .todo .todo-list {
+        min-width: 420px;
     }
 }
 
-@media (max-width: 480px) {
-    .cardBox {
-        grid-template-columns: repeat(1, 1fr);
-    }
-    .cardHeader h2 {
-        font-size: 20px;
-    }
-    .user {
-        min-width: 40px;
-    }
-    .navigation {
-        width: 100%;
-        left: -100%;
-        z-index: 1000;
-    }
-    .navigation.active {
-        width: 100%;
-        left: 0;
-    }
-    .toggle {
-        z-index: 10001;
-    }
-    .main.active .toggle {
-        color: #fff;
-        position: fixed;
-        right: 0;
-        left: initial;
-    }
-}
-.avatar-container {
-    position: relative;
-    display: inline-block;
-    margin-left: 40px;
-}
 
 .avatar {
     width: 40px;
@@ -503,89 +581,101 @@ body {
 }
 
 .dropdown-content {
-    display: none; /* Ẩn phần tử theo mặc định */
-    position: absolute; /* Định vị tuyệt đối */
-    right: 0px; /* Đặt phần tử ở bên phải */
-    background-color: #f9f9f9; /* Màu nền của phần tử */
-    min-width: 150px; /* Chiều rộng tối thiểu tăng lên */
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); /* Đổ bóng */
-    z-index: 1; /* Đảm bảo phần tử này nằm trên các phần tử khác */
-    border-radius: 8px; /* Bo tròn các góc */
-    border: 1px solid #ccc; /* Đường viền màu xám nhạt */
-    padding: 10px; /* Tăng khoảng cách bên trong của dropdown */
+    display: none;
+    position: absolute;
+    right: 0px;
+    top: 50px;
+    background-color: #f9f9f9;
+    min-width: 140px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    padding: 8px 0; /* Thêm padding cho phần nội dung */
+    border-radius: 8px; /* Định dạng góc bo tròn */
+    border: 1px solid #ccc; /* Thêm border để phân biệt với nền */
 }
 
 .dropdown-content a {
-    color: black; /* Màu chữ đen cho các liên kết */
-    padding: 16px 20px; /* Tăng khoảng cách bên trong của liên kết */
-    text-decoration: none; /* Loại bỏ gạch chân của liên kết */
-    display: block; /* Hiển thị liên kết như một khối */
-    font-size: 16px; /* Tăng kích thước chữ */
+    color: black;
+    padding: 8px 16px; /* Điều chỉnh padding để làm rõ ràng hơn */
+    text-decoration: none;
+    display: block;
+    transition: background-color 0.3s; /* Thêm hiệu ứng chuyển đổi */
 }
 
 .dropdown-content a:hover {
-    background-color: #999999/* Thay đổi màu nền khi di chuột qua */
-}
-.logo {
-    color: var(--black);
-    font-size: 2.5rem;
-    font-weight: bolder;
-    margin-left: 20px;
-    margin-bottom: 20px;
+    background-color: #e0e0e0; /* Màu nền khi hover */
 }
 
-.logo i {
-    color: var(--green);
+.dropdown-content-1 {
+    display: none;
+    position: absolute;
+    right: -10px;
+    top: 23.5px;
+    background-color: #f9f9f9;
+    min-width: 110px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    padding: 8px 0; /* Thêm padding cho phần nội dung */
+    border-radius: 8px; /* Định dạng góc bo tròn */
+    border: 1px solid #ccc; /* Thêm border để phân biệt với nền */
 }
 
-/* Thiết lập font chữ và màu sắc chung cho thông báo*/
-body {
-    font-family: Arial, sans-serif;
-    color: #333;
+.dropdown-content-1 a {
+    color: black;
+    padding: 8px 16px; /* Điều chỉnh padding để làm rõ ràng hơn */
+    text-decoration: none;
+    display: block;
+    transition: background-color 0.3s; /* Thêm hiệu ứng chuyển đổi */
 }
 
-/* Định dạng cho các tiêu đề h1 */
-h1 {
-    font-size: 36px;
-    color: #555;
-    margin-bottom: 20px;
+.dropdown-content-1 a:hover {
+    background-color: #e0e0e0; /* Màu nền khi hover */
 }
 
-/* Định dạng cho phần tử đường viền */
-hr {
-    border: 1px solid #ddd;
-    margin: 20px 0;
+.dropdown-content-2 {
+    display: none; /* Ẩn dropdown ban đầu */
+    position: absolute; /* Đặt vị trí tuyệt đối */
+    right: 0; /* Đặt vị trí bên phải */
+    top: 100%; /* Đặt vị trí từ bottom của thông báo */
+    background-color: #fff; /* Màu nền của dropdown */
+    min-width: 200px; /* Đảm bảo dropdown đủ rộng */
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); /* Hiệu ứng bóng đổ */
+    z-index: 1; /* Độ sâu z-index để đảm bảo dropdown hiển thị trên các phần tử khác */
+    border-radius: 8px; /* Bo tròn góc */
+    border: 1px solid #ccc; /* Đường viền của dropdown */
 }
 
-/* Định dạng cho phần tử dạng button */
-button {
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+.dropdown-content-2 a {
+    display: block; /* Hiển thị các liên kết trên mỗi dòng */
+    padding: 12px 16px; /* Khoảng cách giữa nội dung và đường viền */
+    text-decoration: none; /* Không gạch chân các liên kết */
+    color: black; /* Màu chữ */
+    transition: background-color 0.3s; /* Hiệu ứng chuyển đổi khi di chuột qua */
+    cursor: pointer; /* Thay đổi con trỏ chuột thành pointer */
 }
 
-button:hover {
-    background-color: #0056b3;
+.dropdown-content-2 a:hover {
+    background-color: #f0f0f0; /* Màu nền khi di chuột qua */
+    border-radius: 4px; /* Bo tròn góc khi di chuột qua */
 }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
+.dropdown-content.show {
+    display: block; /* Hiển thị dropdown khi có class 'show' */
+}
+.dropdown-content-1.show {
+    display: block; /* Hiển thị dropdown khi có class 'show' */
+}
+.dropdown-content-2.show {
+    display: block; /* Hiển thị dropdown khi có class 'show' */
+}
+.dropdown-container {
+    position: relative;
+    display: inline-block;
+
 }
 
-table th, table td {
-    border: 1px solid #ddd;
-    padding: 10px;
-}
 
-table th {
-    background-color: #f2f2f2;
-}
-
+/* Định dạng cho modal */
 /* Định dạng cho phần tử modal */
 .modal {
     display: none;
@@ -602,9 +692,9 @@ table th {
 .modal-content {
     background-color: #fefefe;
     margin: 10% auto; /* Thay đổi khoảng cách từ trên xuống */
-    padding: 40px; /* Thay đổi lề nội dung bên trong */
-    border-radius: 10px;
-    width: 800px; /* Thay đổi chiều rộng */
+    padding: 30px; /* Thay đổi lề nội dung bên trong */
+    border-radius: 15px;
+    width: 750px; /* Thay đổi chiều rộng */
     height: 500px;
     box-shadow: 0 0 20px rgba(0,0,0,0.3);
 }
@@ -613,7 +703,7 @@ table th {
 .close {
     color: #aaa;
     float: right;
-    font-size: 28px;
+    font-size: 30px;
     font-weight: bold;
 }
 
@@ -623,22 +713,72 @@ table th {
     text-decoration: none;
     cursor: pointer;
 }
-.button {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); /* Đổ bóng cho văn bản */
-    margin: 5px;
-    width: 120px; /*Đặt chiều rộng cố định*/
+
+.empty-message {
+    text-align: center;
+    opacity: 0.5; /* Độ mờ của chữ */
+    font-size: 1.5em; /* Tăng kích thước chữ một chút */
+    padding: 20px; /* Tăng khoảng cách giữa chữ và viền ô */
+    margin-top: 100px;
 }
 
-.button.all {
+.reason-modal-content {
+    background-color: #fefefe;
+    margin: 20% auto; /* Thay đổi khoảng cách từ trên xuống */
+    padding: 20px; /* Thay đổi lề nội dung bên trong */
+    border-radius: 15px;
+    width: 500px;
+    height: 220px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.3);
+}
+
+button {
+    background-color: #4CAF50; /* Màu nền */
+    border: none; /* Không có viền */
+    color: white; /* Màu chữ */
+    padding: 10px 20px; /* Padding trên/dưới và trái/phải */
+    text-align: center; /* Căn giữa chữ */
+    text-decoration: none; /* Không có gạch chân */
+    display: inline-block; /* Hiển thị như khối nội tuyến */
+    font-size: 14px; /* Kích thước chữ */
+    margin: 4px 2px; /* Khoảng cách giữa các nút */
+    cursor: pointer; /* Con trỏ chuột khi di chuột vào */
+    border-radius: 5px; /* Bo tròn các góc */
+    transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Hiệu ứng chuyển động */
+}
+
+button:hover {
+    background-color: #45a049; /* Màu nền khi di chuột vào */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Hiệu ứng đổ bóng */
+}
+
+button:active {
+    background-color: #3e8e41; /* Màu nền khi nhấn vào */
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2); /* Hiệu ứng đổ bóng khi nhấn */
+    transform: translateY(2px); /* Hiệu ứng nhấn xuống */
+}
+
+
+.pagination {
+    margin: 20px 0;
+    display: flex;
+    justify-content: center;
+}
+
+.pagination a {
+    margin: 0 5px;
+    padding: 8px 16px;
+    border: 1px solid #ddd;
+    text-decoration: none;
+    color: black;
+}
+
+.pagination a.active {
+    background-color: #4CAF50;
     color: white;
 }
 
-.button:hover {
-    opacity: 1.5; /*Hiệu ứng mở dần khi di chuột qua*/
+.pagination a:hover:not(.active) {
+    background-color: #ddd;
 }
+

@@ -221,19 +221,4 @@ public class AccountDAO extends MyDAO {
             System.out.println(a);
         }
     }
-
-//    public static void main(String[] args) {
-//        AccountDAO accountDAO = new AccountDAO();
-//
-//        // Kiểm thử hàm getAccountByEmail
-//        String emailToTest = "icon0690@gmail.com";
-//        Account account = accountDAO.getAccountByEmail(emailToTest);
-//
-//        if (account != null) {
-//            System.out.println("Account found: " + account);
-//        } else {
-//            System.out.println("No account found with email: " + emailToTest);
-//        }
-//
-//    }
 }

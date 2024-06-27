@@ -62,12 +62,5 @@
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/login</url-pattern>
     </servlet-mapping>
-    <!--    <servlet>
-        <servlet-name>ResetPasswordServlet</servlet-name>
-        <servlet-class>controller.ResetPasswordServlet</servlet-class>
-    </servlet> 
-    <servlet-mapping>
-        <servlet-name>ResetPasswordServlet</servlet-name>
-        <url-pattern>/resetpassword</url-pattern>
-    </servlet-mapping>-->
+    
 </web-app>

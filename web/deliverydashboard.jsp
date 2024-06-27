@@ -1,200 +1,211 @@
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html lang="en">
-
     <head>
         <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Delivery DashBoard</title>
-        <!-- ======= Styles ====== -->
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <!-- Boxicons -->
+        <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+        <!-- My CSS -->
         <link rel="stylesheet" href="css/style_ship.css">
-
+        <title>Delivery Dashboard</title>
     </head>
-
     <body>
-        <!-- =============== Navigation ================ -->
-        <div class="container">
-            <div class="navigation">
-                <ul>
-                    <li>
-                        <a href="home">
-                            <span class="logo">
-                                <i class="icon"></i>
-                                <span class="title">GrubHub</span>
-                            </span>
-                        </a>
-                    </li>
 
-                    <li>
-                        <a href="deliverydashboard">
-                            <span class="icon">
-                                <ion-icon name="home-outline"></ion-icon>
-                            </span>
-                            <span class="title">Bảng điều khiển</span>
-                        </a>
-                    </li>
+        <!-- SIDEBAR -->
+        <section id="sidebar">
+            <a href="home" class="brand">
+                <i class='bx bxs-food-menu'></i>
+                <span class="text">Grubhub</span>
+            </a>
+            <ul class="side-menu top">
+                <li class="active">
+                    <a href="deliverydashboard">
+                        <i class='bx bxs-dashboard'></i>
+                        <span class="text">Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="deliveryorder">
+                        <i class='bx bxs-shopping-bag-alt'></i>
+                        <span class="text">Order</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="deliveryhistory">
+                        <i class='bx bxs-doughnut-chart' ></i>
+                        <span class="text">History</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class='bx bxs-bell' ></i>
+                        <!--                        bxs-message-dots-->
+                        <span class="text">Notification</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class='bx bxs-group' ></i>
+                        <span class="text">Help</span>
+                    </a>
+                </li>
+            </ul>
+        </section>
+        <!-- SIDEBAR -->
 
-                    <li>
-                        <a href="order">
-                            <span class="icon">
-                                <ion-icon name="cart-outline"></ion-icon>
-                            </span>
-                            <span class="title">Đơn hàng</span>
-                        </a>
-                    </li>
 
-                    <li>
-                        <a href="#">
-                            <span class="icon">
-                                <ion-icon name="time-outline"></ion-icon>
-                            </span>
-                            <span class="title">Lịch sử</span>
-                        </a>
-                    </li>
 
-                    <li>
-                        <a href="#">
-                            <span class="icon">
-                                <ion-icon name="chatbubble-outline"></ion-icon>
-                            </span>
-                            <span class="title">Tin nhắn</span>
-                        </a>
-                    </li>
+        <!-- CONTENT -->
+        <section id="content">
+            <!-- NAVBAR -->
+            <nav>
+                <i class='bx bx-menu' ></i>
+                <a href="#" class="nav-link">Categories</a>
+                <form action="#">
+                    <div class="form-input">
+                        <input type="search" placeholder="Search...">
+                        <button type="submit" class="search-btn"><i class='bx bx-search' ></i></button>
+                    </div>
+                </form>
+                <!--                <input type="checkbox" id="switch-mode" hidden>-->
+                <div class="dropdown-container" >
+                    <div class="notification" >
+                        <i class='bx bxs-bell' onclick="toggleDropdown('dropdown3')"></i>
+                        <span class="num">10</span>
+                    </div>
+                    <div id="dropdown3" class="dropdown-content-2">
+                        <a href="#">Notification 1</a>
+                        <a href="#">Notification 2</a>
+                        <a href="#">Notification 3</a>
+                    </div>
+                </div>
+                <div class="dropdown-container">
+                    <img src="images/icon/avatar1.jpg" alt="Avatar" class="avatar" onclick="toggleDropdown('dropdown1')">
+                    <div id="dropdown1" class="dropdown-content">
+                        <a href="Showinfo.jsp">Profile</a>
+                        <a href="settings">Setting</a>
+                        <a id="logoutButton" href="logout">Logout</a>
+                    </div>
+                </div>
+            </nav>
+            <!-- NAVBAR -->
 
+            <!-- MAIN -->
+            <main>
+                <div class="head-title">
+                    <div class="left">
+                        <h1>Delivery Dashboard</h1>
+                        <ul class="breadcrumb">
+                            <li>
+                                <a href="home">Home</a>
+                            </li>
+                            <li><i class='bx bx-chevron-right' ></i></li>
+                            <li>
+                                <a class="active" href="deliverydashboard">Dashboard</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <a href="#" class="btn-download">
+                        <i class='bx bxs-cloud-download' ></i>
+                        <span class="text">Download PDF</span>
+                    </a>
+                </div>
+
+                <ul class="box-info">
                     <li>
-                        <a href="#">
-                            <span class="icon">
-                                <ion-icon name="help-outline"></ion-icon>
-                            </span>
-                            <span class="title">Trợ giúp</span>
-                        </a>
+                        <i class='bx bx-check' ></i>
+                        <span class="text">
+                            <h3>${totaldone}</h3>
+                            <p>Success</p>
+                        </span>
+                    </li>
+                    <li>
+                        <i class='bx bxs-truck' ></i>
+                        <span class="text">
+                            <h3>${totaldelivery}</h3>
+                            <p>Processing</p>
+                        </span>
+                    </li>
+                    <li>
+                        <i class='bx bx-x' ></i>
+                        <span class="text">
+                            <h3>${totalcancel}</h3>
+                            <p>Canceled</p>
+                        </span>
+                    </li>
+                    <li>
+                        <i class='bx bxs-dollar-circle' ></i>
+                        <span class="text">
+                            <h3>${totalship}</h3>
+                            <p>Earning</p>
+                        </span>
                     </li>
                 </ul>
-            </div>
 
-            <!-- ========================= Main ==================== -->
-            <div class="main">
-                <div class="topbar">
-                    <!--                <div class="toggle">
-                                        <ion-icon name="menu-outline"></ion-icon>
-                                    </div>-->
-
-                    <div class="search">
-                        <label>
-                            <input type="text" placeholder="Tìm kiếm">
-                            <ion-icon name="search-outline"></ion-icon>
-                        </label>
-                    </div>
-
-                    <div class="avatar-container">
-                        <img src="images/icon/avatar1.jpg" alt="Avatar" class="avatar" onclick="toggleDropdown()">
-                        <div id="dropdown" class="dropdown-content">
-                            <a href="Showinfo.jsp">Hồ sơ</a>
-                            <a href="settings">Cài đặt</a>
-                            <a href="logout">Đăng xuất</a>
-
+                <div class="table-data">
+                    <div class="order">
+                        <div class="head">
+                            <h3>Your Order</h3>
+                            <form action="deliverydashboard" method = "GET">
+                                <div class="form-input">
+                                    <input style ="border-radius: 5px; font-size: 100%;" type="search" name="search" placeholder="Search by code">
+                                    <button type="submit" class="search-btn"><i class='bx bx-search' ></i></button>
+                                </div>
+                            </form>
+                            <div class="dropdown-container">
+                                <i class='bx bx-filter' onclick="toggleDropdown('dropdown2')"></i>
+                                <div id="dropdown2" class="dropdown-content-1">
+                                    <a href="#">Newest</a>
+                                    <a href="#">Oldest</a>
+                                </div>
+                            </div> 
                         </div>
-                    </div>
-                </div>
-
-                <!-- ======================= Cards ================== -->
-                <div class="cardBox">
-                    <div class="card" style = "color: green">
-                        <div>
-                            <div class="numbers">1</div>
-                            <div class="cardName">Đã giao</div>
-                        </div>
-
-                        <div class="iconBx">
-                            <ion-icon name="checkmark-circle-outline"></ion-icon>
-                        </div>
-                    </div>
-
-                    <div class="card" style = "color: blue">
-                        <div>
-                            <div class="numbers">1</div>
-                            <div class="cardName">Đang giao</div>
-                        </div>
-
-                        <div class="iconBx">
-                            <ion-icon name="bicycle-outline"></ion-icon>
-                        </div>
-                    </div>
-
-                    <div class="card" style = "color: red">
-                        <div>
-                            <div class="numbers">1</div>
-                            <div class="cardName">Không giao được</div>
-                        </div>
-
-                        <div class="iconBx" style = "red">
-                            <ion-icon name="close-circle-outline"></ion-icon>
-                        </div>
-                    </div>
-
-                    <div class="card">
-                        <div>
-                            <div class="numbers">100K</div>
-                            <div class="cardName">Lợi nhuận</div>
-                        </div>
-
-                        <div class="iconBx">
-                            <ion-icon name="cash-outline"></ion-icon>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- ================ Order Details List ================= -->
-                <div class="details">
-                    <div class="recentOrders">
-                        <div class="cardHeader">
-                            <h2>Đơn hàng gần đây</h2>
-                            <a href="order" class="btn" style ="color: black">Xem tất cả</a>
-                        </div>
-
+                        <p style = "color: red">${err}</p>
                         <table>
-                            <thead>
-                                <tr>
-                                    <th>Mã đơn hàng</th>
-                                    <th>Cước vận chuyển</th>
-                                    <th>Ngày vận chuyển</th>
-                                    <th>Trạng thái</th>
-                                    <th>Ảnh xác nhận</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <c:forEach var="d" items="${list}">
-                                    <tr onclick="openModal(${d.order_id})" style="cursor: pointer;">
-                                        <td>${d.order_id}</td>
-                                        <td>${d.ship_price}</td>
-                                        <td>${d.delivery_date}</td>
-                                        <td>
-                                            <c:choose>
-                                                <c:when test="${d.status == 'Đang giao'}">
-                                                    <span class="status-inProgress">${d.status}</span>
-                                                </c:when>
-                                                <c:when test="${d.status == 'Đã giao'}">
-                                                    <span class="status-delivered">${d.status}</span>
-                                                </c:when>
-                                                <c:when test="${d.status == 'Không giao được'}">
-                                                    <span class="status-return">${d.status}</span>
-                                                </c:when>
-                                                <c:otherwise>
-                                                    <!-- Không hiển thị gì nếu không phù hợp -->
-                                                </c:otherwise>
-                                            </c:choose>
-                                        </td>
-                                        <td>
-                                            <img src="${d.image}" alt="Xem" style="max-width: 100px; height: auto;">
-                                        </td>
-                                    </tr>
-                                </c:forEach>
-                            </tbody>
+                            <c:choose>
+                                <c:when test="${fn:length(list) == 0}">
+                                    <p class="empty-message">Let's start receiving your orders!</p>
+                                </c:when>
+                                <c:otherwise>
+                                    <thead>
+                                        <tr>
+                                            <th>Code</th>
+                                            <th>Ship Price</th>
+                                            <th>Delivery Date</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <c:forEach var="d" items="${list}">
+                                            <tr onclick="openModal(${d.order_id})" style="cursor: pointer;">
+                                                <td>${d.order_id}</td>
+                                                <td>${d.ship_price}</td>
+                                                <td>${d.delivery_date}</td>
+                                                <td>
+                                                    <c:choose>
+                                                        <c:when test="${d.status == 'Đang giao'}">
+                                                            <span class="status process">${d.status}</span>
+                                                        </c:when>
+                                                        <c:when test="${d.status == 'Đang lấy hàng'}">
+                                                            <span class="status take">${d.status}</span>
+                                                        </c:when>
+                                                    </c:choose>
+                                                </td>
+                                            </tr>
+                                        </c:forEach>
+                                    </tbody>
+                                </c:otherwise>
+                            </c:choose>
                         </table>
-                        
+                        <div class="pagination">
+                            <c:forEach var="i" begin="1" end="${totalPages}">
+                                <a href="?page=${i}" class="${i == currentPage ? 'active' : ''}">${i}</a>
+                            </c:forEach>
+                        </div>
                         <div id="myModal" class="modal">
                             <div class="modal-content">
                                 <span class="close" onclick="closeModal();">&times;</span>
@@ -204,58 +215,43 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- ================= New Customers ================ -->
-                    <div class="recentCustomers">
-                        <div class="cardHeader">
-                            <h2>Khách hàng gần đây</h2>
+                    <div class="todo">
+                        <div class="head">
+                            <h3>Todos</h3>
+                            <i class='bx bx-plus' ></i>
+                            <i class='bx bx-filter' ></i>
                         </div>
-
-                        <table>
-                            <tr>
-                                <td width="30px">
-                                    <div class="imgBx"><img src="assets/imgs/customer02.jpg" alt=""></div>
-                                </td>
-                                <td>
-                                    <h4>Admin<br> <span>VietNam</span></h4>
-                                </td>
-                            </tr>
-
-                        </table>
+                        <ul class="todo-list">
+                            <li class="completed">
+                                <p>Todo List</p>
+                                <i class='bx bx-dots-vertical-rounded' ></i>
+                            </li>
+                            <li class="completed">
+                                <p>Todo List</p>
+                                <i class='bx bx-dots-vertical-rounded' ></i>
+                            </li>
+                            <li class="not-completed">
+                                <p>Todo List</p>
+                                <i class='bx bx-dots-vertical-rounded' ></i>
+                            </li>
+                            <li class="completed">
+                                <p>Todo List</p>
+                                <i class='bx bx-dots-vertical-rounded' ></i>
+                            </li>
+                            <li class="not-completed">
+                                <p>Todo List</p>
+                                <i class='bx bx-dots-vertical-rounded' ></i>
+                            </li>
+                        </ul>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <!-- =========== Scripts =========  -->
-        <script src="js/main.js"></script>
-
-        <!-- ====== ionicons ======= -->
-        <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
-        <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
-        <script type="text/javascript">
-                                    function toggleDropdown() {
-                                        var dropdown = document.getElementById("dropdown");
-                                        if (dropdown.style.display === "block") {
-                                            dropdown.style.display = "none";
-                                        } else {
-                                            dropdown.style.display = "block";
-                                        }
-                                    }
-
-                                    // Đóng dropdown nếu người dùng nhấn ngoài nó
-                                    window.onclick = function (event) {
-                                        if (!event.target.matches('.avatar')) {
-                                            var dropdowns = document.getElementsByClassName("dropdown-content");
-                                            for (var i = 0; i < dropdowns.length; i++) {
-                                                var openDropdown = dropdowns[i];
-                                                if (openDropdown.style.display === "block") {
-                                                    openDropdown.style.display = "none";
-                                                }
-                                            }
-                                        }
-                                    }
-                                    //Mở modal            
+            </main>
+            <!-- MAIN -->
+        </section>
+        <!-- CONTENT -->
+        <script src="js/delivery.js"></script>
+        <script>
+                                    //Mở modal                
                                     function openModal(order_id) {
                                         fetch('deliverydashboard', {
                                             method: 'POST',
@@ -266,10 +262,7 @@
                                         })
                                                 .then(response => response.text())
                                                 .then(html => {
-                                                    // Cập nhật nội dung của modalContent với HTML nhận được từ server
                                                     document.getElementById('modalContent').innerHTML = html;
-
-                                                    // Hiển thị modal sau khi cập nhật nội dung
                                                     var modal = document.getElementById("myModal");
                                                     modal.style.display = "block";
                                                 })
@@ -283,5 +276,4 @@
                                     }
         </script>
     </body>
-
 </html>

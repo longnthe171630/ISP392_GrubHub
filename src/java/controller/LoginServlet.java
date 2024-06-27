@@ -119,7 +119,7 @@ public class LoginServlet extends HttpServlet {
                     response.sendRedirect("deliverydashboard");
                     break;
                 default:
-                    response.sendRedirect("Home.jsp");
+                    response.sendRedirect("login");
                     break;
             }
         }
