@@ -8,7 +8,9 @@ import java.util.List;
 import model.Feedback;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import model.Customer;
 
 /**
  *
@@ -17,20 +19,22 @@ import java.util.List;
 public class FeedbackDAO extends MyDAO {
 
     public List<Feedback> getListFeedback() {
+
         List<Feedback> list = new ArrayList<>();
         try {
-            String sql = "select f.id, c.name, r.name,f.order_id, f.value,f.description\n"
-                    + "from Feedback f\n"
-                    + "join Customer c on c.id= f.customer_id\n"
-                    + "join Restaurant r on r.id= f.restaurant_id";
-            ps = con.prepareStatement(sql);
+//            String sql = "select f.id, c.name, r.name,f.order_id, f.value,f.description\n"
+//                    + "from Feedback f\n"
+//                    + "join Customer c on c.id= f.customer_id\n"
+//                    + "join Restaurant r on r.id= f.restaurant_id";
+            xSql = " select * from feedback";
+            ps = con.prepareStatement(xSql);
             rs = ps.executeQuery();
 
             while (rs.next()) {
                 Feedback a = new Feedback(rs.getInt(1),
-                        rs.getString(2),
-                        rs.getString(3),
-                        rs.getString(4),
+                        rs.getInt(2),
+                        rs.getInt(3),
+                        rs.getInt(4),
                         rs.getInt(5),
                         rs.getString(6));
                 list.add(a);
@@ -41,4 +45,11 @@ public class FeedbackDAO extends MyDAO {
         return list;
     }
 
+    public static void main(String[] args) {
+        FeedbackDAO dao = new FeedbackDAO();
+        List<Feedback> list = dao.getListFeedback();
+        for (Feedback f : list) {
+            System.out.println(f);
+        }
+    }
 }

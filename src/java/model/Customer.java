@@ -27,6 +27,13 @@ public class Customer {
     public Customer() {
     }
 
+    public Customer(int id, String name, String dob, boolean gender) {
+        this.id = id;
+        this.name = name;
+        this.dob = dob;
+        this.gender = gender;
+    }
+
     public Customer(String userName, String passWord) {
         this.userName = userName;
         this.passWord = passWord;

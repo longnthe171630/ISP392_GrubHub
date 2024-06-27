@@ -8,6 +8,9 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
 import model.Customer;
 
 public class CustomerDAO extends MyDAO {
@@ -240,10 +243,32 @@ public class CustomerDAO extends MyDAO {
         }
 
     }
+    public List<Customer> getListCustomer(){
+        List<Customer> list = new ArrayList<>();
+       String sql = "select*from Customer";
+       try {
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+               int xId= rs.getInt("id");
+                String xName= rs.getString("name");
+                String xDob= rs.getString("dob");
+                Boolean xGender= rs.getBoolean("gender");
+                Customer c= new Customer(xId, xName, xDob, xGender);
+                list.add(c);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return list;
+    }
 // test function
     public static void main(String[] args) {
         // Chuỗi ngày tháng có định dạng "dd-MM-yyyy"
         CustomerDAO cd = new CustomerDAO();
-        System.out.println(cd.checkCustomer("asdfcs","123"));
+        List<Customer> list = cd.getListCustomer();
+        for(Customer c: list){
+            System.out.println(c);
+        }
     }
 }

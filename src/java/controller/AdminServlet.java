@@ -6,6 +6,7 @@ package controller;
 
 import dao.AccountDAO;
 import dao.AdminDAO;
+import dao.CustomerDAO;
 import dao.DeliveryDAO;
 import dao.FeedbackDAO;
 import dao.OrderDAO;
@@ -22,7 +23,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 import jakarta.servlet.http.HttpSession;
+import java.util.HashMap;
 import model.Account;
+import model.Customer;
 import model.Delivery;
 import model.Feedback;
 import model.Order;
@@ -33,7 +36,7 @@ import model.Restaurant;
  *
  * @author Dell
  */
-@WebServlet(name="AdminServlet", urlPatterns={"/admin"})
+@WebServlet(name = "AdminServlet", urlPatterns = {"/admin"})
 public class AdminServlet extends HttpServlet {
 
     /**
@@ -67,7 +70,9 @@ public class AdminServlet extends HttpServlet {
         if (action == null) {
             action = "0"; // Hoặc bất kỳ giá trị mặc định nào bạn muốn sử dụng
         }
-
+        AccountDAO dao3 = new AccountDAO();
+        RestaurantDAO dao4 = new RestaurantDAO();
+        CustomerDAO dao9= new CustomerDAO();
         switch (action) {
             case "home":
                 AdminDAO dao = new AdminDAO();
@@ -82,13 +87,13 @@ public class AdminServlet extends HttpServlet {
                 request.getRequestDispatcher("Admin.jsp").forward(request, response);
                 break;
             case "cus":
-                AccountDAO dao3 = new AccountDAO();
-                List<Account> listCus = dao3.getListAccount();
-                request.setAttribute("listCus", listCus);
+                
+                List<Account> listAccount = dao3.getListAccount();
+                request.setAttribute("listAccount", listAccount);
                 request.getRequestDispatcher("AdminCus.jsp").forward(request, response);
                 break;
             case "res":
-                RestaurantDAO dao4 = new RestaurantDAO();
+                
                 List<Restaurant> listRes = dao4.getListRestaurant();
                 request.setAttribute("listRes", listRes);
                 request.getRequestDispatcher("AdminRes.jsp").forward(request, response);
@@ -102,9 +107,28 @@ public class AdminServlet extends HttpServlet {
                 break;
 
             case "feed":
+
                 FeedbackDAO dao5 = new FeedbackDAO();
                 List<Feedback> listFeed = dao5.getListFeedback();
-                request.setAttribute("listFeed", listFeed);
+                List<Restaurant> listRes1 = dao4.getListRestaurant();
+                List<Customer> listCus1 = dao9.getListCustomer();
+                HashMap<Feedback, Customer> map1 = new HashMap<>();
+                HashMap<Feedback, Restaurant> map2 = new HashMap<>();
+                for(Feedback f: listFeed){
+                    for (Customer c: listCus1) {
+                        if (c.getId()==f.getCustomer_id()) {
+                            map1.put(f, c);
+                        }
+                       
+                    }
+                    for (Restaurant r: listRes1) {
+                        if (r.getId()==f.getRestaurant_id()) {
+                            map2.put(f, r);
+                        }
+                    }
+                }
+                request.setAttribute("map1", map1);               
+                request.setAttribute("listRes1", listRes1);
                 request.getRequestDispatcher("AdminFeed.jsp").forward(request, response);
 
                 break;
