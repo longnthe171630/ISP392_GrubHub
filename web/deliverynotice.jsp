@@ -11,12 +11,10 @@
         <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
         <!-- My CSS -->
         <link rel="stylesheet" href="css/style_ship.css">
-        <!-- Thư viện SweetAlert -->
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <title>Delivery Dashboard</title>
+        <title>Delivery History</title>
     </head>
-    <body>
 
+    <body>
         <!-- SIDEBAR -->
         <section id="sidebar">
             <a href="home" class="brand">
@@ -62,10 +60,6 @@
                 </li>
             </ul>
         </section>
-        <!-- SIDEBAR -->
-
-
-
         <!-- CONTENT -->
         <section id="content">
             <!-- NAVBAR -->
@@ -81,37 +75,27 @@
                 <input type="checkbox" id="switch-mode" hidden>
                 <div class="dropdown-container">
                     <div class="notification">
-                        <i class='bx bxs-bell' onclick="toggleDropdown('dropdown3')"></i>
-                        <span class="num">0</span>
+                        <i class='bx bxs-bell custom-icon' onclick="toggleDropdown('dropdown3')"></i>
+                        <span class="num">10</span>
                     </div>
                     <div id="dropdown3" class="dropdown-content">
                         <div class="notification-header">
-                            <h4>Notifications</h4> <button id="markAllAsRead" >Mark all as read</button>
+                            <h4>Notifications</h4>
                         </div>
                         <div class="notification-body">
-                            <c:choose>
-                                <c:when test="${empty notice}">
-                                    <div class="no-notifications">You don't have any notification!</div>
-                                </c:when>
-                                <c:otherwise>
-                                    <c:forEach var="n" items="${notice}">
-                                        <div class="notification-item" data-id="${n.id}">
-                                            <img src="${n.image}" alt="Ex" class="notification-avatar">
-                                            <span class="notification-content">${n.descripsion}</span>
-                                            <span class="notification-time" data-time="${n.notice_time}"></span>
-                                        </div>
-                                    </c:forEach>
-                                    <div class="notification-footer">
-                                        <a href="deliverynotice">See All</a>
-                                    </div>
-                                </c:otherwise>
-                            </c:choose>
+                            <c:forEach var="n" items="${notice}">
+                                <div class="notification-item">
+                                    <img src="#" alt="Image" class="notification-avatar">
+                                    <span class="notification-content">${n.descripsion}</span>
+                                    <span class="notification-time">${n.notice_time}</span>
+                                </div>
+                            </c:forEach>
                         </div>
-
+                        <div class="notification-footer">
+                            <a href="deliverynotice">See All</a>
+                        </div>
                     </div>
                 </div>
-
-
                 <div class="dropdown-container">
                     <img src="images/icon/avatar1.jpg" alt="Avatar" class="avatar" onclick="toggleDropdown('dropdown1')">
                     <div id="dropdown1" class="dropdown-content-1">
@@ -127,14 +111,14 @@
             <main>
                 <div class="head-title">
                     <div class="left">
-                        <h1>Delivery Dashboard</h1>
+                        <h1>Delivery Message</h1>
                         <ul class="breadcrumb">
                             <li>
                                 <a href="home">Home</a>
                             </li>
                             <li><i class='bx bx-chevron-right' ></i></li>
                             <li>
-                                <a class="active" href="deliverydashboard">Dashboard</a>
+                                <a class="active" href="deliveryorder">Message</a>
                             </li>
                         </ul>
                     </div>
@@ -143,95 +127,34 @@
                         <span class="text">Download PDF</span>
                     </a>
                 </div>
-
-                <ul class="box-info">
-                    <li>
-                        <i class='bx bx-check'></i>
-                        <a href="deliveryanalysis">
-                            <span class="text">
-                                <h3>${totaldone}</h3>
-                                <p>Success</p>
-                            </span>
-                        </a>
-                    </li>
-                    <li>
-                        <i class='bx bxs-truck'></i>
-                        <a href="deliveryanalysis">
-                            <span class="text">
-                                <h3>${totaldelivery}</h3>
-                                <p>Processing</p>
-                            </span>
-                        </a>
-                    </li>
-                    <li>
-                        <i class='bx bx-x'></i>
-                        <a href="deliveryanalysis">
-                            <span class="text">
-                                <h3>${totalcancel}</h3>
-                                <p>Canceled</p>
-                            </span>
-                        </a>
-                    </li>
-                    <li>
-                        <i class='bx bxs-dollar-circle'></i>
-                        <a href="deliveryanalysis">
-                            <span class="text">
-                                <h3>${totalship}</h3>
-                                <p>Earning</p>
-                            </span>
-                        </a>
-                    </li>
-                </ul>
-
-                <!--Bên dưới là phần chính, hiển thị đơn hàng đang thực hiện-->
+                <!-- ================ Order Details List ================= -->
                 <div class="table-data">
                     <div class="order">
-                        <form action="deliverydashboard" method = "GET">
-                            <div class="head">
-                                <h3>Your Order</h3>
-                                <div class="form-input">
-                                    <input style ="border-radius: 5px; font-size: 100%;" type="search" name="search" placeholder="Search by code">
-                                    <i type="submit" class="search-btn"><button class='bx bx-search' ></button></i>
-                                </div>
-                                <div class="dropdown-container">
-                                    <i class='bx bx-filter' onclick="toggleDropdown('dropdown2')"></i>
-                                    <div id="dropdown2" class="dropdown-content-1">
-                                        <a href="?sort=false">Newest</a>
-                                        <a href="?sort=true">Oldest</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                        <div id="notice" class="notice">${err}</div>
+                        <div class="head">
+                            <h3>Notification</h3>
+                        </div>
+                        <p style = "color: red">${err}</p>
                         <table>
                             <c:choose>
                                 <c:when test="${fn:length(list) == 0}">
-                                    <p class="empty-message">Let's start receiving your orders!</p>
+                                    <p class="empty-message">You haven't any message!</p>
                                 </c:when>
                                 <c:otherwise>
                                     <thead>
                                         <tr>
-                                            <th>Code</th>
-                                            <th>Ship Price</th>
-                                            <th>Receiving Time</th>
-                                            <th>Status</th>
+                                            <th> </th>
+                                            <th> </th>
+                                            <th> </th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <c:forEach var="d" items="${list}">
-                                            <tr onclick="openModal(${d.order_id})" style="cursor: pointer;">
-                                                <td>${d.order_id}</td>
-                                                <td>${d.ship_price}</td>
-                                                <td class="notification-time" data-time="${d.delivery_date}"></td>
+                                        <c:forEach var="n" items="${list}">
+                                            <tr>
+                                                <td><img src = "${n.image}" alt="Img" class="notification-avatar"></td>
+                                                <td><p><strong>You was update a status order: </strong>${n.descripsion}</p></td>
+                                                <td class="notification-time" data-time="${n.notice_time}"></td>
                                                 <td>
-                                                    <c:choose>
-                                                        <c:when test="${d.status == 'Đang giao'}">
-                                                            <span class="status process">${d.status}</span>
-                                                        </c:when>
-                                                        <c:when test="${d.status == 'Đang lấy hàng'}">
-                                                            <span class="status take">${d.status}</span>
-                                                        </c:when>
-                                                    </c:choose>
+                                                    <button  onclick="openModal(${n.order_id})" style="cursor: pointer;">View</button>
                                                 </td>
                                             </tr>
                                         </c:forEach>
@@ -239,11 +162,40 @@
                                 </c:otherwise>
                             </c:choose>
                         </table>
+                        <!--                        Phân trang-->
                         <div class="pagination">
-                            <c:forEach var="i" begin="1" end="${totalPages}">
-                                <a href="?page=${i}" class="${i == currentPage ? 'active' : ''}">${i}</a>
-                            </c:forEach>
+                            <c:choose>
+                                <c:when test="${totalPages > 1}">
+                                    <c:if test="${currentPage > 1}">
+                                        <a href="?page=${currentPage - 1}">&laquo; Previous</a>
+                                    </c:if>
+                                    <c:forEach begin="1" end="${totalPages}" var="i">
+                                        <c:choose>
+                                            <c:when test="${i == currentPage}">
+                                                <a href="#" class="active">${i}</a>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <c:choose>
+                                                    <c:when test="${i == 1 || i == totalPages || (i >= currentPage - 1 && i <= currentPage + 1)}">
+                                                        <a href="?page=${i}">${i}</a>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <c:if test="${i == 2 || i == totalPages - 1 || (i == currentPage - 2 || i == currentPage + 2)}">
+                                                            <a href="#">...</a>
+                                                        </c:if>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </c:forEach>
+
+                                    <c:if test="${currentPage < totalPages}">
+                                        <a href="?page=${currentPage + 1}">Next &raquo;</a>
+                                    </c:if>
+                                </c:when>
+                            </c:choose>
                         </div>
+
                         <div id="myModal" class="modal">
                             <div class="modal-content">
                                 <span class="close" onclick="closeModal();">&times;</span>
@@ -252,25 +204,23 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="todo">
-                        <div class="head">
-                            <h3>Location</h3>
-                            <i class='bx bx-plus' ></i>
-                            <i class='bx bx-filter' ></i>
-                        </div>
-
+                        
                     </div>
                 </div>
             </main>
             <!-- MAIN -->
         </section>
         <!-- CONTENT -->
+
         <script src="js/delivery.js"></script>
+        <!-- ====== ionicons ======= -->
+
+        <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+        <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
         <script>
                                     //Mở modal                
                                     function openModal(order_id) {
-                                        fetch('deliverydashboard', {
+                                        fetch('deliveryhistory', {
                                             method: 'POST',
                                             headers: {
                                                 'Content-Type': 'application/x-www-form-urlencoded',

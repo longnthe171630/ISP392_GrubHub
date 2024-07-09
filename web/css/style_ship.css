@@ -389,11 +389,11 @@ body {
     color: var(--dark);
 }
 
-
+/* CSS của <table> */
 #content main .table-data {
     display: flex;
     flex-wrap: wrap;
-    grid-gap: 24px;
+    gap: 24px;
     margin-top: 24px;
     width: 100%;
     color: var(--dark);
@@ -403,44 +403,59 @@ body {
     background: var(--light);
     padding: 24px;
     overflow-x: auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
+/*#content main .table-data > div:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}*/
+
 #content main .table-data .head {
-    display: flex;
-    align-items: center;
-    grid-gap: 16px;
-    margin-bottom: 24px;
+    display: flex; /* Sử dụng flexbox để xếp các phần tử ngang hàng */
+    align-items: center; /* Căn các phần tử theo chiều dọc vào giữa */
+    gap: 16px; /* Khoảng cách giữa các phần tử */
+    margin-bottom: 24px; /* Khoảng cách phía dưới */
 }
+
 #content main .table-data .head h3 {
-    margin-right: auto;
+    margin-right: auto; /* Đẩy h3 về phía bên phải */
     font-size: 24px;
     font-weight: 600;
 }
+
 #content main .table-data .head .bx {
     cursor: pointer;
 }
 
 #content main .table-data .order {
     flex-grow: 1;
-    flex-basis: 500px;
+    min-height: 500px; /* Tăng chiều cao tối thiểu của bảng */
+    /*    flex-basis: 500px;*/
 }
+
 #content main .table-data .order table {
     width: 100%;
     border-collapse: collapse;
 }
+
 #content main .table-data .order table th {
     padding-bottom: 12px;
     font-size: 13px;
     text-align: left;
     border-bottom: 1px solid var(--grey);
+    color: var(--dark);
 }
+
 #content main .table-data .order table td {
     padding: 16px 0;
 }
+
 #content main .table-data .order table tr td:first-child {
-    display: flex;
+    /*        display: flex;*/
     align-items: center;
     grid-gap: 12px;
-    padding-left: 6px;
+    padding-left: 8px;
 }
 #content main .table-data .order table td img {
     width: 36px;
@@ -450,13 +465,16 @@ body {
 }
 #content main .table-data .order table tbody tr:hover {
     background: var(--grey);
+    transform: scale(1.02);
 }
 #content main .table-data .order table tr td .status {
-    font-size: 10px;
-    padding: 6px 16px;
+    font-size: 12px;
+    padding: 8px 16px;
     color: var(--light);
     border-radius: 20px;
     font-weight: 700;
+    text-transform: uppercase;
+    display: inline-block;
 }
 #content main .table-data .order table tr td .status.completed {
     background: var(--blue);
@@ -490,6 +508,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 #content main .table-data .todo .todo-list li .bx {
     cursor: pointer;
@@ -499,6 +518,10 @@ body {
 }
 #content main .table-data .todo .todo-list li.not-completed {
     border-left: 10px solid var(--orange);
+}
+#content main .table-data .todo .todo-list li:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 #content main .table-data .todo .todo-list li:last-child {
     margin-bottom: 0;
@@ -557,7 +580,46 @@ body {
     }
 
     #content main .box-info {
-        grid-template-columns: 1fr;
+        display: flex;
+        justify-content: space-around;
+        gap: 24px;
+        margin-top: 24px;
+        padding: 0;
+        list-style-type: none;
+    }
+
+    #content main .box-info li {
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        width: 200px;
+        text-align: center;
+    }
+
+    #content main .box-info li:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    #content main .box-info li i {
+        font-size: 36px;
+        color: #007bff;
+        margin-bottom: 10px;
+        display: block;
+    }
+
+    #content main .box-info li h3 {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 8px;
+    }
+
+    #content main .box-info li p {
+        font-size: 14px;
+        color: #666666;
+        margin: 0;
     }
 
     #content main .table-data .head {
@@ -580,39 +642,13 @@ body {
     object-fit: cover;
 }
 
-.dropdown-content {
+.dropdown-content-1 {
     display: none;
     position: absolute;
     right: 0px;
     top: 50px;
     background-color: #f9f9f9;
     min-width: 140px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 1;
-    padding: 8px 0; /* Thêm padding cho phần nội dung */
-    border-radius: 8px; /* Định dạng góc bo tròn */
-    border: 1px solid #ccc; /* Thêm border để phân biệt với nền */
-}
-
-.dropdown-content a {
-    color: black;
-    padding: 8px 16px; /* Điều chỉnh padding để làm rõ ràng hơn */
-    text-decoration: none;
-    display: block;
-    transition: background-color 0.3s; /* Thêm hiệu ứng chuyển đổi */
-}
-
-.dropdown-content a:hover {
-    background-color: #e0e0e0; /* Màu nền khi hover */
-}
-
-.dropdown-content-1 {
-    display: none;
-    position: absolute;
-    right: -10px;
-    top: 23.5px;
-    background-color: #f9f9f9;
-    min-width: 110px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
     padding: 8px 0; /* Thêm padding cho phần nội dung */
@@ -632,48 +668,142 @@ body {
     background-color: #e0e0e0; /* Màu nền khi hover */
 }
 
-.dropdown-content-2 {
-    display: none; /* Ẩn dropdown ban đầu */
-    position: absolute; /* Đặt vị trí tuyệt đối */
-    right: 0; /* Đặt vị trí bên phải */
-    top: 100%; /* Đặt vị trí từ bottom của thông báo */
-    background-color: #fff; /* Màu nền của dropdown */
-    min-width: 200px; /* Đảm bảo dropdown đủ rộng */
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); /* Hiệu ứng bóng đổ */
-    z-index: 1; /* Độ sâu z-index để đảm bảo dropdown hiển thị trên các phần tử khác */
-    border-radius: 8px; /* Bo tròn góc */
-    border: 1px solid #ccc; /* Đường viền của dropdown */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: -64px;
+    top: 40px;
+    background-color: #fff;
+    width: 460px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    font-family: Arial, sans-serif;
+    font-size: 13px;
 }
 
-.dropdown-content-2 a {
-    display: block; /* Hiển thị các liên kết trên mỗi dòng */
-    padding: 12px 16px; /* Khoảng cách giữa nội dung và đường viền */
-    text-decoration: none; /* Không gạch chân các liên kết */
-    color: black; /* Màu chữ */
-    transition: background-color 0.3s; /* Hiệu ứng chuyển đổi khi di chuột qua */
-    cursor: pointer; /* Thay đổi con trỏ chuột thành pointer */
+.notification-header {
+    background-color: #4267B2;
+    color: #fff;
+    padding: 10px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    display: flex;
+    justify-content: center; /* Center align all items horizontally */
+    align-items: center; /* Center align all items vertically */
+    z-index: 1;
+    position: relative;
 }
 
-.dropdown-content-2 a:hover {
-    background-color: #f0f0f0; /* Màu nền khi di chuột qua */
-    border-radius: 4px; /* Bo tròn góc khi di chuột qua */
+.notification-header h4 {
+    margin: 0;
+    font-size: 25px;
+    flex: 1; /* Allow h4 to take up available space */
+    text-align: left; /* Center the text within the h4 */
 }
 
-.dropdown-content.show {
-    display: block; /* Hiển thị dropdown khi có class 'show' */
+#markAllAsRead {
+    background-color: #fff; /* Optional: Set a different background for the button */
+    color: #4267B2; /* Optional: Set the button text color to match the header */
+    border: none; /* Remove default border */
+    padding: 5px 10px; /* Adjust padding as needed */
+    border-radius: 4px; /* Add some border-radius for rounded corners */
+    cursor: pointer; /* Change cursor to pointer on hover */
+    position: absolute; /* Position the button absolutely */
+    right: 10px; /* Align to the right of the header */
 }
-.dropdown-content-1.show {
-    display: block; /* Hiển thị dropdown khi có class 'show' */
+
+#markAllAsRead:hover {
+    background-color: #ddd; /* Optional: Change background color on hover */
 }
-.dropdown-content-2.show {
-    display: block; /* Hiển thị dropdown khi có class 'show' */
+
+
+.notification-body {
+    max-height: 300px;
+    overflow-y: auto;
 }
+
+.notification-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    background-color: #fff; /* Màu nền cho thông báo chưa đọc */
+    transition: background-color 0.3s;
+}
+
+.notification-item:last-child {
+    border-bottom: none;
+}
+
+.notification-item.read {
+    background-color: #f0f0f0; /* Màu nền cho thông báo đã đọc */
+    color: #888; /* Màu chữ cho thông báo đã đọc */
+}
+
+.no-notifications {
+    padding: 20px;
+    text-align: center;
+    color: #999;
+    font-size: 15px;
+}
+
+.notification-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.notification-content {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1;
+    position: relative;
+}
+
+.notification-time {
+    color: #888;
+    font-size: 12px;
+}
+
+.notification-footer {
+    background-color: #f0f0f0;
+    padding: 10px;
+    text-align: center;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+.notification-footer a {
+    color: #4267B2;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.notification-footer a:hover {
+    text-decoration: underline;
+}
+
 .dropdown-container {
     position: relative;
     display: inline-block;
-
 }
 
+.show{
+    display: block;
+}
+
+.swal2-popup {
+    border-radius: 20px;
+}
+
+#notice {
+    display: none; /* Mặc định ẩn đi */
+}
 
 /* Định dạng cho modal */
 /* Định dạng cho phần tử modal */
@@ -780,5 +910,115 @@ button:active {
 
 .pagination a:hover:not(.active) {
     background-color: #ddd;
+}
+
+.custom-icon {
+    color: #FFA500; /* Màu cam */
+    pointer-events: none; /* Không phản hồi với sự kiện click */
+}
+
+#map {
+    height: 100%;
+    width: 100%;
+}
+
+.info-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+
+.order-info {
+    border: 1px solid #ccc;
+    padding: 20px;
+    background-color: #f9f9f9;
+    width: 45%;
+}
+
+.image-container {
+    border: 1px solid #ccc;
+    padding: 20px;
+    background-color: #f9f9f9;
+    width: 50%;
+    text-align: center;
+}
+
+.upload-container p {
+    margin-bottom: 5px;
+}
+
+.upload-container input[type=file] {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+.image-container img {
+    width: 200px;
+    height: 250px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.status-message-failure {
+    color: red;
+}
+
+.status-message-success {
+    color: green;
+}
+
+.reason {
+    color: red;
+}
+
+.my-chart {
+    max-width: 600px;
+    margin: 20px auto;
+}
+.programming-stats .details ul {
+    list-style-type: none;
+    padding: 0;
+}
+.programming-stats .details ul li {
+    margin: 5px 0;
+}
+
+.chart-legend ul {
+    list-style: none;
+    padding: 0;
+    display: flex; /* Sử dụng flex để sắp xếp các thẻ li nằm ngang */
+}
+
+.chart-legend li {
+    margin-top: 100px;
+    margin-right: 15px; /* Khoảng cách giữa các mục */
+    display: flex;
+    align-items: center;
+}
+
+.legend-color {
+    width: 10px;
+    height: 10px;
+    display: inline-block;
+    margin-right: 5px;
+}
+
+.no-data-message {
+    display: none; /* Ẩn theo mặc định */
+    text-align: center;
+    font-size: 27px;
+    font-style: italic;
+    color: #AAAAAA;
+    margin-top: 100px;
+}
+
+.total-orders {
+    font-weight: bold; /* In đậm */
+    background-color: #f0f0f0; /* Màu nền nhạt */
+    border-top: 1px solid #333; /* Đường viền trên */
+    border-bottom: 1px solid #333; /* Đường viền dưới */
 }
 

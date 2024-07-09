@@ -5,6 +5,7 @@
 package dao;
 
 import java.io.InputStream;
+import java.security.Timestamp;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,32 +18,58 @@ import model.Delivery;
  */
 public class DeliveryDAO extends MyDAO {
 
-//    public List<Delivery> getDelivery() {
-//        List<Delivery> t = new ArrayList<>();
-//        xSql = "select * from Delivery";
-//        
-//        Delivery x;
-//        try {
-//            ps = con.prepareStatement(xSql);
-//            rs = ps.executeQuery();
-//            while (rs.next()) {
-//                int xId = rs.getInt("id");
-//                int xOrder_id = rs.getInt("order_id");
-//                int xDelivery_person_id = rs.getInt("delivery_person_id");
-//                int xShip_price = rs.getInt("ship_price");
-//                java.sql.Date xDelivery_date = rs.getDate("delivery_date");
-//                String xStatus = rs.getString("status");
-//                String xImage = rs.getString("image");
-//                x = new Delivery(xId, xOrder_id, xDelivery_person_id, xShip_price, xDelivery_date, xStatus, xImage);
-//                t.add(x);
-//            }
-//            rs.close();
-//            ps.close();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return (t);
-//    }
+    public List<Delivery> getDeliverySuccess() {
+        List<Delivery> t = new ArrayList<>();
+        xSql = "select * from Delivery where status = N'Đã giao'";
+        Delivery x;
+        try {
+            ps = con.prepareStatement(xSql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                int xId = rs.getInt("id");
+                int xOrder_id = rs.getInt("order_id");
+                int xDelivery_person_id = rs.getInt("delivery_person_id");
+                int xShip_price = rs.getInt("ship_price");
+                java.sql.Timestamp xDelivery_date = rs.getTimestamp("delivery_date");
+                String xStatus = rs.getString("status");
+                String xImage = rs.getString("image");
+                x = new Delivery(xId, xOrder_id, xDelivery_person_id, xShip_price, xDelivery_date, xStatus, xImage);
+                t.add(x);
+            }
+            rs.close();
+            ps.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return (t);
+    }
+
+    public List<Delivery> getDeliveryFailure() {
+        List<Delivery> t = new ArrayList<>();
+        xSql = "select * from Delivery where status = N'Không giao được'";
+        Delivery x;
+        try {
+            ps = con.prepareStatement(xSql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                int xId = rs.getInt("id");
+                int xOrder_id = rs.getInt("order_id");
+                int xDelivery_person_id = rs.getInt("delivery_person_id");
+                int xShip_price = rs.getInt("ship_price");
+                java.sql.Timestamp xDelivery_date = rs.getTimestamp("delivery_date");
+                String xStatus = rs.getString("status");
+                String xImage = rs.getString("image");
+                x = new Delivery(xId, xOrder_id, xDelivery_person_id, xShip_price, xDelivery_date, xStatus, xImage);
+                t.add(x);
+            }
+            rs.close();
+            ps.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return (t);
+    }
+
     public float getShipPricByOrderId(int order_id) {
         xSql = "select * from Delivery where [order_id] = ?";
 
@@ -62,13 +89,18 @@ public class DeliveryDAO extends MyDAO {
         return 0;
     }
 
-    public List<Delivery> getDeliveryDashboard(int id) {
+    public List<Delivery> getDeliveryDashboard(int id, Boolean sortList) {
         List<Delivery> t = new ArrayList<>();
         xSql = "SELECT d.*\n"
                 + "FROM Delivery d\n"
                 + "JOIN Delivery_person dp ON d.delivery_person_id = dp.id\n"
                 + "WHERE (d.status = 'Đang giao' OR d.status = N'Đang lấy hàng')\n"
                 + "AND dp.id = ? ";
+
+        if (sortList != null) {
+            String time = sortList ? "ASC" : "DESC";
+            xSql += "ORDER BY d.delivery_date " + time;
+        }
         try {
             ps = con.prepareStatement(xSql);
             ps.setInt(1, id);
@@ -78,7 +110,7 @@ public class DeliveryDAO extends MyDAO {
                 int xOrder_id = rs.getInt("order_id");
                 int xDelivery_person_id = rs.getInt("delivery_person_id");
                 int xShip_price = rs.getInt("ship_price");
-                java.sql.Date xDelivery_date = rs.getDate("delivery_date");
+                java.sql.Timestamp xDelivery_date = rs.getTimestamp("delivery_date");
                 String xStatus = rs.getString("status");
                 String xImage = rs.getString("image");
                 Delivery x = new Delivery(xId, xOrder_id, xDelivery_person_id, xShip_price, xDelivery_date, xStatus, xImage);
@@ -92,12 +124,17 @@ public class DeliveryDAO extends MyDAO {
         return (t);
     }
 
-    public List<Delivery> getDeliveryHistory(int id) {
+    public List<Delivery> getDeliveryHistory(int id, Boolean sortList) {
         List<Delivery> t = new ArrayList<>();
         xSql = "SELECT d.*\n"
                 + "FROM Delivery d\n"
                 + "JOIN Delivery_person dp ON d.delivery_person_id = dp.id\n"
-                + "WHERE d.status IN (N'Đã giao', N'Không giao được') AND dp.id = ?";
+                + "WHERE (d.status = N'Đã giao' OR d.status = N'Không giao được')\n"
+                + "AND dp.id = ? ";
+        if (sortList != null) {
+            String time = sortList ? "ASC" : "DESC";
+            xSql += "ORDER BY d.delivery_date " + time;
+        }
         try {
             ps = con.prepareStatement(xSql);
             ps.setInt(1, id);
@@ -107,7 +144,7 @@ public class DeliveryDAO extends MyDAO {
                 int xOrder_id = rs.getInt("order_id");
                 int xDelivery_person_id = rs.getInt("delivery_person_id");
                 int xShip_price = rs.getInt("ship_price");
-                java.sql.Date xDelivery_date = rs.getDate("delivery_date");
+                java.sql.Timestamp xDelivery_date = rs.getTimestamp("delivery_date");
                 String xStatus = rs.getString("status");
                 String xImage = rs.getString("image");
                 Delivery x = new Delivery(xId, xOrder_id, xDelivery_person_id, xShip_price, xDelivery_date, xStatus, xImage);
@@ -133,10 +170,10 @@ public class DeliveryDAO extends MyDAO {
                 int xOrder_id = rs.getInt("order_id");
                 int xDelivery_person_id = rs.getInt("delivery_person_id");
                 int xShip_price = rs.getInt("ship_price");
-                java.sql.Date xOrder_date = rs.getDate("delivery_date");
+                java.sql.Timestamp xDelivery_date = rs.getTimestamp("delivery_date");
                 String xStatus = rs.getString("status");
                 String xImage = rs.getString("image");
-                x = new Delivery(xId, xOrder_id, xDelivery_person_id, xShip_price, xOrder_date, xStatus, xImage);
+                x = new Delivery(xId, xOrder_id, xDelivery_person_id, xShip_price, xDelivery_date, xStatus, xImage);
 
             }
             rs.close();
@@ -149,7 +186,7 @@ public class DeliveryDAO extends MyDAO {
 
     public void updateStatusDelivery(int id) {
         String xSql = "UPDATE [Delivery]\n"
-                + "SET [status] = N'Đang lấy hàng'\n"
+                + "SET [status] = N'Đang lấy hàng', delivery_date = CONVERT(VARCHAR(19), GETDATE(), 120)\n"
                 + "WHERE [status] = N'Đang chờ' AND [order_id] = ?;";
         try {
             ps = con.prepareStatement(xSql);
@@ -163,8 +200,8 @@ public class DeliveryDAO extends MyDAO {
 
     public void updateStatusDelivery_2(int id) {
         String xSql = "UPDATE [Delivery]\n"
-                + "SET [status] = N'Đã giao'\n"
-                + "WHERE [status] = N'Đang giao' AND [order_id] = ?;";
+                + "SET [status] = N'Đã giao'\n , delivery_date = CONVERT(VARCHAR(19), GETDATE(), 120)\n"
+                + "WHERE [status] = N'Đang giao' AND [order_id] = ?";
         try {
             ps = con.prepareStatement(xSql);
             ps.setInt(1, id);
@@ -177,8 +214,8 @@ public class DeliveryDAO extends MyDAO {
 
     public void updateStatusDelivery_3(int id) {
         String xSql = "UPDATE [Delivery]\n"
-                + "SET [status] = N'Không giao được'\n"
-                + "WHERE [status] = N'Đang giao' AND [order_id] = ?;";
+                + "SET [status] = N'Không giao được'\n , delivery_date = CONVERT(VARCHAR(19), GETDATE(), 120)\n"
+                + "WHERE [status] = N'Đang giao' AND [order_id] = ?";
         try {
             ps = con.prepareStatement(xSql);
             ps.setInt(1, id);
@@ -191,8 +228,8 @@ public class DeliveryDAO extends MyDAO {
 
     public void updateStatusDelivery_4(int id) {
         String xSql = "UPDATE [Delivery]\n"
-                + "SET [status] = N'Đang giao'\n"
-                + "WHERE [status] = N'Đang lấy hàng' AND [order_id] = ?;";
+                + "SET [status] = N'Đang giao' , delivery_date = CONVERT(VARCHAR(19), GETDATE(), 120)\n"
+                + "WHERE [status] = N'Đang lấy hàng' AND [order_id] = ?";
         try {
             ps = con.prepareStatement(xSql);
             ps.setInt(1, id);
@@ -298,7 +335,7 @@ public class DeliveryDAO extends MyDAO {
             ps.setInt(2, order_id);
             int rowsUpdated = ps.executeUpdate();
             if (rowsUpdated > 0) {
-                System.out.println("Đường dẫn ảnh đã được lưu vào cơ sở dữ liệu.");
+                System.out.println("Save to database succesfull!");
             }
             ps.close();
         } catch (SQLException e) {
@@ -391,7 +428,7 @@ public class DeliveryDAO extends MyDAO {
                 int xOrder_id = rs.getInt("order_id");
                 int xDelivery_person_id = rs.getInt("delivery_person_id");
                 int xShip_price = rs.getInt("ship_price");
-                java.sql.Date xDelivery_date = rs.getDate("delivery_date");
+                java.sql.Timestamp xDelivery_date = rs.getTimestamp("delivery_date");
                 String xStatus = rs.getString("status");
                 String xImage = rs.getString("image");
                 Delivery x = new Delivery(xId, xOrder_id, xDelivery_person_id, xShip_price, xDelivery_date, xStatus, xImage);
@@ -430,7 +467,7 @@ public class DeliveryDAO extends MyDAO {
                 int xOrder_id = rs.getInt("order_id");
                 int xDelivery_person_id = rs.getInt("delivery_person_id");
                 int xShip_price = rs.getInt("ship_price");
-                java.sql.Date xDelivery_date = rs.getDate("delivery_date");
+                java.sql.Timestamp xDelivery_date = rs.getTimestamp("delivery_date");
                 String xStatus = rs.getString("status");
                 String xImage = rs.getString("image");
                 Delivery x = new Delivery(xId, xOrder_id, xDelivery_person_id, xShip_price, xDelivery_date, xStatus, xImage);
@@ -444,17 +481,47 @@ public class DeliveryDAO extends MyDAO {
         return (t);
     }
 
+    public long calculateDeliveryDuration(int order_id) {
+        String sql = "SELECT * FROM [Delivery] WHERE [order_id] = ? ORDER BY delivery_date DESC";
+        try {
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, order_id);
+            rs = ps.executeQuery();
+            java.sql.Timestamp startDeliveryTime = null;
+            java.sql.Timestamp endDeliveryTime = null;
+            while (rs.next()) {
+                java.sql.Timestamp delivery_date = rs.getTimestamp("delivery_date");
+                String status = rs.getString("status");
+                if (status.equals("Đang lấy hàng")) {
+                    startDeliveryTime = delivery_date;
+                } else if (status.equals("Đã giao") || status.equals("Không giao được")) {
+                    endDeliveryTime = delivery_date;
+                    break; // Break loop when found end time
+                }
+            }
+            if (startDeliveryTime != null && endDeliveryTime != null) {
+                // Calculate duration in milliseconds
+                long durationInMillis = endDeliveryTime.getTime() - startDeliveryTime.getTime();
+                int durationInMinutes = (int) (durationInMillis / (1000 * 60));
+                return durationInMinutes;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1; 
+    }
+
     public static void main(String[] args) {
         DeliveryDAO d = new DeliveryDAO();
-        List<Delivery> ld = d.searchDeliveryDashboard(1, "1");
-        if (ld == null) {
-            System.out.println("List empty");
-        } else {
-            for (Delivery dx : ld) {
-                System.out.println(dx);
-
-            }
-        }
-        //System.out.println(d.searchDeliveryDashboard(1, "1"));
+//        List<Delivery> ld = d.getDeliveryFailure();
+//        if (ld == null) {
+//            System.out.println("List empty");
+//        } else {
+//            for (Delivery dx : ld) {
+//                System.out.println(dx);
+//
+//            }
+//        }
+        System.out.println(d.calculateDeliveryDuration(4));
     }
 }

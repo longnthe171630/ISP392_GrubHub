@@ -14,10 +14,8 @@ import model.Restaurant;
  */
 public class ProductDAO extends MyDAO {
 
-
     private CategoryDAO cd = new CategoryDAO();
     private RestaurantDAO rt = new RestaurantDAO();
-
 
     public List<Product> getProducts() {
         List<Product> t = new ArrayList<>();
@@ -47,6 +45,7 @@ public class ProductDAO extends MyDAO {
         }
         return (t);
     }
+
     public String getNameProductById(int product_id) {
         xSql = "SELECT name FROM Product WHERE ID = ?";
         Product x = null;
@@ -55,17 +54,7 @@ public class ProductDAO extends MyDAO {
             ps.setInt(1, product_id);
             rs = ps.executeQuery();
             if (rs.next()) {
-//                int xProduct_id = rs.getInt("id");
                 String xName = rs.getString("name");
-//                int xPrice = rs.getInt("price");
-//                String xDescription = rs.getString("description");
-//                String xImage = rs.getString("image");
-//                boolean xStatus = rs.getBoolean("status");
-//                Date xCreate_date = rs.getDate("create_date");
-//                int xCategory_id = rs.getInt("category_id");
-//                int xRestaurant_id = rs.getInt("restaurant_id");
-//
-//                x = new Product(xProduct_id, xName, xPrice, xDescription, xImage, xStatus, xCreate_date, xCategory_id, xRestaurant_id);
                 return xName;
             }
             rs.close();
@@ -78,7 +67,7 @@ public class ProductDAO extends MyDAO {
 
     public List<Product> getProducts2() {
         List<Product> t = new ArrayList<>();
-         xSql = "SELECT p.id, p.name, p.price, p.description, p.image, p.status, p.create_date, "
+        xSql = "SELECT p.id, p.name, p.price, p.description, p.image, p.status, p.create_date, "
                 + "p.category_id, p.restaurant_id, r.name AS restaurant_name "
                 + "FROM Product p "
                 + "JOIN Restaurant r ON p.restaurant_id = r.id "
@@ -207,7 +196,7 @@ public class ProductDAO extends MyDAO {
                 int xQuantity = rs.getInt("quantity");
                 Restaurant s = rt.getRestaurantById(rs.getInt("restaurant_id"));
                 Category c = cd.getCategoryId(rs.getInt("category_id"));
-                x = new Product(xProductId, xName, xPrice, xDescription, xImage, xStatus, xCreate_date,xQuantity, s, c);
+                x = new Product(xProductId, xName, xPrice, xDescription, xImage, xStatus, xCreate_date, xQuantity, s, c);
 
                 t.add(x);
             }
@@ -238,7 +227,7 @@ public class ProductDAO extends MyDAO {
                 int xQuantity = rs.getInt("quantity");
                 Restaurant s = rt.getRestaurantById(rs.getInt("restaurant_id"));
                 Category c = cd.getCategoryId(rs.getInt("category_id"));
-                Product x = new Product(xProductId, xName, xPrice, xDescription, xImage, xStatus, xCreate_date,xQuantity, s, c);
+                Product x = new Product(xProductId, xName, xPrice, xDescription, xImage, xStatus, xCreate_date, xQuantity, s, c);
 
                 t.add(x);
             }
@@ -268,7 +257,7 @@ public class ProductDAO extends MyDAO {
                 int xQuantity = rs.getInt("quantity");
                 Restaurant s = rt.getRestaurantById(rs.getInt("restaurant_id"));
                 Category c = cd.getCategoryId(rs.getInt("category_id"));
-                Product x = new Product(xProductId, xName, xPrice, xDescription, xImage, xStatus, xCreate_date,xQuantity, s, c);
+                Product x = new Product(xProductId, xName, xPrice, xDescription, xImage, xStatus, xCreate_date, xQuantity, s, c);
                 t.add(x);
             }
             rs.close();
@@ -280,14 +269,14 @@ public class ProductDAO extends MyDAO {
     }
 
     public Product getProduct(int ProductId) {
-        xSql = "SELECT * FROM Product WHERE product_id = ?";
+        xSql = "SELECT * FROM Product WHERE id = ?";
         Product x = null;
         try {
             ps = con.prepareStatement(xSql);
             ps.setInt(1, ProductId);
             rs = ps.executeQuery();
             if (rs.next()) {
-                int xProductId = rs.getInt("product_id");
+                int xProductId = rs.getInt("id");
                 String xName = rs.getString("name");
                 int xPrice = rs.getInt("price");
                 String xDescription = rs.getString("description");
@@ -297,7 +286,7 @@ public class ProductDAO extends MyDAO {
                 int xQuantity = rs.getInt("quantity");
                 Restaurant s = rt.getRestaurantById(rs.getInt("restaurant_id"));
                 Category c = cd.getCategoryId(rs.getInt("category_id"));
-                x = new Product(xProductId, xName, xPrice, xDescription, xImage, xStatus, xCreate_date,xQuantity, s, c);
+                x = new Product(xProductId, xName, xPrice, xDescription, xImage, xStatus, xCreate_date, xQuantity, s, c);
             }
             rs.close();
             ps.close();
@@ -325,7 +314,7 @@ public class ProductDAO extends MyDAO {
                 int xQuantity = rs.getInt("quantity");
                 Restaurant s = rt.getRestaurantById(rs.getInt("restaurant_id"));
                 Category c = cd.getCategoryId(rs.getInt("category_id"));
-                x = new Product(xProductId, xName, xPrice, xDescription, xImage, xStatus, xCreate_date,xQuantity, s, c);
+                x = new Product(xProductId, xName, xPrice, xDescription, xImage, xStatus, xCreate_date, xQuantity, s, c);
             }
             rs.close();
             ps.close();
@@ -390,10 +379,12 @@ public class ProductDAO extends MyDAO {
     public static void main(String[] args) {
         try {
             ProductDAO dao = new ProductDAO();
-            List<Product> list = dao.getProducts();
-            for (Product b : list) {
-                System.out.println(b);
-            }
+//            List<Product> list = dao.getProducts();
+//            for (Product b : list) {
+//                System.out.println(b);
+//            }
+
+            System.out.println(dao.getProduct(1));
         } catch (Exception e) {
             e.printStackTrace();
         }

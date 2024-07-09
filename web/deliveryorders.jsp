@@ -1,5 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -10,6 +11,7 @@
         <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
         <!-- My CSS -->
         <link rel="stylesheet" href="css/style_ship.css">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <title>Order</title>
     </head>
 
@@ -40,9 +42,15 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="deliverynotice">
                         <i class='bx bxs-message-dots' ></i>
                         <span class="text">Message</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="deliveryanalysis">
+                        <i class="bx bxs-data"></i>
+                        <span class="text">Analysis</span>
                     </a>
                 </li>
                 <li>
@@ -62,18 +70,45 @@
                 <a href="#" class="nav-link">Categories</a>
                 <form action="#">
                     <div class="form-input">
-                        <input type="search" placeholder="Search">
+                        <input type="search" placeholder="Search...">
                         <button type="submit" class="search-btn"><i class='bx bx-search' ></i></button>
                     </div>
                 </form>
                 <input type="checkbox" id="switch-mode" hidden>
-                <a href="#" class="notification">
-                    <i class='bx bxs-bell' ></i>
-                    <span class="num">8</span>
-                </a>
+                <div class="dropdown-container">
+                    <div class="notification">
+                        <i class='bx bxs-bell' onclick="toggleDropdown('dropdown3')"></i>
+                        <span class="num">10</span>
+                    </div>
+                    <div id="dropdown3" class="dropdown-content">
+                        <div class="notification-header">
+                            <h4>Notifications</h4> <button id="markAllAsRead" >Mark all as read</button>
+                        </div>
+                        <div class="notification-body">
+                            <c:choose>
+                                <c:when test="${empty notice}">
+                                    <div class="no-notifications">You don't have any notification!</div>
+                                </c:when>
+                                <c:otherwise>
+                                    <c:forEach var="n" items="${notice}">
+                                        <div class="notification-item">
+                                            <img src="${n.image}" alt="Ex" class="notification-avatar">
+                                            <span class="notification-content">${n.descripsion}</span>
+                                            <span class="notification-time" data-time="${n.notice_time}"></span>
+                                        </div>
+                                    </c:forEach>
+                                    <div class="notification-footer">
+                                        <a href="deliverynotice">See All</a>
+                                    </div>
+                                </c:otherwise>
+                            </c:choose>
+                        </div>
+
+                    </div>
+                </div>
                 <div class="dropdown-container">
                     <img src="images/icon/avatar1.jpg" alt="Avatar" class="avatar" onclick="toggleDropdown('dropdown1')">
-                    <div id="dropdown1" class="dropdown-content">
+                    <div id="dropdown1" class="dropdown-content-1">
                         <a href="Showinfo.jsp">Profile</a>
                         <a href="settings">Setting</a>
                         <a id="logoutButton" href="logout">Logout</a>
@@ -106,48 +141,55 @@
                 <!-- ================ Order Details List ================= -->
                 <div class="table-data">
                     <div class="order">
-                        <div class="head">
-                            <h3>Order</h3>
-                            <form action="deliveryorder" method = "GET">
+                        <form action="deliveryorder" method = "GET">
+                            <div class="head">
+                                <h3>Order</h3>
                                 <div class="form-input">
                                     <input style ="border-radius: 5px; font-size: 100%;" type="search" name="search" placeholder="Search by zone">
-                                    <button type="submit" class="search-btn"><i class='bx bx-search' ></i></button>
+                                    <i type="submit" class="search-btn"><button class='bx bx-search' ></button></i>
                                 </div>
-                            </form>
-                            <div class="dropdown-container">
-                                <i class='bx bx-filter' onclick="toggleDropdown('dropdown2')"></i>
-                                <div id="dropdown2" class="dropdown-content-1">
-                                    <a href="#">Newest</a>
-                                    <a href="#">Oldest</a>
+                                <div class="dropdown-container">
+                                    <i class='bx bx-filter' onclick="toggleDropdown('dropdown2')"></i>
+                                    <div id="dropdown2" class="dropdown-content-1">
+                                        <a href="?sort=false">Newest</a>
+                                        <a href="?sort=true">Oldest</a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <p style = "color: red">${err}</p>
+                        </form>
+                        <div id="notice" class="notice">${err}</div>
                         <table>
-                            <thead>
-                                <tr>
-                                    <td>Code</td>
-                                    <td>From</td>
-                                    <td>To</td>
-                                    <td>Total</td>
-                                    <td>Status</td>
-                                    <td>Order Date</td>
-                                </tr>
-                            </thead>
-                            <tbody>  
-                                <c:forEach var="o" items="${order}">
-                                    <tr onclick="openModal(${o.id})" style="cursor: pointer;">
-                                        <td>${o.id}</td>
-                                        <td>${o.fromAddress}</td>
-                                        <td>${o.toAddress}</td>
-                                        <td>${o.total_amount}</td>
-                                        <td>
-                                            <span class="status waiting">${o.status}</span>
-                                        </td>
-                                        <td>${o.order_date}</td>
-                                    </tr>
-                                </c:forEach>
-                            </tbody>
+                            <c:choose>
+                                <c:when test="${fn:length(order) == 0}">
+                                    <p class="empty-message">There are no orders around here!</p>
+                                </c:when>
+                                <c:otherwise>
+                                    <thead>
+                                        <tr>
+                                            <th>Code</th>
+                                            <th>From</th>
+                                            <th>To</th>
+                                            <th>Total</th>
+                                            <th>Status</th>
+                                            <th>Order Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>  
+                                        <c:forEach var="o" items="${order}">
+                                            <tr onclick="openModal(${o.id})" style="cursor: pointer;">
+                                                <td>${o.id}</td>
+                                                <td>${o.fromAddress}</td>
+                                                <td>${o.toAddress}</td>
+                                                <td>${o.total_amount}</td>
+                                                <td>
+                                                    <span class="status waiting">${o.status}</span>
+                                                </td>
+                                                <td class="notification-time" data-time="${o.order_date}"></td>
+                                            </tr>
+                                        </c:forEach>
+                                    </tbody>
+                                </c:otherwise>
+                            </c:choose>
                         </table>
 
                         <!--                        Phân trang-->

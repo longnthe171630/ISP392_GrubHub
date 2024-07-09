@@ -33,7 +33,7 @@
                 allowfullscreen>
             </iframe>
 
-            <div class="order-details" style ="margin-top: -40px">    
+            <div class="order-details" style = "margin-top: -20px;">    
                 <h3>Do you want to receive this order?</h3>
                 <button type = "submit" name = "action" value = "accept">Yes</button>
                 <button type = "submit" name = "action" value = "reject">No</button>

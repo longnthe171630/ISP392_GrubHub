@@ -6,6 +6,7 @@ package controller;
 
 import dao.AddressDAO;
 import dao.DeliveryDAO;
+import dao.NotificationDAO;
 import dao.OrderDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -19,6 +20,7 @@ import java.util.List;
 import model.Account;
 import model.Address;
 import model.Delivery;
+import model.Notification;
 import model.Order;
 
 /**
@@ -28,7 +30,6 @@ import model.Order;
 @WebServlet(name = "DeliveryOrdersServlet", urlPatterns = {"/deliverydashboard"})
 public class DeliveryDashboardServlet extends HttpServlet {
 
-   
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -39,19 +40,30 @@ public class DeliveryDashboardServlet extends HttpServlet {
 
         //Lấy dữ liệu từ DAO
         DeliveryDAO dao = new DeliveryDAO();
+        NotificationDAO dao1 = new NotificationDAO();
+        //Lấy info của account login vào
         int id = dao.getDeliveryPersonIdByUsername(account.getUsername());
+        List<Notification> notice = dao1.getListNotification(id);
+        //Biến search
         String search = request.getParameter("search");
+        // Lấy giá trị của tham số sort từ request
+        String sortParam = request.getParameter("sort");
+        // Khởi tạo một biến Boolean để lưu trữ giá trị sort
+        Boolean sort = null;
+        // Kiểm tra nếu sortParam không null, thực hiện chuyển đổi sang Boolean
+        if (sortParam != null) {
+            sort = Boolean.parseBoolean(sortParam);
+        }
         List<Delivery> list;
         if (search == null || search.trim().isEmpty()) {
-            list = dao.getDeliveryDashboard(id);
+            list = dao.getDeliveryDashboard(id, sort);
         } else {
             list = dao.searchDeliveryDashboard(id, search);
             // Kiểm tra nếu không có kết quả tìm kiếm
             if (list.isEmpty()) {
-                request.setAttribute("err", "No matches found, please try again!");
+                request.getSession().setAttribute("err", "No matches found, please try again!");
             }
         }
-
         setupPagination(request, list);
 
         int totalShip = dao.totalShipPriceByDeliveryPersonId(id);
@@ -68,6 +80,7 @@ public class DeliveryDashboardServlet extends HttpServlet {
             request.setAttribute("err", err);
         }
         //Chuẩn bị data đẩy sang jsp
+        request.setAttribute("notice", notice);
         request.setAttribute("account", account);
         request.setAttribute("totaldone", totalDone);
         request.setAttribute("totalship", totalShip);
@@ -94,7 +107,6 @@ public class DeliveryDashboardServlet extends HttpServlet {
         request.getRequestDispatcher("deliverystatus.jsp").forward(request, response);
     }
 
-    
     private void setupPagination(HttpServletRequest request, List<Delivery> list) {
         int itemsPerPage = 5;
         int totalItems = list.size();

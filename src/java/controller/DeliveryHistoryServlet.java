@@ -37,12 +37,24 @@ public class DeliveryHistoryServlet extends HttpServlet {
         Account account = (Account) session.getAttribute("acc");
 
         //Lấy dữ liệu từ DAO
+        NotificationDAO dao1 = new NotificationDAO();
         DeliveryDAO dao = new DeliveryDAO();
+       //Lấy info của account login vào
         int id = dao.getDeliveryPersonIdByUsername(account.getUsername());
+        List<Notification> notice = dao1.getListNotification(id);
+        //Biến search
         String search = request.getParameter("search");
+        // Lấy giá trị của tham số sort từ request
+        String sortParam = request.getParameter("sort");
+        // Khởi tạo một biến Boolean để lưu trữ giá trị sort
+        Boolean sort = null;
+        // Kiểm tra nếu sortParam không null, thực hiện chuyển đổi sang Boolean
+        if (sortParam != null) {
+            sort = Boolean.parseBoolean(sortParam);
+        }
         List<Delivery> list;
         if (search == null || search.trim().isEmpty()) {
-            list = dao.getDeliveryHistory(id);
+            list = dao.getDeliveryHistory(id, sort);
         } else {
             list = dao.searchDeliveryHistory(id, search);
             // Kiểm tra nếu không có kết quả tìm kiếm
@@ -64,6 +76,7 @@ public class DeliveryHistoryServlet extends HttpServlet {
 
         //Thiết lập yêu cầu để đẩy data sang jsp
         request.setAttribute("account", account);
+        request.setAttribute("notice", notice);
         request.getRequestDispatcher("deliveryhistory.jsp").forward(request, response);
     }
 

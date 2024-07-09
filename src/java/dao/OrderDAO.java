@@ -23,23 +23,17 @@ public class OrderDAO extends MyDAO {
     public List<Order> getOrder() {
         List<Order> t = new ArrayList<>();
         xSql = "select * from [Order]";
-        int xId;
-        int xRestaurant_Id;
-        int xCustomer_Id;
-        int xTotal_amount;
-        String xStatus;
-        java.sql.Date xOrder_date;
         Order x;
         try {
             ps = con.prepareStatement(xSql);
             rs = ps.executeQuery();
             while (rs.next()) {
-                xId = rs.getInt("id");
-                xRestaurant_Id = rs.getInt("restaurant_id");
-                xCustomer_Id = rs.getInt("customer_id");
-                xTotal_amount = rs.getInt("total_amount");
-                xStatus = rs.getString("status");
-                xOrder_date = rs.getDate("order_date");
+                int xId = rs.getInt("id");
+                int xRestaurant_Id = rs.getInt("restaurant_id");
+                int xCustomer_Id = rs.getInt("customer_id");
+                int xTotal_amount = rs.getInt("total_amount");
+                String xStatus = rs.getString("status");
+                java.sql.Timestamp xOrder_date = rs.getTimestamp("order_date");
 
                 x = new Order(xId, xRestaurant_Id, xCustomer_Id, xTotal_amount, xStatus, xOrder_date);
                 t.add(x);
@@ -106,9 +100,9 @@ public class OrderDAO extends MyDAO {
         }
     }
 
-    public List<Order> getAddressRestaurant_CustomerWithId() {
+    public List<Order> getAddressRestaurant_CustomerWithId(Boolean sortList) {
         List<Order> orders = new ArrayList<>();
-        String xSql = "SELECT  o.id, r_address.details AS from_details, \n"
+        xSql = "SELECT  o.id, r_address.details AS from_details, \n"
                 + "    r_address.street AS from_street, \n"
                 + "    r_address.state AS from_state,\n"
                 + "    c_address.details AS to_details, \n"
@@ -124,12 +118,16 @@ public class OrderDAO extends MyDAO {
                 + "JOIN restaurant r ON o.restaurant_id = r.id\n"
                 + "JOIN account r_account ON r.account_id = r_account.id\n"
                 + "JOIN address r_address ON r_account.address_id = r_address.id\n"
-                + "WHERE o.status = N'Đang chờ';";
+                + "WHERE o.status = N'Đang chờ' ";
 
+        if (sortList != null) {
+            String time = sortList ? "ASC" : "DESC";
+            xSql += "ORDER BY o.order_date " + time;
+        }
+        
         try {
             ps = con.prepareStatement(xSql);
             rs = ps.executeQuery();
-
             while (rs.next()) {
                 int id = rs.getInt("id");
                 String fromDetails = rs.getString("from_details");
@@ -140,7 +138,7 @@ public class OrderDAO extends MyDAO {
                 String toState = rs.getString("to_state");
                 int total_Amount = rs.getInt("total_amount");
                 String status = rs.getString("status");
-                java.sql.Date orderDate = rs.getDate("order_date");
+                java.sql.Timestamp orderDate = rs.getTimestamp("order_date");
 
                 Address fromAddress = new Address(fromDetails, fromStreet, fromState);
                 Address toAddress = new Address(toDetails, toStreet, toState);
@@ -191,7 +189,7 @@ public class OrderDAO extends MyDAO {
                 int xId = rs.getInt("id");
                 int xTotal_amount = rs.getInt("total_amount");
                 String xStatus = rs.getString("status");
-                java.sql.Date xOrder_date = rs.getDate("order_date");
+                java.sql.Timestamp xOrder_date = rs.getTimestamp("order_date");
                 String fromDetails = rs.getString("from_details");
                 String fromStreet = rs.getString("from_street");
                 String fromState = rs.getString("from_state");
@@ -225,7 +223,7 @@ public class OrderDAO extends MyDAO {
                 int xCustomer_Id = rs.getInt("customer_id");
                 int xTotal_amount = rs.getInt("total_amount");
                 String xStatus = rs.getString("status");
-                java.sql.Date xOrder_date = rs.getDate("order_date");
+                java.sql.Timestamp xOrder_date = rs.getTimestamp("order_date");
 
                 x = new Order(xId, xRestaurant_Id, xCustomer_Id, xTotal_amount, xStatus, xOrder_date);
                 t.add(x);
@@ -238,10 +236,38 @@ public class OrderDAO extends MyDAO {
         return (t);
     }
 
-    public void updateStatusOrderToDelivery(int id) {
+    public void updateStatusOrder(int id) {
         String xSql = "UPDATE [Order]\n"
                 + "SET [status] = N'Đang lấy hàng'\n"
-                + "WHERE [status] = N'Đang chờ' AND [id] = ?";
+                + "WHERE [id] = ?";
+        try {
+            ps = con.prepareStatement(xSql);
+            ps.setInt(1, id);
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void updateStatusOrder_1(int id) {
+        String xSql = "UPDATE [Order]\n"
+                + "SET [status] = N'Đang giao'\n"
+                + "WHERE id = ?;";
+        try {
+            ps = con.prepareStatement(xSql);
+            ps.setInt(1, id);
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void updateStatusOrder_2(int id) {
+        String xSql = "UPDATE [Order]\n"
+                + "SET [status] = N'Đã giao'\n"
+                + "WHERE id = ?;";
         try {
             ps = con.prepareStatement(xSql);
             ps.setInt(1, id);
@@ -252,6 +278,20 @@ public class OrderDAO extends MyDAO {
         }
     }
 
+    public void updateStatusOrder_3(int id) {
+        String xSql = "UPDATE [Order]\n"
+                + "SET [status] = N'Không giao được'\n"
+                + "WHERE id = ?;";
+        try {
+            ps = con.prepareStatement(xSql);
+            ps.setInt(1, id);
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
     public Order getRestaurant_Customer_ByOrderId(int id) {
         String xSql = "SELECT \n"
                 + "    o.id,\n"
@@ -285,7 +325,7 @@ public class OrderDAO extends MyDAO {
                 String xCustomer_name = rs.getString("cus_name");
                 String xCustomer_phone = rs.getString("cus_phone");
                 String xStatus = rs.getString("status");
-                java.sql.Date xOrder_date = rs.getDate("order_date");
+                java.sql.Timestamp xOrder_date = rs.getTimestamp("order_date");
 
                 o = new Order(xId, xStatus, xOrder_date, xRestaurant_name, xRestaurant_phone, xCustomer_name, xCustomer_phone);
             }
@@ -340,7 +380,7 @@ public class OrderDAO extends MyDAO {
                 String toState = rs.getString("to_state");
                 int total_Amount = rs.getInt("total_amount");
                 String status = rs.getString("status");
-                java.sql.Date orderDate = rs.getDate("order_date");
+                java.sql.Timestamp orderDate = rs.getTimestamp("order_date");
 
                 Address fromAddress = new Address(fromDetails, fromStreet, fromState);
                 Address toAddress = new Address(toDetails, toStreet, toState);
@@ -356,7 +396,7 @@ public class OrderDAO extends MyDAO {
 
     public static void main(String[] args) {
         OrderDAO d = new OrderDAO();
-        List<Order> lo = d.searchAddressRestaurant_CustomerWithId("n");
+        List<Order> lo = d.getAddressRestaurant_CustomerWithId(Boolean.FALSE);
         if (lo == null) {
             System.out.println("List empty");
         } else {

@@ -11,6 +11,7 @@
         <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
         <!-- My CSS -->
         <link rel="stylesheet" href="css/style_ship.css">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <title>Delivery History</title>
     </head>
 
@@ -41,9 +42,15 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="deliverynotice">
                         <i class='bx bxs-message-dots' ></i>
                         <span class="text">Message</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="deliveryanalysis">
+                        <i class="bx bxs-data"></i>
+                        <span class="text">Analysis</span>
                     </a>
                 </li>
                 <li>
@@ -67,13 +74,40 @@
                     </div>
                 </form>
                 <input type="checkbox" id="switch-mode" hidden>
-                <a href="#" class="notification">
-                    <i class='bx bxs-bell' ></i>
-                    <span class="num">8</span>
-                </a>
+                <div class="dropdown-container">
+                    <div class="notification">
+                        <i class='bx bxs-bell' onclick="toggleDropdown('dropdown3')"></i>
+                        <span class="num">10</span>
+                    </div>
+                    <div id="dropdown3" class="dropdown-content">
+                        <div class="notification-header">
+                            <h4>Notifications</h4> <button id="markAllAsRead" >Mark all as read</button>
+                        </div>
+                        <div class="notification-body">
+                            <c:choose>
+                                <c:when test="${empty notice}">
+                                    <div class="no-notifications">You don't have any notification!</div>
+                                </c:when>
+                                <c:otherwise>
+                                    <c:forEach var="n" items="${notice}">
+                                        <div class="notification-item">
+                                            <img src="${n.image}" alt="Img" class="notification-avatar">
+                                            <span class="notification-content">${n.descripsion}</span>
+                                            <span class="notification-time" data-time="${n.notice_time}"></span>
+                                        </div>
+                                    </c:forEach>
+                                    <div class="notification-footer">
+                                        <a href="deliverynotice">See All</a>
+                                    </div>
+                                </c:otherwise>
+                            </c:choose>
+                        </div>
+
+                    </div>
+                </div>
                 <div class="dropdown-container">
                     <img src="images/icon/avatar1.jpg" alt="Avatar" class="avatar" onclick="toggleDropdown('dropdown1')">
-                    <div id="dropdown1" class="dropdown-content">
+                    <div id="dropdown1" class="dropdown-content-1">
                         <a href="Showinfo.jsp">Profile</a>
                         <a href="settings">Setting</a>
                         <a id="logoutButton" href="logout">Logout</a>
@@ -86,7 +120,7 @@
             <main>
                 <div class="head-title">
                     <div class="left">
-                        <h1>Delivery Dashboard</h1>
+                        <h1>Delivery History</h1>
                         <ul class="breadcrumb">
                             <li>
                                 <a href="home">Home</a>
@@ -105,23 +139,23 @@
                 <!-- ================ Order Details List ================= -->
                 <div class="table-data">
                     <div class="order">
-                        <div class="head">
-                            <h3>History</h3>
-                            <form action="deliveryhistory" method = "GET">
+                        <form action="deliveryhistory" method = "GET">
+                            <div class="head">
+                                <h3>History</h3>
                                 <div class="form-input">
                                     <input style ="border-radius: 5px; font-size: 100%;" type="search" name="search" placeholder="Search by code">
-                                    <button type="submit" class="search-btn"><i class='bx bx-search' ></i></button>
+                                    <i type="submit" class="search-btn"><button class='bx bx-search' ></button></i>
                                 </div>
-                            </form>
-                            <div class="dropdown-container">
-                                <i class='bx bx-filter' onclick="toggleDropdown('dropdown2')"></i>
-                                <div id="dropdown2" class="dropdown-content-1">
-                                    <a href="#">Earliest</a>
-                                    <a href="#">Latest</a>
+                                <div class="dropdown-container">
+                                    <i class='bx bx-filter' onclick="toggleDropdown('dropdown2')"></i>
+                                    <div id="dropdown2" class="dropdown-content-1">
+                                        <a href="?sort=false">Newest</a>
+                                        <a href="?sort=true">Oldest</a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <p style = "color: red">${err}</p>
+                        </form>
+                        <div id="notice" class="notice">${err}</div>
                         <table>
                             <c:choose>
                                 <c:when test="${fn:length(list) == 0}">
@@ -132,8 +166,8 @@
                                         <tr>
                                             <th>Code</th>
                                             <th>Ship Price</th>
-                                            <th>Delivery Date</th>
                                             <th>Status</th>
+                                            <th>Delivery Date</th>
                                             <th> </th>
                                         </tr>
                                     </thead>
@@ -142,17 +176,19 @@
                                             <tr>
                                                 <td>${d.order_id}</td>
                                                 <td>${d.ship_price}</td>
-                                                <td>${d.delivery_date}</td>
                                                 <td>
                                                     <c:choose>
                                                         <c:when test="${d.status == 'Đã giao'}">
                                                             <span class="status completed">${d.status}</span>
+                                                            
                                                         </c:when>
                                                         <c:when test="${d.status == 'Không giao được'}">
                                                             <span class="status pending">${d.status}</span>
+                                                            
                                                         </c:when>
                                                     </c:choose>
                                                 </td>
+                                                <td class="notification-time" data-time="${d.delivery_date}"></td>
                                                 <td>
                                                     <button  onclick="openModal(${d.order_id})" style="cursor: pointer;">View</button>
                                                 </td>

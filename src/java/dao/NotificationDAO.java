@@ -6,13 +6,45 @@ package dao;
 
 import model.Notification;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import model.Delivery;
+
 /**
  *
  * @author Long1
  */
-public class NotificationDAO extends MyDAO{
-    
-    public Notification getNoticeByOrderId(int order_id){
+public class NotificationDAO extends MyDAO {
+
+    public List<Notification> getListNotification(int id) {
+        List<Notification> list = new ArrayList<>();
+        String xSql = "select d.order_id, d.image, n.descripsion, n.notice_time from Notification n\n"
+                + "join [order] o ON o.id = n.order_id\n"
+                + "join [delivery] d ON d.order_id = o.id\n"
+                + "where d.delivery_person_id = ?\n"
+                + "order by n.notice_time DESC";
+        Notification n;
+        try {
+            ps = con.prepareStatement(xSql);
+            ps.setInt(1, id);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                String xImage = rs.getString("image");
+                String xDescription = rs.getString("descripsion");
+                java.sql.Timestamp xNotice_time = rs.getTimestamp("notice_time");
+                int xOrder_id = rs.getInt("order_id");
+                n = new Notification(xDescription, xNotice_time, xOrder_id, xImage);
+                list.add(n);
+            }
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return list;
+    }
+
+    public Notification getNoticeByOrderId(int order_id) {
         xSql = "select * from notification where order_id = ?";
         Notification x = null;
         try {
@@ -22,9 +54,10 @@ public class NotificationDAO extends MyDAO{
             while (rs.next()) {
                 int xId = rs.getInt("id");
                 String xDescription = rs.getString("descripsion");
+                java.sql.Timestamp xNotice_time = rs.getTimestamp("notice_time");
                 int xOrder_id = rs.getInt("order_id");
-                x = new Notification(xId,xDescription, xOrder_id);
-                
+                x = new Notification(xId, xDescription, xNotice_time, xOrder_id);
+
             }
             rs.close();
             ps.close();
@@ -33,9 +66,9 @@ public class NotificationDAO extends MyDAO{
         }
         return x;
     }
-    
-    public void InsertNotice(String des, int order_id){
-        xSql = "insert into Notification values(?,?)";
+
+    public void InsertNotice(String des, int order_id) {
+        xSql = "insert into Notification (descripsion, order_id, notice_time) values(?,?, CONVERT(VARCHAR(19), GETDATE(), 120))";
         try {
             ps = con.prepareStatement(xSql);
             ps.setString(1, des);
@@ -46,19 +79,17 @@ public class NotificationDAO extends MyDAO{
             e.printStackTrace();
         }
     }
-    
+
     public static void main(String[] args) {
         NotificationDAO d = new NotificationDAO();
-//        List<Delivery> ld = d.getDeliveryByStatus();
-//        if (ld == null) {
-//            System.out.println("List empty");
-//        } else {
-//            for (Delivery dx : ld) {
-//                System.out.println(dx);
-//                
-//            }
-//        }
-        System.out.println(d.getNoticeByOrderId(1));
+        List<Notification> ld = d.getListNotification(1);
+        if (ld == null) {
+            System.out.println("List empty");
+        } else {
+            for (Notification dx : ld) {
+                System.out.println(dx);
+            }
+        }
+        //System.out.println(d.getNoticeByOrderId(1));
     }
-    
 }

@@ -2,11 +2,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-
 package controller;
 
 import dao.CustomerDAO;
 import dao.DeliveryDAO;
+import dao.NotificationDAO;
 import dao.OrderDAO;
 import dao.OrderDetailsDAO;
 import dao.ProductDAO;
@@ -19,9 +19,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.List;
+import model.Account;
 import model.Address;
+import model.Notification;
 import model.Order;
 import model.OrderDetails;
+import model.Product;
 
 /**
  *
@@ -29,25 +32,40 @@ import model.OrderDetails;
  */
 @WebServlet(name = "OrderServlet", urlPatterns = {"/deliveryorder"})
 public class DeliveryOrderServlet extends HttpServlet {
-   
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         //Lấy data bằng session
         HttpSession session = request.getSession();
-
+        Account account = (Account) session.getAttribute("acc");
         //Lấy dữ liệu từ DAO
+        NotificationDAO dao1 = new NotificationDAO();
         OrderDAO dao = new OrderDAO();
+        DeliveryDAO dao2 = new DeliveryDAO();
+       //Lấy info của account login vào
+        int id = dao2.getDeliveryPersonIdByUsername(account.getUsername());
+        List<Notification> notice = dao1.getListNotification(id);
+        //Tìm kiếm đơn
         String search = request.getParameter("search");
+        // Lấy giá trị của tham số sort từ request
+        String sortParam = request.getParameter("sort");
+        // Khởi tạo một biến Boolean để lưu trữ giá trị sort
+        Boolean sort = null;
+        // Kiểm tra nếu sortParam không null, thực hiện chuyển đổi sang Boolean
+        if (sortParam != null) {
+            sort = Boolean.parseBoolean(sortParam);
+        }
+        //Hiện list tùy điều kiện
         List<Order> orderList;
         if (search == null || search.trim().isEmpty()) {
-            orderList = dao.getAddressRestaurant_CustomerWithId();
+            orderList = dao.getAddressRestaurant_CustomerWithId(sort);
         } else {
             orderList = dao.searchAddressRestaurant_CustomerWithId(search.trim());
             // Kiểm tra nếu không có kết quả tìm kiếm
             if (orderList.isEmpty()) {
-                request.setAttribute("err", "No matches found, please try again!");
+                //request.setAttribute("err", "No matches found, please try again!");
             }
         }
         setupPagination(request, orderList);
@@ -60,21 +78,21 @@ public class DeliveryOrderServlet extends HttpServlet {
         if (err != null) {
             request.setAttribute("err", err);
         }
-        
+        request.setAttribute("notice", notice);
         request.getRequestDispatcher("deliveryorders.jsp").forward(request, response);
-    } 
+    }
 
-    /** 
+    /**
      * Handles the HTTP <code>POST</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
         int order_id = Integer.parseInt(request.getParameter("id"));
         OrderDetailsDAO dao1 = new OrderDetailsDAO();
         OrderDetails orderdetails = dao1.getOrderDetailsByOrder(order_id);
@@ -85,7 +103,7 @@ public class DeliveryOrderServlet extends HttpServlet {
         float ship_price = dao3.getShipPricByOrderId(order_id);
 
         OrderDAO orderDAO = new OrderDAO();
-        List<Order> order = orderDAO.getAddressRestaurant_CustomerWithId();
+        //List<Order> order = orderDAO.getAddressRestaurant_CustomerWithId(sort);
 
         Order order1 = orderDAO.getOrderById(order_id);
         Address fromAddress = order1.getFromAddress();
@@ -95,7 +113,7 @@ public class DeliveryOrderServlet extends HttpServlet {
         String directionsURL = "https://www.google.com/maps/embed/v1/directions?key=AIzaSyAOVYRIgupAurZup5y1PRh8Ismb1A3lLao&origin=" + fromAddress + "&destination=" + toAddress;
 
         request.setAttribute("directionsURL", directionsURL);
-        request.setAttribute("order", order);
+        //request.setAttribute("order", order);
         request.setAttribute("order1", order1);
         request.setAttribute("ship_price", ship_price);
         request.setAttribute("productname", product);

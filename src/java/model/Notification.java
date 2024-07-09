@@ -4,6 +4,9 @@
  */
 package model;
 
+import java.sql.Timestamp;
+import java.util.Date;
+
 /**
  *
  * @author Long1
@@ -11,17 +14,28 @@ package model;
 public class Notification {
     private int id;
     private String descripsion;
+    private java.sql.Timestamp notice_time;
     private int order_id;
-
+    private String image;
+    
     public Notification() {
     }
 
-    public Notification(int id, String descripsion, int order_id) {
+    public Notification(String descripsion, Timestamp notice_time, int order_id, String image) {
+        this.descripsion = descripsion;
+        this.notice_time = notice_time;
+        this.order_id = order_id;
+        this.image = image;
+    }
+     
+    
+    public Notification(int id, String descripsion, java.sql.Timestamp notice_time, int order_id) {
         this.id = id;
         this.descripsion = descripsion;
+        this.notice_time = notice_time;
         this.order_id = order_id;
     }
-
+    
     public int getId() {
         return id;
     }
@@ -38,6 +52,14 @@ public class Notification {
         this.descripsion = descripsion;
     }
 
+    public java.sql.Timestamp getNotice_time() {
+        return notice_time;
+    }
+
+    public void setNotice_time(java.sql.Timestamp notice_time) {
+        this.notice_time = notice_time;
+    }
+
     public int getOrder_id() {
         return order_id;
     }
@@ -46,10 +68,18 @@ public class Notification {
         this.order_id = order_id;
     }
 
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
     @Override
     public String toString() {
-        return id +", "+ descripsion +","+ order_id;
+        return "Notification{" + "id=" + id + ", descripsion=" + descripsion + ", notice_time=" + notice_time + ", order_id=" + order_id + ", image=" + image + '}';
     }
-    
+
     
 }

@@ -214,6 +214,8 @@ public class AccountDAO extends MyDAO {
         return list;
     }
 
+    
+    
     public static void main(String[] args) {
         AccountDAO accountDAO = new AccountDAO();
         List<Account> list = accountDAO.getListAccount();

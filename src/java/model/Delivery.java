@@ -13,14 +13,14 @@ import java.util.Date;
 public class Delivery {
     private int id, order_id, delivery_person_id;
     private int ship_price;
-    private java.sql.Date delivery_date;
+    private java.sql.Timestamp delivery_date;
     private String status;
     private String image;
 
     public Delivery() {
     }
-
-    public Delivery(int id, int order_id, int delivery_person_id, int ship_price, java.sql.Date delivery_date, String status, String image) {
+    
+    public Delivery(int id, int order_id, int delivery_person_id, int ship_price, java.sql.Timestamp delivery_date, String status, String image) {
         this.id = id;
         this.order_id = order_id;
         this.delivery_person_id = delivery_person_id;
@@ -62,11 +62,11 @@ public class Delivery {
         this.ship_price = ship_price;
     }
 
-    public java.sql.Date getDelivery_date() {
+    public java.sql.Timestamp getDelivery_date() {
         return delivery_date;
     }
 
-    public void setDelivery_date(java.sql.Date delivery_date) {
+    public void setDelivery_date(java.sql.Timestamp delivery_date) {
         this.delivery_date = delivery_date;
     }
 
