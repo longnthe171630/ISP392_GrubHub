@@ -44,6 +44,18 @@
         <servlet-name>AdminServlet</servlet-name>
         <servlet-class>controller.AdminServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AdminDashBoard</servlet-name>
+        <servlet-class>controller.AdminDashBoard</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>MonthlyRevenueServlet</servlet-name>
+        <servlet-class>controller.MonthlyRevenueServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AccountPDFServlet</servlet-name>
+        <servlet-class>controller.AccountPDFServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ForgotPasswordServlet</servlet-name>
         <url-pattern>/forgot</url-pattern>
@@ -98,6 +110,18 @@
     <servlet-mapping>
         <servlet-name>AdminServlet</servlet-name>
         <url-pattern>/admin</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AdminDashBoard</servlet-name>
+        <url-pattern>/admindashboard</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>MonthlyRevenueServlet</servlet-name>
+        <url-pattern>/monthlyrevenue</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AccountPDFServlet</servlet-name>
+        <url-pattern>/AccountPDFServlet</url-pattern>
     </servlet-mapping>
     <welcome-file-list>
         <welcome-file>home</welcome-file>

@@ -21,6 +21,7 @@ import model.Account;
 import model.Address;
 import model.CartItem;
 import model.Customer;
+import model.Notification;
 import model.Order;
 import model.Product;
 import utils.Mail;
@@ -30,6 +31,42 @@ import utils.Mail;
  * @author manh0
  */
 public class OrderDAO extends MyDAO {
+
+    public Map<String, Double> getMonthlyRevenue() {
+        Map<String, Double> revenue = new HashMap<>();
+        String sql = """
+                     SELECT FORMAT(order_date, 'yyyy-MM') AS month, SUM(total_amount) AS revenue
+                     FROM [Order]
+                     GROUP BY FORMAT(order_date, 'yyyy-MM')
+                     ORDER BY FORMAT(order_date, 'yyyy-MM')""";
+        try {
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                revenue.put(rs.getString("month"), rs.getDouble("revenue"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return revenue;
+    }
+
+    public double totalMoneyMonth(int month, int year) {
+        String sql = """
+                     select SUM(total_amount) from [Order]
+                                     where MONTH(order_date)= ? and year(order_date)= ?""";
+        try {
+            ps = connection.prepareStatement(sql);
+            ps.setInt(1, month);
+            ps.setInt(2, year);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                return rs.getDouble(1);
+            }
+        } catch (Exception e) {
+        }
+        return 0;
+    }
 
     public List<Order> getOrder() {
         List<Order> t = new ArrayList<>();
@@ -63,31 +100,6 @@ public class OrderDAO extends MyDAO {
         }
         return (t);
     }
-    
-      public List<Order> getListOrder() {
-        List<Order> list = new ArrayList<>();
-        try {
-            String sql = "select o.id, r.name, c.name , total_amount, status, order_date\n"
-                    + "from [Order] o\n"
-                    + "join Restaurant r on r.id= o.restaurant_id\n"
-                    + "join Customer c on c.id= o.customer_id";
-            ps = con.prepareStatement(sql);
-            rs = ps.executeQuery();
-
-            while (rs.next()) {
-                Order a = new Order(rs.getInt(1),
-                        rs.getInt(2),
-                        rs.getInt(3),
-                        rs.getInt(4),
-                        rs.getString(5),
-                        rs.getDate(6));
-                list.add(a);
-            }
-        } catch (SQLException e) {
-            System.out.println(e);
-        }
-        return list;
-    }
 
     public int getNumberOrders() {
         try {
@@ -101,6 +113,56 @@ public class OrderDAO extends MyDAO {
         } catch (Exception e) {
         }
         return 1;
+    }
+
+    public List<Order> getListOrder() {
+        List<Order> list = new ArrayList<>();
+        try {
+            String sql = """
+                        SELECT 
+                             o.id AS id,
+                             r.id AS restaurant_id,
+                             c.id AS customer_id,
+                             o.total_amount,
+                             o.status,
+                             o.order_date
+                         FROM 
+                             [Order] AS o
+                         JOIN 
+                             Restaurant AS r ON r.id = o.restaurant_id
+                         JOIN 
+                             Customer AS c ON c.id = o.customer_id
+                         order by order_date desc""";
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int orderId = rs.getInt("id");
+                int restaurantName = rs.getInt("restaurant_id");
+                int customerName = rs.getInt("customer_id");
+                int totalAmount = rs.getInt("total_amount");
+                String status = rs.getString("status");
+                Date orderDate = rs.getDate("order_date");
+
+                Order a = new Order(orderId, restaurantName, customerName, totalAmount, status, orderDate);
+                list.add(a);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        } finally {
+            // Close resources
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                System.out.println(e);
+            }
+        }
+        return list;
     }
 
     public void addOrder(Customer customer, Cart cart) {
@@ -121,7 +183,7 @@ public class OrderDAO extends MyDAO {
                     itemsByRestaurant.computeIfAbsent(restaurantId, k -> new ArrayList<>()).add(item);
                 } else {
                     System.out.println("Invalid product or restaurant: " + product);
-                    
+
                 }
             }
 
@@ -225,7 +287,27 @@ public class OrderDAO extends MyDAO {
         }
     }
 
-   
+    public List<Notification> getNotificationsByAccountId(int accountId) {
+        List<Notification> notifications = new ArrayList<>();
+        String sql = "SELECT * FROM Notifications WHERE account_id = ?";
+        try {
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, accountId);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String desciption = rs.getString("description");
+                int order_id = rs.getInt("order_id");
+                notifications.add(new Notification(id, desciption, accountId, order_id));
+            }
+            rs.close();
+            ps.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return notifications;
+    }
+
     public List<Order> getAddressRestaurant_CustomerWithId() {
         List<Order> orders = new ArrayList<>();
         String xSql = "SELECT o.id, r_address.details AS from_details, r_address.street AS from_street, r_address.state AS from_state,\n"
@@ -389,40 +471,9 @@ public class OrderDAO extends MyDAO {
 
     public static void main(String[] args) {
         // Khởi tạo khách hàng
-        Customer customer = new Customer();
-        Account account = new Account();
-        CustomerDAO dao = new CustomerDAO();
-//        customer = dao.getCustomerByAccID(5);
-        customer.setId(2);
-        // Thay thế bằng ID của khách hàng từ cơ sở dữ liệu
-
-        // Khởi tạo giỏ hàng
-        Cart cart = new Cart();
-
-        // Lấy sản phẩm từ cơ sở dữ liệu hoặc dao
-        ProductDAO productDAO = new ProductDAO();
-
-        // Lấy sản phẩm 1 từ cơ sở dữ liệu
-        Product product1 = productDAO.getProduct(6); // Thay thế bằng ID sản phẩm từ cơ sở dữ liệu
-        int quantity1 = 1; // Số lượng sản phẩm 1
-        CartItem item1 = new CartItem(product1, quantity1);
-        cart.addItem(item1); // Thêm vào giỏ hàng
-
-        // Lấy sản phẩm 2 từ cơ sở dữ liệu
-        Product product2 = productDAO.getProduct(9); // Thay thế bằng ID sản phẩm từ cơ sở dữ liệu
-        int quantity2 = 1; // Số lượng sản phẩm 2
-        CartItem item2 = new CartItem(product2, quantity2);
-        cart.addItem(item2); // Thêm vào giỏ hàng
-
-        // In ra chi tiết các sản phẩm trong giỏ hàng
-        List<CartItem> items = cart.getItems();
-        for (CartItem item : items) {
-            System.out.println("Product: " + item.getProduct().getName() + ", Quantity: " + item.getQuantity());
-        }
-
-        // Gọi hàm addOrder để thêm đơn hàng
         OrderDAO orderDAO = new OrderDAO();
-        orderDAO.addOrder(customer, cart);
-    }
+        double total = orderDAO.totalMoneyMonth(7, 2024);
+        System.out.println(total);
 
+    }
 }

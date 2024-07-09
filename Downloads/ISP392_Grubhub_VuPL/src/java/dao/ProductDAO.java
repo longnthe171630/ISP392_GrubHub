@@ -503,7 +503,7 @@ public class ProductDAO extends MyDAO {
 
     public static void main(String[] args) {
         ProductDAO pd = new ProductDAO();
-        Product p = pd.getProduct(4);
+        Product p = pd.getProduct("4");
         System.out.println(p);
     }
 }

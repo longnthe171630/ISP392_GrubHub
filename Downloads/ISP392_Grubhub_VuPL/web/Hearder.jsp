@@ -52,6 +52,30 @@
                 color: black;
                 font-weight: 600;
             }
+            /* Style for notification bell */
+            .notification-bell {
+                position: relative;
+                display: inline-block;
+                cursor: pointer;
+            }
+
+            /* Style for notification popup */
+            .notification-popup {
+                display: none;
+                position: absolute;
+                top: 30px;
+                right: 0;
+                background-color: #fff;
+                box-shadow: 0 0 10px rgba(0,0,0,0.1);
+                border: 1px solid #ccc;
+                padding: 10px;
+                z-index: 1000;
+            }
+
+            .notification-bell:hover .notification-popup {
+                display: block;
+            }
+
         </style>
     </head>
     <body>
@@ -77,13 +101,26 @@
                     <span id="cartCount">${sessionScope.cart.items.size()}</span>
                 </a>
 
+                <div class="notification-bell">
+                    <i class="fas fa-bell"></i>
+                    <!-- Popup content -->
+                    <div class="notification-popup">
+                        <p>You have 3 new notifications:</p>
+                        <ul>
+                            <li>Notification 1</li>
+                            <li>Notification 2</li>
+                            <li>Notification 3</li>
+                        </ul>
+                    </div>
+                </div>
+
                 <c:if test="${sessionScope.acc == null}">
                     <a href="login" class="login-btn">login</a>
                 </c:if>               
                 <c:if test="${sessionScope.acc != null}">
                     <a href="logout" class="login-btn">logout</a>
                 </c:if>              
-                    
+
             </div> 
 
         </header>
@@ -95,5 +132,21 @@
             <label for="search-box" class="fas fa-search"></label>
             <i class="fas fa-times" id="close"></i>
         </form>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const bell = document.querySelector(".notification-bell");
+                const popup = document.querySelector(".notification-popup");
+
+                bell.addEventListener("mouseover", function () {
+                    popup.style.display = "block";
+                });
+
+                bell.addEventListener("mouseout", function () {
+                    popup.style.display = "none";
+                });
+            });
+        </script>
+
     </body>
 </html>

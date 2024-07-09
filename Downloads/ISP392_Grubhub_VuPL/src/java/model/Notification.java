@@ -3,12 +3,22 @@ public class Notification {
     private int id;
     private String description;
     private int order_id;
+    private int account_id;
 
     public Notification(int id, String description, int order_id) {
         this.id = id;
         this.description = description;
         this.order_id = order_id;
     }
+
+    public Notification(int id, String description, int order_id, int account_id) {
+        this.id = id;
+        this.description = description;
+        this.order_id = order_id;
+        this.account_id = account_id;
+    }
+    
+    
 
     public Notification() {
     }
@@ -36,6 +46,16 @@ public class Notification {
     public void setOrder_id(int order_id) {
         this.order_id = order_id;
     }
+
+    public int getAccount_id() {
+        return account_id;
+    }
+
+    public void setAccount_id(int account_id) {
+        this.account_id = account_id;
+    }
+    
+    
 
     @Override
     public String toString() {

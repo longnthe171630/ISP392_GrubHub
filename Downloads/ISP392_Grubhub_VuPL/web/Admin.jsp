@@ -1,21 +1,18 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<!DOCTYPE html>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 
+<!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
         <!-- Boxicons -->
         <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
         <!-- My CSS -->
         <link rel="stylesheet" href="css/admin.css">
-
         <title>AdminHub</title>
     </head>
     <body>
-
-
         <!-- SIDEBAR -->
         <section id="sidebar">
             <a href="#" class="brand">
@@ -59,6 +56,13 @@
                         <span class="text">Ban</span>
                     </a>
                 </li>
+                <li>
+                    <a href="admindashboard">
+                        <i class='bx bxs-dollar-circle' ></i>
+                        <span class="text">Monthly Revenue</span>
+                    </a>
+                </li>
+
             </ul>
             <ul class="side-menu">
                 <li>
@@ -77,14 +81,11 @@
         </section>
         <!-- SIDEBAR -->
 
-
-
         <!-- CONTENT -->
         <section id="content">
             <!-- NAVBAR -->
             <nav>
                 <i class='bx bx-menu' ></i>
-                <!--			<a href="#" class="nav-link">Categories</a>-->
                 <form action="DashboardServlet">
                     <div class="form-input">
                         <input type="search" placeholder="Search...">
@@ -118,7 +119,6 @@
                             </li>
                         </ul>
                     </div>
-
                 </div>
 
                 <ul class="box-info">
@@ -126,8 +126,7 @@
                         <i class='bx bxs-calendar-check' ></i>
                         <span class="text">
                             <h3>
-                                <% Integer countOrder= (Integer) request.getAttribute("orderCount");
-                                                     out.println(countOrder); %>
+                                <c:out value="${orderCount}"/>
                             </h3>
                             <p>Order</p>
                         </span>
@@ -136,13 +135,22 @@
                         <i class='bx bxs-group' ></i>
                         <span class="text">
                             <h3>
-                                <% Integer countAccount= (Integer) request.getAttribute("NumofUser");
-                                                     out.println(countAccount); %>
+                                <c:out value="${NumofUser}"/>
                             </h3>
                             <p>User</p>
                         </span>
                     </li>
+                    <li>
+                        <i class='bx bxs-dollar-circle' ></i>
+                        <span class="text">
+                            <h3>
+                                <c:out value="${totalRevenue}"/> Đ
+                            </h3>
+                            <p>Total Revenue</p>
+                        </span>
+                    </li>
                 </ul>
+
                 <div class="table-data">
                     <div class="order">
                         <div class="head">
@@ -154,7 +162,7 @@
                             <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Restaurant</th>                                 
+                                    <th>Restaurant</th>
                                     <th>Customer</th>
                                     <th>Total_amount</th>
                                     <th>Status</th>
@@ -164,16 +172,14 @@
                             <tbody>
                                 <c:forEach items="${requestScope.listOrder}" var="o">
                                     <tr>
-                                        <td></td>
                                         <td>${o.id}</td>
-                                        <td>${o.nameRes}</td>
-                                        <td>${o.nameCus}</td>
+                                        <td>${o.restaurant_id}</td>
+                                        <td>${o.customer_id}</td>
                                         <td>${o.total_amount}</td>
                                         <td><span class="status completed">${o.status}</span></td>
                                         <td>${o.order_date}</td>
                                     </tr>
                                 </c:forEach>
-
                             </tbody>
                         </table>
                     </div>
@@ -182,7 +188,6 @@
             <!-- MAIN -->
         </section>
         <!-- CONTENT -->
-
 
         <script src="js/admin.js"></script>
     </body>

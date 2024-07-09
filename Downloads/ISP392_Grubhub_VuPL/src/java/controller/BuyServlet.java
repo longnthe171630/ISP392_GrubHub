@@ -24,6 +24,15 @@ public class BuyServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
+        Account account = (Account) session.getAttribute("acc");
+
+        // Check if user is logged in
+        if (account == null || account.getRole() != 2) { // Role 2 for customers
+            // Redirect to login page or show error message
+            response.sendRedirect("login"); // Change "login" to your actual login page URL
+            return;
+        }
+
         Cart cart = null;
         Object o = session.getAttribute("cart");
         if (o != null) {
@@ -40,16 +49,13 @@ public class BuyServlet extends HttpServlet {
             id = Integer.parseInt(tid);
             System.out.println("Product ID: " + id + ", Quantity: " + num);  // Debugging line
 
-              Account account = (Account) session.getAttribute("acc");
-            if (account != null && account.getRole() == 2) { // Assuming role 2 is for customers
-                CustomerDAO customerDAO = new CustomerDAO();
-                Customer customer = customerDAO.getCustomerByAccID(account.getId());
-                if (customer != null) {
-                    CartDAO cartDAO = new CartDAO();
-                    cartDAO.addProductToCart(customer.getId(), id, num);  // Add product to cart in database
-                } else {
-                    System.out.println("Customer not found for account ID: " + account.getId());
-                }
+            CustomerDAO customerDAO = new CustomerDAO();
+            Customer customer = customerDAO.getCustomerByAccID(account.getId());
+            if (customer != null) {
+                CartDAO cartDAO = new CartDAO();
+                cartDAO.addProductToCart(customer.getId(), id, num);  // Add product to cart in database
+            } else {
+                System.out.println("Customer not found for account ID: " + account.getId());
             }
 
             ProductDAO dao = new ProductDAO();
