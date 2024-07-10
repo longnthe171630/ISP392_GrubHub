@@ -15,14 +15,28 @@ public class Product {
     private int id;
     private String name;
     private int price;
+    private int quantity;
     private String description, image;
     private boolean status;
+    private float rating;
     private Date create_date;
-    private int quantity;
     private Restaurant restaurant;
     private Category category;
 
     public Product() {
+    }
+
+    public Product(int id, String name, int price, int quantity, String description, String image, boolean status, Date create_date, Restaurant restaurant, Category category) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.quantity = quantity;
+        this.description = description;
+        this.image = image;
+        this.status = status;
+        this.create_date = create_date;
+        this.restaurant = restaurant;
+        this.category = category;
     }
 
     public Product(int id, String name, int price, String description, String image, boolean status, Date create_date, int quantity, Restaurant restaurant, Category category) {

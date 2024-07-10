@@ -28,6 +28,83 @@ public class AddressDAO extends MyDAO {
         return null; // Trả về null nếu không có kết quả nào
     }
 
+    public void createAddress(Address a) {
+        xSql = "INSERT INTO [dbo].[Address]\n"
+                + "           ([details]\n"
+                + "           ,[state]\n"
+                + "           ,[street])\n"
+                + "     VALUES(\n"
+                + "           ?\n"
+                + "           ,?\n"
+                + "           ,?)";
+        try {
+            ps = con.prepareStatement(xSql);
+            ps.setString(1, a.getDetails());
+            ps.setString(2, a.getState());
+            ps.setString(3, a.getStreet());
+            ps.executeUpdate();
+            ps.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Address getAddressByOrderId(int order_id) {
+        String xSql = "select * from [Order] o\n"
+                + "join customer c ON o.customer_id = c.id\n"
+                + "join address a ON c.address_id = a.id\n"
+                + "where o.id = ?;";
+
+        try {
+            ps = con.prepareStatement(xSql);
+            ps.setInt(1, order_id);
+            rs = ps.executeQuery(); // Thực hiện truy vấn và lấy kết quả
+
+            if (rs.next()) {
+                int id = rs.getInt("id");
+                String details = rs.getString("details");
+                String street = rs.getString("street");
+                String state = rs.getString("state");
+
+                return new Address(id, details, street, state);
+            }
+            rs.close();
+            ps.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<Address> getAddress() {
+        List<Address> t = new ArrayList<>();
+        xSql = "select * from Address";
+        int xId;
+        String xDetails;
+        String xStreet;
+        String xState;
+      
+        Address x;
+        try {
+            ps = con.prepareStatement(xSql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                xId = rs.getInt("id");
+                xDetails = rs.getString("details");
+                xStreet = rs.getString("street");
+                xState = rs.getString("state");
+                
+                x = new Address(xId, xDetails, xStreet, xState);
+                t.add(x);
+            }
+            rs.close();
+            ps.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return (t);
+    }
+    
     public Address getAddressById(int id) {
         xSql = "SELECT [id], [details], [state], [street]\n"
                 + "  FROM [dbo].[Address]\n"
@@ -51,49 +128,22 @@ public class AddressDAO extends MyDAO {
         }
         return null; // Trả về null nếu không có kết quả nào
     }
-
-    public void createAddress(Address a) {
-        xSql = "INSERT INTO [dbo].[Address]\n"
-                + "           ([details]\n"
-                + "           ,[state]\n"
-                + "           ,[street])\n"
-                + "     VALUES(\n"
-                + "           ?\n"
-                + "           ,?\n"
-                + "           ,?)";
-        try {
-            ps = con.prepareStatement(xSql);
-            ps.setString(1, a.getDetails());
-            ps.setString(2, a.getState());
-            ps.setString(3, a.getStreet());
-            ps.executeUpdate();
-            ps.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
+    
     public static void main(String[] args) {
         AddressDAO ad = new AddressDAO();
-
-       Address list = ad.getAddressById(1);
-        System.out.println(list);
-
-//        Address add = new Address(1, "thon 3 ", "thach hoa", "thach that");
-//        int idAddress = 0;
+//        Address a = new Address(1, "thon 3 ", "thach hoa", "thach that");
+        System.out.println(ad.getAddressByOrderId(2));
+        // Tạo địa chỉ mới
+//        ad.createAddress(a);
 //
-//// Kiểm tra xem địa chỉ đã tồn tại trong cơ sở dữ liệu chưa
-//        Address existingAddress = ad.getAddress(add);
+//        // Kiểm tra xem địa chỉ mới đã được thêm vào chưa
+//        Address result = ad.getAddress(a);
 //
-//        if (existingAddress == null) {
-//            // Nếu địa chỉ chưa tồn tại, tạo nó trong cơ sở dữ liệu
-//            ad.createAddress(add);
-//            idAddress = ad.getAddress(add).getId(); // Lấy ID của địa chỉ vừa tạo
-//            System.out.println(idAddress);
+//        if (result != null) {
+//            System.out.println("Address created successfully:");
+//            System.out.println("ID: " + result.getId() + ", Details: " + result.getDetails() + ", State: " + result.getState() + ", Street: " + result.getStreet());
 //        } else {
-//            // Nếu địa chỉ đã tồn tại, sử dụng ID hiện tại của nó
-//            idAddress = existingAddress.getId();
-//            System.out.println(idAddress);
+//            System.out.println("Failed to create address.");
 //        }
     }
 }

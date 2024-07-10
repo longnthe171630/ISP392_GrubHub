@@ -24,7 +24,7 @@ public class ProductDAO extends MyDAO {
             ps = con.prepareStatement(xSql);
             rs = ps.executeQuery();
             while (rs.next()) {
-                int xProductId = rs.getInt("product_id");
+                int xProductId = rs.getInt("id");
                 String xName = rs.getString("name");
                 int xPrice = rs.getInt("price");
                 String xDescription = rs.getString("description");
@@ -146,7 +146,7 @@ public class ProductDAO extends MyDAO {
             rs = ps.executeQuery();
 
             while (rs.next()) {
-                xProductId = rs.getInt("product_id");
+                xProductId = rs.getInt("id");
                 xName = rs.getString("name");
                 xPrice = rs.getInt("price");
                 xDescription = rs.getString("description");
@@ -185,7 +185,7 @@ public class ProductDAO extends MyDAO {
             ps.setString(1, "%" + xxName + "%");
             rs = ps.executeQuery();
             while (rs.next()) {
-                xProductId = rs.getInt("product_id");
+                xProductId = rs.getInt("id");
                 xName = rs.getString("name");
                 xPrice = rs.getInt("price");
                 xDescription = rs.getString("description");
@@ -217,7 +217,7 @@ public class ProductDAO extends MyDAO {
             ps.setInt(2, (index - 1) * 9);
             rs = ps.executeQuery();
             while (rs.next()) {
-                int xProductId = rs.getInt("product_id");
+                int xProductId = rs.getInt("id");
                 String xName = rs.getString("name");
                 int xPrice = rs.getInt("price");
                 String xDescription = rs.getString("description");
@@ -247,7 +247,7 @@ public class ProductDAO extends MyDAO {
             ps.setString(1, cproduct_id);
             rs = ps.executeQuery();
             while (rs.next()) {
-                int xProductId = rs.getInt("product_id");
+                int xProductId = rs.getInt("id");
                 String xName = rs.getString("name");
                 int xPrice = rs.getInt("price");
                 String xDescription = rs.getString("description");
@@ -297,14 +297,14 @@ public class ProductDAO extends MyDAO {
     }
 
     public Product getProduct(String xxProductId) {
-        xSql = "SELECT * FROM Product WHERE product_id = ?";
+        xSql = "SELECT * FROM Product WHERE id = ?";
         Product x = null;
         try {
             ps = con.prepareStatement(xSql);
             ps.setString(1, xxProductId);
             rs = ps.executeQuery();
             if (rs.next()) {
-                int xProductId = rs.getInt("product_id");
+                int xProductId = rs.getInt("id");
                 String xName = rs.getString("name");
                 int xPrice = rs.getInt("price");
                 String xDescription = rs.getString("description");
@@ -347,7 +347,7 @@ public class ProductDAO extends MyDAO {
     }
 
     public void delete(int xxProductId) {
-        xSql = "delete from Product where product_id=?";
+        xSql = "delete from Product where id=?";
         try {
             ps = con.prepareStatement(xSql);
             ps.setInt(1, xxProductId);
