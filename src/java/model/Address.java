@@ -1,18 +1,18 @@
-
 package model;
 public class Address {
     private int id;
-    private String details, state, street;
+    private String details, street, state;
 
     public Address() {
     }
 
-    public Address(String details, String state, String street) {
+    public Address(String details, String street, String state) {
         this.details = details;
-        this.state = state;
         this.street = street;
+        this.state = state;
     }
     
+
     public Address(int id, String details, String state, String street) {
         this.id = id;
         this.details = details;
@@ -54,10 +54,7 @@ public class Address {
 
     @Override
     public String toString() {
-        return details + "," + state + "," + street;
+        return details + "-" + street + "-" + state;
     }
-    
-    
-    
-    
+
 }

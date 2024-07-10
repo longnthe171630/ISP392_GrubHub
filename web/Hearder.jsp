@@ -78,10 +78,10 @@
                 </a>
 
                 <c:if test="${sessionScope.customer == null && sessionScope.account == null}">
-                    <a href="cuslogin" class="login-btn">login</a>
+                    <a href="cuslogin" class="login-btn">Login</a>
                 </c:if>               
                 <c:if test="${sessionScope.customer != null || sessionScope.account != null}">
-                    <a href="logout" class="login-btn">logout</a>
+                    <a href="logout" class="login-btn">Logout</a>
                 </c:if>              
                     
             </div> 

@@ -4,12 +4,9 @@
  */
 package controller;
 
-import dao.CustomerDAO;
 import dao.DeliveryDAO;
 import dao.NotificationDAO;
 import dao.OrderDAO;
-import dao.OrderDetailsDAO;
-import dao.ProductDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -20,18 +17,16 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import model.Account;
-import model.Address;
+import model.Delivery;
 import model.Notification;
 import model.Order;
-import model.OrderDetails;
-import model.Product;
 
 /**
  *
  * @author Long1
  */
-@WebServlet(name = "OrderServlet", urlPatterns = {"/deliveryorder"})
-public class DeliveryOrderServlet extends HttpServlet {
+@WebServlet(name = "DeliveryHistoryServlet", urlPatterns = {"/deliveryhistory"})
+public class DeliveryHistoryServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -40,14 +35,14 @@ public class DeliveryOrderServlet extends HttpServlet {
         //Lấy data bằng session
         HttpSession session = request.getSession();
         Account account = (Account) session.getAttribute("acc");
+
         //Lấy dữ liệu từ DAO
         NotificationDAO dao1 = new NotificationDAO();
-        OrderDAO dao = new OrderDAO();
-        DeliveryDAO dao2 = new DeliveryDAO();
+        DeliveryDAO dao = new DeliveryDAO();
        //Lấy info của account login vào
-        int id = dao2.getDeliveryPersonIdByUsername(account.getUsername());
+        int id = dao.getDeliveryPersonIdByUsername(account.getUsername());
         List<Notification> notice = dao1.getListNotification(id);
-        //Tìm kiếm đơn
+        //Biến search
         String search = request.getParameter("search");
         // Lấy giá trị của tham số sort từ request
         String sortParam = request.getParameter("sort");
@@ -57,18 +52,18 @@ public class DeliveryOrderServlet extends HttpServlet {
         if (sortParam != null) {
             sort = Boolean.parseBoolean(sortParam);
         }
-        //Hiện list tùy điều kiện
-        List<Order> orderList;
+        List<Delivery> list;
         if (search == null || search.trim().isEmpty()) {
-            orderList = dao.getAddressRestaurant_CustomerWithId(sort);
+            list = dao.getDeliveryHistory(id, sort);
         } else {
-            orderList = dao.searchAddressRestaurant_CustomerWithId(search.trim());
+            list = dao.searchDeliveryHistory(id, search);
             // Kiểm tra nếu không có kết quả tìm kiếm
-            if (orderList.isEmpty()) {
-                //request.setAttribute("err", "No matches found, please try again!");
+            if (list.isEmpty()) {
+                request.setAttribute("err", "No matches found, please try again!");
             }
         }
-        setupPagination(request, orderList);
+
+        setupPagination(request, list);
         
         //Hiển thị lỗi
         String err = (String) session.getAttribute("err");
@@ -78,8 +73,11 @@ public class DeliveryOrderServlet extends HttpServlet {
         if (err != null) {
             request.setAttribute("err", err);
         }
+
+        //Thiết lập yêu cầu để đẩy data sang jsp
+        request.setAttribute("account", account);
         request.setAttribute("notice", notice);
-        request.getRequestDispatcher("deliveryorders.jsp").forward(request, response);
+        request.getRequestDispatcher("deliveryhistory.jsp").forward(request, response);
     }
 
     /**
@@ -93,45 +91,34 @@ public class DeliveryOrderServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int order_id = Integer.parseInt(request.getParameter("id"));
-        OrderDetailsDAO dao1 = new OrderDetailsDAO();
-        OrderDetails orderdetails = dao1.getOrderDetailsByOrder(order_id);
-        ProductDAO dao2 = new ProductDAO();
-        String product = dao2.getNameProductById(orderdetails.getProduct_id());
+        int order_id = Integer.parseInt(request.getParameter("order_id"));
 
-        DeliveryDAO dao3 = new DeliveryDAO();
-        float ship_price = dao3.getShipPricByOrderId(order_id);
-
+        DeliveryDAO deliveryDAO = new DeliveryDAO();
         OrderDAO orderDAO = new OrderDAO();
-        //List<Order> order = orderDAO.getAddressRestaurant_CustomerWithId(sort);
+        NotificationDAO notice = new NotificationDAO();
+        Delivery delivery1 = deliveryDAO.getDeliveryByOrderId(order_id);
+        Order order1 = orderDAO.getRestaurant_Customer_ByOrderId(order_id);
+        Order order2 = orderDAO.getOrderById(order_id);
+        Notification des = notice.getNoticeByOrderId(order_id);
 
-        Order order1 = orderDAO.getOrderById(order_id);
-        Address fromAddress = order1.getFromAddress();
-        Address toAddress = order1.getToAddress();
-
-        // Tạo URL của Google Maps Directions API với thông tin địa chỉ xuất phát và đích đến
-        String directionsURL = "https://www.google.com/maps/embed/v1/directions?key=AIzaSyAOVYRIgupAurZup5y1PRh8Ismb1A3lLao&origin=" + fromAddress + "&destination=" + toAddress;
-
-        request.setAttribute("directionsURL", directionsURL);
-        //request.setAttribute("order", order);
+        request.setAttribute("des", des);
+        request.setAttribute("delivery1", delivery1);
         request.setAttribute("order1", order1);
-        request.setAttribute("ship_price", ship_price);
-        request.setAttribute("productname", product);
-        request.setAttribute("orderdetails", orderdetails);
-        request.getRequestDispatcher("deliveryorderdetails.jsp").forward(request, response);
+        request.setAttribute("order2", order2);
+        request.getRequestDispatcher("deliverystatus.jsp").forward(request, response);
     }
 
-    private void setupPagination(HttpServletRequest request, List<Order> orderList) {
+    private void setupPagination(HttpServletRequest request, List<Delivery> list) {
         int itemsPerPage = 5;
-        int totalItems = orderList.size();
+        int totalItems = list.size();
         int totalPages = (int) Math.ceil((double) totalItems / itemsPerPage);
         String pageParam = request.getParameter("page");
         int currentPage = pageParam != null ? Integer.parseInt(pageParam) : 1;
         int startIndex = (currentPage - 1) * itemsPerPage;
         int endIndex = Math.min(startIndex + itemsPerPage, totalItems);
-        List<Order> paginatedList = orderList.subList(startIndex, endIndex);
+        List<Delivery> paginatedList = list.subList(startIndex, endIndex);
 
-        request.setAttribute("order", paginatedList);
+        request.setAttribute("list", paginatedList);
         request.setAttribute("totalPages", totalPages);
         request.setAttribute("currentPage", currentPage);
     }

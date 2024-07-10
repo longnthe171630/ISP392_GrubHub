@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.List;
 import model.Account;
 
 /**
@@ -17,7 +18,7 @@ import model.Account;
  * @author Long1
  */
 public class AccountDAO extends MyDAO {
-    
+
     //kiểm tra tài khoản
     public Account checkAccount(String username, String password) {
         String sql = "SELECT * FROM Account where username = ? and password = ?";
@@ -95,63 +96,6 @@ public class AccountDAO extends MyDAO {
         }
     }
 
-//kiểm tra trùng username
-//    public boolean existedUser(String username) {
-//        String sql = "SELECT [username]\n"
-//                + "      ,[password]\n"
-//                + "      ,[email]\n"
-//                + "      ,[phonenumber]\n"
-//                + "      ,[role]\n"
-//                + "  FROM [dbo].[Account] where username=?";
-//        try {
-//            PreparedStatement st = connection.prepareStatement(sql);
-//            st.setString(1, username);
-//            ResultSet rs = st.executeQuery();
-//            if (rs.next()) {
-//                return true;
-//            }
-//        } catch (Exception e) {
-//        }
-//        return false;
-//    }
-//kiểm tra trùng email
-//    public boolean existedEmail(String email) {
-//        String sql = "SELECT [username]\n"
-//                + "      ,[password]\n"
-//                + "      ,[email]\n"
-//                + "      ,[phonenumber]\n"
-//                + "      ,[role]\n"
-//                + "  FROM [dbo].[Account] where email=?";
-//        try {
-//            PreparedStatement st = connection.prepareStatement(sql);
-//            st.setString(1, email);
-//            ResultSet rs = st.executeQuery();
-//            if (rs.next()) {
-//                return true;
-//            }
-//        } catch (Exception e) {
-//        }
-//        return false;
-//    }
-//kiểm tra trùng số điện thoại
-//    public boolean existedPhoneNumber(String phonenumber) {
-//        String sql = "SELECT [username]\n"
-//                + "      ,[password]\n"
-//                + "      ,[email]\n"
-//                + "      ,[phonenumber]\n"
-//                + "      ,[role]\n"
-//                + "  FROM [dbo].[Account] where phonenumber=?";
-//        try {
-//            PreparedStatement st = connection.prepareStatement(sql);
-//            st.setString(1, phonenumber);
-//            ResultSet rs = st.executeQuery();
-//            if (rs.next()) {
-//                return true;
-//            }
-//        } catch (Exception e) {
-//        }
-//        return false;
-//    }
     public Account getAccountByEmail(String email) {
         String sql = "SELECT * FROM Account WHERE email = ?";
         int xId;
@@ -215,12 +159,12 @@ public class AccountDAO extends MyDAO {
 
     public void ResetToken(int id) {
         String xSql = "UPDATE account SET token = '' WHERE id = ?";
-        
+
         try {
             ps = con.prepareStatement(xSql);
             ps.setInt(1, id);
             ps.executeUpdate();
-            
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -232,7 +176,7 @@ public class AccountDAO extends MyDAO {
             ps = con.prepareStatement(xSql);
             ps.setString(1, email);
             ps.setString(2, token);
-            
+
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     return rs.getString("email");
@@ -244,18 +188,39 @@ public class AccountDAO extends MyDAO {
         return null;
     }
 
+    public List<Account> getListAccount() {
+        List<Account> list = new ArrayList<>();
+        String sql = "select * from Account";
+        
+        Account a;
+        try {
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                PreparedStatement st = con.prepareStatement(sql);
+                int xId = rs.getInt("id");
+                String xUsername = rs.getString("username");
+                String xPassword = rs.getString("password");
+                String xEmail = rs.getString("email");
+                String xPhonenumber = rs.getString("phonenumber");
+                int xRole = rs.getInt("role");
+                boolean xActive = rs.getBoolean("active");
+                a = new Account (xId, xUsername, xPassword, xEmail, xPhonenumber, xRole);
+                list.add(a);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return list;
+    }
+
+    
+    
     public static void main(String[] args) {
         AccountDAO accountDAO = new AccountDAO();
-
-        // Kiểm thử hàm getAccountByEmail
-        String emailToTest = "icon0690@gmail.com";
-        Account account = accountDAO.getAccountByEmail(emailToTest);
-
-        if (account != null) {
-            System.out.println("Account found: " + account);
-        } else {
-            System.out.println("No account found with email: " + emailToTest);
+        List<Account> list = accountDAO.getListAccount();
+        for (Account a : list) {
+            System.out.println(a);
         }
-
     }
 }

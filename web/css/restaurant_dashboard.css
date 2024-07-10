@@ -46,10 +46,6 @@ body {
 	overflow-x: hidden;
 }
 
-
-
-
-
 /* SIDEBAR */
 #sidebar {
 	position: fixed;
@@ -64,9 +60,9 @@ body {
 	overflow-x: hidden;
 	scrollbar-width: none;
 }
-#sidebar::--webkit-scrollbar {
+/*#sidebar::--webkit-scrollbar {
 	display: none;
-}
+}*/
 #sidebar.hide {
 	width: 60px;
 }

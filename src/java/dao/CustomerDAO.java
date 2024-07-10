@@ -17,7 +17,7 @@ public class CustomerDAO extends MyDAO {
 
         xSql = "SELECT [username], [password]\n"
                 + "FROM [dbo].[Customer]\n"
-                + "WHERE [username] = ? And [password] = ?";
+                + "WHERE [username] = ? OR [password] = ?";
 
         try {
             ps = con.prepareStatement(xSql);
@@ -207,7 +207,6 @@ public class CustomerDAO extends MyDAO {
                 return c;
             }
         } catch (Exception e) {
-            e.printStackTrace();
 
         }
 
@@ -244,6 +243,6 @@ public class CustomerDAO extends MyDAO {
     public static void main(String[] args) {
         // Chuỗi ngày tháng có định dạng "dd-MM-yyyy"
         CustomerDAO cd = new CustomerDAO();
-        System.out.println(cd.checkCustomer("asdfcs","123"));
+        System.out.println(cd.getIdLastCustomer());
     }
 }
