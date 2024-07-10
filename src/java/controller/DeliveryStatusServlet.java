@@ -71,7 +71,6 @@ public class DeliveryStatusServlet extends HttpServlet {
                     delivery.updateDeliveryPersonId(id, order_id);
                     order.updateStatusOrder(order_id);
                     delivery.updateStatusDelivery(order_id);
-                    delivery.calculateDeliveryDuration(order_id);
                     String err = "You have successfully received this order!";
                     request.getSession().setAttribute("err", err);
                     response.sendRedirect("deliverydashboard");
@@ -106,7 +105,6 @@ public class DeliveryStatusServlet extends HttpServlet {
                         delivery.savePathToDatabase(imagePathS, order_id);
                         request.setAttribute("image", image);
                         delivery.updateStatusDelivery_2(order_id);
-                        delivery.calculateDeliveryDuration(order_id);
                         order.updateStatusOrder_2(order_id);
                         String err3 = "The order has been delivered successfully!";
                         request.getSession().setAttribute("err", err3);

@@ -165,21 +165,20 @@
                                 <tr onclick="openModal('success');">
                                     <td>Delivered</td>
                                     <td>${totaldone}</td>
-                                    <td></td>
+                                    <td>${time1} minutes</td>
                                 </tr>
                                 <tr onclick="openModal('failure');">
                                     <td>Undelivered</td>
                                     <td>${totalcancel}</td>
-                                    <td></td>
+                                    <td>${time2} minutes</td>
                                 </tr>
                                 <tr class="total-orders">
                                     <td>Total Orders</td>
                                     <td>${totalcancel + totaldone}</td>
-                                    <td></td>
+                                    <td>${time1 + time2} minutes</td>
                                 </tr>
                             </tbody>
                         </table>
-
                         <div id="myModal" class="modal">
                             <div class="modal-content">
                                 <span class="close" onclick="closeModal();">&times;</span>
@@ -188,13 +187,29 @@
                                 </div>
                             </div>
                         </div>
-
+                        <div class="summary-container">
+                            <h4>Summary</h4>
+                            <p><strong>Your average time for successful delivery is:  </strong>${avgSuccessfulDelivery} minutes</p>
+                            <p><strong>Your average time for failure delivery is:  </strong>${avgFailureDelivery} minutes</p>
+                            <p><strong>The average time of Total order: </strong>${avgTotalOrder} minutes</p>
+                            <p><strong>Fastest delivery time: </strong> 1</p>
+                            <p><strong>Slowest delivery time: </strong> 1</p>
+                        </div>
                     </div>
                     <div class="todo">   
                         <div class="head">
-                            <h3>Board</h3>
-                            <i class='bx bx-plus' ></i>
-                            <i class='bx bx-filter' ></i>
+                            <form action="deliveryanalysis" method = "GET">
+                                <div class="head">
+                                    <h3>Chart</h3>
+                                    <div class="dropdown-container">
+                                        <i class='bx bx-filter' onclick="toggleDropdown('dropdown2')"></i>
+                                        <div id="dropdown2" class="dropdown-content-1" style = "margin-top: -25px; margin-right: -30px;">
+                                            <a href="?sort=false">Delivery</a>
+                                            <a href="?sort=true">Time</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                         <div class="programming-stats">
                             <canvas class="my-chart"></canvas>
@@ -204,20 +219,19 @@
 
                                 </ul>
                             </div>
-                            
                         </div>
                         <div class="chart-legend">
-                                <ul>
-                                    <li>
-                                        <span class="legend-color" style="background-color: #7CB342"></span>
-                                        <span>Delivered</span>
-                                    </li>
-                                    <li>
-                                        <span class="legend-color" style="background-color: #C62828"></span>
-                                        <span>Undelivered</span>
-                                    </li>
-                                </ul>
-                            </div>
+                            <ul>
+                                <li>
+                                    <span class="legend-color" style="background-color: #7CB342"></span>
+                                    <span>Delivered</span>
+                                </li>
+                                <li>
+                                    <span class="legend-color" style="background-color: #C62828"></span>
+                                    <span>Undelivered</span>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
 
                 </div>
@@ -228,71 +242,71 @@
         <script src="js/delivery.js"></script>
 
         <script>
-                                    document.addEventListener("DOMContentLoaded", function () {
-                                        const chartData = {
-                                            labels: ["Delivered", "Undelivered"],
-                                            data: [${totaldone}, ${totalcancel}],
-                                        };
+                                            document.addEventListener("DOMContentLoaded", function () {
+                                                const chartData = {
+                                                    labels: ["Delivered", "Undelivered"],
+                                                    data: [${totaldone}, ${totalcancel}],
+                                                };
 
-                                        const myChart = document.querySelector(".my-chart");
-                                        const ul = document.querySelector(".programming-stats .details ul");
-                                        const noDataMessage = document.getElementById('no-data-message');
+                                                const myChart = document.querySelector(".my-chart");
+                                                const ul = document.querySelector(".programming-stats .details ul");
+                                                const noDataMessage = document.getElementById('no-data-message');
 
-                                        if (myChart && ul) {
-                                            const hasData = chartData.data.some(value => value > 0);
+                                                if (myChart && ul) {
+                                                    const hasData = chartData.data.some(value => value > 0);
 
-                                            if (hasData) {
-                                                new Chart(myChart, {
-                                                    type: "doughnut",
-                                                    data: {
-                                                        labels: chartData.labels,
-                                                        datasets: [
-                                                            {
-                                                                label: "Language Popularity",
-                                                                data: chartData.data,
-                                                                backgroundColor: [
-                                                                    '#7CB342',
-                                                                    '#C62828',
+                                                    if (hasData) {
+                                                        new Chart(myChart, {
+                                                            type: "doughnut",
+                                                            data: {
+                                                                labels: chartData.labels,
+                                                                datasets: [
+                                                                    {
+                                                                        label: "Order Status",
+                                                                        data: chartData.data,
+                                                                        backgroundColor: [
+                                                                            '#7CB342',
+                                                                            '#C62828',
+                                                                        ],
+                                                                        borderColor: [
+                                                                            '#7CB342',
+                                                                            '#C62828',
+                                                                        ],
+                                                                        borderWidth: 1,
+                                                                    },
                                                                 ],
-                                                                borderColor: [
-                                                                    '#7CB342',
-                                                                    '#C62828',
-                                                                ],
-                                                                borderWidth: 1,
                                                             },
-                                                        ],
-                                                    },
-                                                    options: {
-                                                        borderWidth: 10,
-                                                        borderRadius: 2,
-                                                        hoverBorderWidth: 0,
-                                                        plugins: {
-                                                            legend: {
-                                                                display: false,
-                                                            },
-                                                            datalabels: {
-                                                                formatter: (value, context) => {
-                                                                    const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
-                                                                    const percentage = ((value / total) * 100).toFixed(1) + "%";
-                                                                    return percentage;
+                                                            options: {
+                                                                borderWidth: 10,
+                                                                borderRadius: 2,
+                                                                hoverBorderWidth: 0,
+                                                                plugins: {
+                                                                    legend: {
+                                                                        display: false,
+                                                                    },
+                                                                    datalabels: {
+                                                                        formatter: (value, context) => {
+                                                                            const total = context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                                                            const percentage = ((value / total) * 100).toFixed(1) + "%";
+                                                                            return percentage;
+                                                                        },
+                                                                        color: 'black',
+                                                                    },
                                                                 },
-                                                                color: 'black',
                                                             },
-                                                        },
-                                                    },
-                                                    plugins: [ChartDataLabels],
-                                                });
+                                                            plugins: [ChartDataLabels],
+                                                        });
 
-                                                myChart.style.display = 'block';
-                                                noDataMessage.style.display = 'none';
-                                            } else {
-                                                myChart.style.display = 'none';
-                                                noDataMessage.style.display = 'block';
-                                            }
-                                        } else {
-                                            console.error("Cannot find the chart or list elements.");
-                                        }
-                                    });
+                                                        myChart.style.display = 'block';
+                                                        noDataMessage.style.display = 'none';
+                                                    } else {
+                                                        myChart.style.display = 'none';
+                                                        noDataMessage.style.display = 'block';
+                                                    }
+                                                } else {
+                                                    console.error("Cannot find the chart or list elements.");
+                                                }
+                                            });
 
         </script>
         <script>

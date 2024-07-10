@@ -2,7 +2,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-
 package controller;
 
 import dao.DeliveryDAO;
@@ -22,46 +21,53 @@ import model.Delivery;
  *
  * @author Long1
  */
-@WebServlet(name="DeliveryAnalysis", urlPatterns={"/deliveryanalysis"})
+@WebServlet(name = "DeliveryAnalysis", urlPatterns = {"/deliveryanalysis"})
 public class DeliveryAnalysis extends HttpServlet {
-   
 
-    
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
         //Lấy data bằng session
         HttpSession session = request.getSession();
         Account account = (Account) session.getAttribute("acc");
+
         //Lấy dữ liệu từ DAO
         DeliveryDAO dao = new DeliveryDAO();
         //Lấy info của account login vào
         int id = dao.getDeliveryPersonIdByUsername(account.getUsername());
         
-        int totalShip = dao.totalShipPriceByDeliveryPersonId(id);
         int totalDone = dao.totalDoneByDeliveryPersonId(id);
-        int totalDelivery = dao.totalDeliveryByDeliveryPersonId(id);
         int totalCancel = dao.totalCancelByDeliveryPersonId(id);
-        
-        request.setAttribute("totaldone", totalDone);
-        request.setAttribute("totalship", totalShip);
-        request.setAttribute("totaldelivery", totalDelivery);
-        request.setAttribute("totalcancel", totalCancel);
-        
-        request.getRequestDispatcher("deliveryanalysis.jsp").forward(request, response);
-    } 
+        int time1 = dao.getTotalDeliveryTimeSuccess();
+        int time2 = dao.getTotalDeliveryTimeFailed();
+        // Java code
+        int avgSuccessfulDelivery = (totalDone != 0) ? time1 / totalDone : 0;
+        int avgFailureDelivery = (totalCancel != 0) ? time2 / totalCancel : 0;
+        int avgTotalOrder = ((totalDone + totalCancel) != 0) ? (time1 + time2) / (totalDone + totalCancel) : 0;
 
-    
+// Thiết lập giá trị vào thuộc tính request
+        request.setAttribute("avgSuccessfulDelivery", avgSuccessfulDelivery);
+        request.setAttribute("avgFailureDelivery", avgFailureDelivery);
+        request.setAttribute("avgTotalOrder", avgTotalOrder);
+        request.setAttribute("totaldone", totalDone);
+        request.setAttribute("totalcancel", totalCancel);
+        request.setAttribute("time1", time1);
+        request.setAttribute("time2", time2);
+        request.setAttribute("avgSuccessfulDelivery", avgSuccessfulDelivery);
+        request.setAttribute("avgFailureDelivery", avgFailureDelivery);
+
+        request.getRequestDispatcher("deliveryanalysis.jsp").forward(request, response);
+    }
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
         String status = request.getParameter("status");
         DeliveryDAO dao = new DeliveryDAO();
-        
         List<Delivery> list;
-        if(status.equals("success")){
+        if (status.equals("success")) {
             list = dao.getDeliverySuccess();
-        }else{
+        } else {
             list = dao.getDeliveryFailure();
         }
         request.setAttribute("list", list);
