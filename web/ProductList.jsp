@@ -12,18 +12,31 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
     </head>
-    <body>
-        <ul>
-            <c:forEach items="${requestScope.list}" var="p">
-                <tr>
-                    <td>${p.id}</td>
-                    <td>${p.name}</td>
-                    <td>${p.price}</td>
-                    <td>${p.quantity}</td>                    
-                    <td>${p.rating}</td>  
-                    <td>${p.cateName}</td>
-                </tr>
-            </c:forEach>
-        </ul>
-    </body>
+   <body>
+    <table>
+    <thead>
+        <tr>
+            <th>Image</th> <!-- Đã thay đổi từ ID sang Image -->
+            <th>Name</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Rating</th>
+          
+        </tr>
+    </thead>
+    <tbody>
+        <c:forEach items="${requestScope.productList}" var="p">
+            <tr>
+                <!-- Sử dụng thẻ <img> để hiển thị hình ảnh -->
+                <td><img src="images/Product/${p.image}"  ></td>
+                <td>${p.name}</td>
+                <td>${p.price}</td>
+                <td>${p.quantity}</td>
+                <td>${p.rating}</td>
+                
+            </tr>
+        </c:forEach>
+    </tbody>
+</table>
+</body>
 </html>

@@ -133,7 +133,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <c:forEach items="${requestScope.map1}" var="entry">
+                                <c:forEach items="${sortedEntries}" var="entry">
                                     <c:set var="feedback" value="${entry.key}" />
                                     <c:set var="customer" value="${entry.value}" />
                                     <tr>

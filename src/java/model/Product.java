@@ -22,10 +22,32 @@ public class Product {
     private Date create_date;
     private Restaurant restaurant;
     private Category category;
-    private String cateName;
+    
 
     public Product() {
     }
+
+    public Product(int id, String name, int price, int quantity, String image, float rating, Restaurant restaurant, Category category) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.quantity = quantity;
+        this.image = image;
+        this.rating = rating;
+        this.restaurant = restaurant;
+        this.category = category;
+    }
+
+    public Product(int id, String name, int price, int quantity, String image, float rating, Category category) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.quantity = quantity;
+        this.image = image;
+        this.rating = rating;
+        this.category = category;
+    }
+    
 
     public Product(int id, String name, int price, int quantity, String description, String image, boolean status, Date create_date, Restaurant restaurant, Category category) {
         this.id = id;
@@ -40,30 +62,8 @@ public class Product {
         this.category = category;
     }
 
-    public Product(int id, String name, int price, int quantity, float rating, String cateName) {
-        this.id = id;
-        this.name = name;
-        this.price = price;
-        this.quantity = quantity;
-        this.rating = rating;
-        this.cateName = cateName;
-    }
+   
 
-    public Product(int id, String name, int price, int quantity, String description, String image, boolean status, float rating, Date create_date, Restaurant restaurant, Category category, String cateName) {
-        this.id = id;
-        this.name = name;
-        this.price = price;
-        this.quantity = quantity;
-        this.description = description;
-        this.image = image;
-        this.status = status;
-        this.rating = rating;
-        this.create_date = create_date;
-        this.restaurant = restaurant;
-        this.category = category;
-        this.cateName = cateName;
-    }
-    
 
     public Product(int id, String name, int price, String description, String image, boolean status, Date create_date, int quantity, Restaurant restaurant, Category category) {
 
@@ -87,17 +87,7 @@ public class Product {
 
     public void setRating(float rating) {
         this.rating = rating;
-    }
-
-    public String getCateName() {
-        return cateName;
-    }
-
-    public void setCateName(String cateName) {
-        this.cateName = cateName;
-    }
-
-    
+    }     
     public String getRestaurant_name() {
         return restaurant.getName();
     }

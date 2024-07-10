@@ -23,7 +23,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 import jakarta.servlet.http.HttpSession;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Map;
 import model.Account;
 import model.Customer;
 import model.Delivery;
@@ -72,7 +74,7 @@ public class AdminServlet extends HttpServlet {
         }
         AccountDAO dao3 = new AccountDAO();
         RestaurantDAO dao4 = new RestaurantDAO();
-        CustomerDAO dao9= new CustomerDAO();
+        CustomerDAO dao9 = new CustomerDAO();
         switch (action) {
             case "home":
                 AdminDAO dao = new AdminDAO();
@@ -87,13 +89,13 @@ public class AdminServlet extends HttpServlet {
                 request.getRequestDispatcher("Admin.jsp").forward(request, response);
                 break;
             case "cus":
-                
+
                 List<Account> listAccount = dao3.getListAccount();
                 request.setAttribute("listAccount", listAccount);
                 request.getRequestDispatcher("AdminCus.jsp").forward(request, response);
                 break;
             case "res":
-                
+
                 List<Restaurant> listRes = dao4.getListRestaurant();
                 request.setAttribute("listRes", listRes);
                 request.getRequestDispatcher("AdminRes.jsp").forward(request, response);
@@ -114,20 +116,25 @@ public class AdminServlet extends HttpServlet {
                 List<Customer> listCus1 = dao9.getListCustomer();
                 HashMap<Feedback, Customer> map1 = new HashMap<>();
                 HashMap<Feedback, Restaurant> map2 = new HashMap<>();
-                for(Feedback f: listFeed){
-                    for (Customer c: listCus1) {
-                        if (c.getId()==f.getCustomer_id()) {
+                
+                for (Feedback f : listFeed) {
+                    for (Customer c : listCus1) {
+                        if (c.getId() == f.getCustomer_id()) {
                             map1.put(f, c);
                         }
-                       
+
                     }
-                    for (Restaurant r: listRes1) {
-                        if (r.getId()==f.getRestaurant_id()) {
+                    for (Restaurant r : listRes1) {
+                        if (r.getId() == f.getRestaurant_id()) {
                             map2.put(f, r);
                         }
                     }
                 }
-                request.setAttribute("map1", map1);               
+                List<Map.Entry<Feedback, Customer>> sortedEntries = new ArrayList<>(map1.entrySet());
+                sortedEntries.sort(Comparator.comparing(entry -> entry.getKey().getId()));
+                
+                request.setAttribute("map1", map1);
+                request.setAttribute("sortedEntries", sortedEntries);
                 request.setAttribute("listRes1", listRes1);
                 request.getRequestDispatcher("AdminFeed.jsp").forward(request, response);
 
@@ -150,9 +157,9 @@ public class AdminServlet extends HttpServlet {
                     dao8.unbanAccount(accountId);
                 } catch (Exception e) {
                 }
-                List<Account> listCus2 = dao8.getListAccount();
-                request.setAttribute("listCus", listCus2);
-                request.getRequestDispatcher("AdminCus.jsp").forward(request, response);
+                List<Account> listBan2 = dao8.getListBanedAccount();
+                request.setAttribute("listBan", listBan2);
+                request.getRequestDispatcher("AdminBan.jsp").forward(request, response);
                 break;
             default:
                 // Xử lý giá trị mặc định hoặc trả về lỗi nếu action không hợp lệ

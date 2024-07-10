@@ -75,20 +75,52 @@ switchMode.addEventListener('change', function () {
     }
 })
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     // Lấy tất cả các liên kết trong menu bên
     const sideMenuLinks = document.querySelectorAll(".side-menu a");
 
     sideMenuLinks.forEach(link => {
         // Kiểm tra nếu liên kết trỏ đến phần tử trên cùng một trang
-        link.addEventListener("click", function(event) {
+        link.addEventListener("click", function (event) {
             const targetId = this.getAttribute("href").substring(1); // Lấy ID của phần tử đích
             const targetElement = document.getElementById(targetId);
 
             if (targetElement) {
                 event.preventDefault(); // Ngăn chặn hành động mặc định của liên kết
-                targetElement.scrollIntoView({ behavior: "smooth" }); // Trượt đến phần tử đích
+                targetElement.scrollIntoView({behavior: "smooth"}); // Trượt đến phần tử đích
             }
         });
     });
 });
+//Mở modal                
+// Open modal function// Function to open the modal and load productList.jsp content
+function openModal(id) {
+    // Gửi yêu cầu đến Servlet với ID sản phẩm
+    fetch('admin', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: 'id=' + id
+    })
+            .then(response => response.text())
+            .then(html => {
+                // Đặt nội dung được trả về vào modal và hiển thị modal
+                document.getElementById('modalContent').innerHTML = html;
+                document.getElementById('myModal').style.display = "block";
+            })
+            .catch(error => console.error('Error:', error));
+}
+
+// Đóng modal khi nhấp vào dấu X
+function closeModal() {
+    document.getElementById('myModal').style.display = "none";
+}
+
+// Đóng modal khi nhấp chuột vào bên ngoài modal
+window.onclick = function (event) {
+    var modal = document.getElementById('myModal');
+    if (event.target == modal) {
+        closeModal();
+    }
+}

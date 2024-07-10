@@ -1,4 +1,4 @@
-package dao;
+ package dao;
 
 import dao.MyDAO;
 import model.Product;
@@ -280,9 +280,8 @@ public class ProductDAO extends MyDAO {
 
     public List<Product> getProductByResID(int cproduct_id) {
         List<Product> t = new ArrayList<>();
-        xSql = "select p.id,p.name,p.price,p.quantity,p.rating,c.name as'Category'\n"
+        xSql = "select p.id,p.name,p.price,p.quantity,p.image,p.rating,p.category_id\n"
                 + "from Product p\n"
-                + "join Category c on c.id= p.category_id\n"
                 + "where p.restaurant_id=?";
         try {
             ps = con.prepareStatement(xSql);
@@ -292,11 +291,11 @@ public class ProductDAO extends MyDAO {
                 int xProductId = rs.getInt("id");
                 String xName = rs.getString("name");
                 int xPrice = rs.getInt("price");
+                String xImage = rs.getString("image");
                 int xQuantity = rs.getInt("quantity");
-                float xRate = rs.getFloat("rating");
+                Category c = cd.getCategoryId(rs.getInt("category_id"));
+                Product x= new Product(xPrice, xName, xPrice, xQuantity, xImage, xPrice, c);
 
-                String xCateName = rs.getString("Category");
-                Product x = new Product(xProductId, xName, xPrice, xQuantity, xRate, xCateName);
                 t.add(x);
             }
             rs.close();

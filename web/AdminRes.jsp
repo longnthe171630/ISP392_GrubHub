@@ -60,7 +60,7 @@
                 </li>
             </ul>
             <ul class="side-menu">
-                
+
                 <li>
                     <a href="Home.jsp" class="logout">
                         <i class='bx bxs-log-out-circle' ></i>
@@ -127,33 +127,32 @@
                                 <tr>
                                     <th>ID</th>
                                     <th>Name</th>
-                                    <th>Phonenumber</th>
-                                    <th>Detail</th>
+                                    <th>Phone Number</th>
+                                    <th>Details</th>
                                     <th>State</th>
                                     <th>Street</th>
                                 </tr>
                             </thead>
                             <tbody>
-
                                 <c:forEach items="${requestScope.listRes}" var="o">
                                     <tr onclick="openModal(${o.id})" style="cursor: pointer;">
-                                    
                                         <td>${o.id}</td>
                                         <td>${o.name}</td>
                                         <td>${o.phonenumber}</td>
                                         <td>${o.details}</td>
                                         <td>${o.state}</td>
-                                        <td>${o.street}</td>      
+                                        <td>${o.street}</td>
                                     </tr>
                                 </c:forEach>
-
                             </tbody>
                         </table>
+
+                        <!-- Modal -->
                         <div id="myModal" class="modal">
                             <div class="modal-content">
                                 <span class="close" onclick="closeModal();">&times;</span>
                                 <div id="modalContent">
-                                    <!-- N?i dung chi ti?t ??n hàng s? ???c t?i vào ?ây -->
+                                    <!-- N?i dung chi ti?t s? ???c t?i vào ?ây -->
                                 </div>
                             </div>
                         </div>
