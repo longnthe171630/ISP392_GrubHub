@@ -16,7 +16,7 @@
         <div class="container">
             <div class="title">Registration Account</div>
             <div class="content">
-                <form action="registeracc" method="post">
+                <form action="registercustomer" method="post">
                     <div class="user-details">
                         <div class="input-box">
                             <span class="details">Full Name</span>

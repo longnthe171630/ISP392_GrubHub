@@ -56,7 +56,7 @@ public class Account {
         this.createDate = createDate;
     }
 
-    public Account(String username, String password, String email, String phonenumber, int role, int addressID, int active, String img) {
+    public Account(String username, String password, String email, String phonenumber, int role, int addressID, int active, String img ,Date createDate) {
         this.username = username;
         this.password = password;
         this.email = email;
@@ -65,12 +65,13 @@ public class Account {
         this.addressID = addressID;
         this.active = active;
         this.img = img;
+        this.createDate = createDate;
 
     }
-
-    public Account(String userName, String passWord, String email, String phoneNumber, int role, int idAddress, int i, Object object, Object object0) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+//
+//    public Account(String userName, String passWord, String email, String phoneNumber, int role, int idAddress, int i, Object object, Object object0) {
+//        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+//    }
     
     
 

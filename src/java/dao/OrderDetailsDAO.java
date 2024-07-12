@@ -43,6 +43,26 @@ public class OrderDetailsDAO extends MyDAO{
         return (t);
     }
     
+    public List<OrderDetails> getOrderDetailsByOrder_Locct(int orderID){
+        List<OrderDetails> list = new ArrayList<>();
+        xSql = "SELECT * FROM OrderDetails WHERE order_id = ?";
+        try {
+            ps = con.prepareStatement(xSql);
+            ps.setInt(1, orderID);
+            rs = ps.executeQuery();
+            while (rs.next()) {                
+                list.add(new OrderDetails(rs.getInt(1),
+                        rs.getInt(2),
+                        rs.getInt(3),
+                        rs.getInt(4),
+                        rs.getInt(5)));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+    
     public OrderDetails getOrderDetailsByOrder(int order_id){
         String sql = "SELECT * FROM [OrderDetails] where [order_id] = ?";
         int xId, xOrder_id, xProduct_id, xQuantity;
@@ -84,14 +104,8 @@ public class OrderDetailsDAO extends MyDAO{
     
     public static void main(String[] args) {
         OrderDetailsDAO o = new OrderDetailsDAO();
-        List<OrderDetails> lo = o.getOrderDetails();
-        
-        if (lo == null) {
-            System.out.println("List empty");
-        } else {
-            for (OrderDetails d : lo) {
-                System.out.println(d);
-            }
-        }
+        List<OrderDetails> lo = o.getOrderDetailsByOrder_Locct(1);
+        System.out.println(lo);
+       
     }
 }

@@ -30,6 +30,11 @@ public class Customer {
     public Customer() {
     }
 
+    public Customer(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     public Customer(String userName, String passWord) {
         this.userName = userName;
         this.passWord = passWord;

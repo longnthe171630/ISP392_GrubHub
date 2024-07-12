@@ -19,6 +19,12 @@ public class Restaurant {
     public Restaurant() {
     }
 
+    public Restaurant(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+    
+    
     public Restaurant(String name, int restaurant_rating, int account_id) {
         this.name = name;
         this.restaurant_rating = restaurant_rating;

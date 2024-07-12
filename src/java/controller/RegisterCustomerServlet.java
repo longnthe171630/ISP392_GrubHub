@@ -55,7 +55,7 @@ public class RegisterCustomerServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int role =2;
+        int role = 2;
         Validate v = new Validate();
         CustomerDAO cd = new CustomerDAO();
         AccountDAO accDAO = new AccountDAO();

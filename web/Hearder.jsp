@@ -66,8 +66,10 @@
                 <a href="Contact.jsp">Contact</a>
 
                 <c:if test="${sessionScope.acc != null}">
+                    <a class="" href="historyorder" >Order History</a>
                     <a class="" href="load" >Hello ${sessionScope.acc.username}</a>
                 </c:if>
+
             </nav>
             <c:set var="size" value="${sessionScope.size}"/>
             <div class="icons">
@@ -83,7 +85,7 @@
                 <c:if test="${sessionScope.acc != null}">
                     <a href="logout" class="login-btn">logout</a>
                 </c:if>              
-                    
+
             </div> 
 
         </header>

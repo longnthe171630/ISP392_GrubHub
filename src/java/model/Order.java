@@ -23,6 +23,8 @@ public class Order {
     
     public Order() {
     }
+    
+    
 
     public Order(int id, int total_amount, String status, Date order_date, Address fromAddress, Address toAddress) {
         this.id = id;

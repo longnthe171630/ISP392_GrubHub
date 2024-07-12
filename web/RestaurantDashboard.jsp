@@ -57,9 +57,9 @@ Author     : phaml
                     </a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="restaurantfeedback">
                         <i class='bx bxs-group' ></i>
-                        <span class="text">Team</span>
+                        <span class="text">Feedback</span>
                     </a>
                 </li>
                 <li>
@@ -71,7 +71,7 @@ Author     : phaml
             </ul>
             <ul class="side-menu">
                 <li>
-                    <a href="#" class="logout">
+                    <a href="logout" class="logout">
                         <i class='bx bxs-log-out-circle' ></i>
                         <span class="text">Logout</span>
                     </a>

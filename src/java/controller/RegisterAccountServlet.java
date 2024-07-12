@@ -61,7 +61,7 @@ public class RegisterAccountServlet extends HttpServlet {
         String detailAddress = request.getParameter("detailaddress");
         if (name == null || userName == null || email == null
                 || phoneNumber == null || passWord == null || cPassWord == null
-                || dob == null || state == null || street == null || role == null|| detailAddress == null) {
+                || dob == null || state == null || street == null || role == null || detailAddress == null) {
             String msg = "All fields must be filled out completely";
             request.setAttribute("msg", msg);
             request.getRequestDispatcher("RegisterAccount.jsp").forward(request, response);
@@ -135,14 +135,14 @@ public class RegisterAccountServlet extends HttpServlet {
             idAddress = existingAddress.getId();
         }
         if (acc == null) {
-            Account newacc = new Account(userName, passWord, email, phoneNumber, roleValue, idAddress, 1, null);
+            Account newAcc = new Account(userName, passWord, email, phoneNumber, roleValue, idAddress, 0, null, null);
             try {
                 int idLastAcc = dao.getIdLastAccount();
-                dao.insertAccount(newacc);
+                dao.addNewAccount(newAcc);
                 if (roleValue == 3) {
                     RestaurantDAO rd = new RestaurantDAO();
-            
-                    Restaurant r = new Restaurant( name,0, idLastAcc);
+
+                    Restaurant r = new Restaurant(name, 0, idLastAcc);
                     rd.insertRestaurant(r);
                 }
                 if (roleValue == 4) {
@@ -150,13 +150,13 @@ public class RegisterAccountServlet extends HttpServlet {
                     dd.insertShipper(idLastAcc);
                 }
                 String token = new Token().generateRandomToken(18);
-                String url = "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/verifyacc?email=" + email + "&token=" + token;
-                dao.insertToken(idLastAcc, token);
+                String url = "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/verifyemailcustomer?email=" + email + "&token=" + token;
+                dao.insertToken(dao.getIDLastAcc(), token);
                 new Mail().sendEmail(email, "Verify email", "Click here to verify email: " + url);
                 String url1 = "RegisterAccount.jsp";
                 String msg = "An email was sent. Please check your email!";
                 request.setAttribute("msg", msg);
-                request.setAttribute("account", newacc);
+                request.setAttribute("acc", newAcc);
                 request.getRequestDispatcher(url1).forward(request, response);
             } catch (Exception e) {
                 e.printStackTrace();  // Log the exception for debugging

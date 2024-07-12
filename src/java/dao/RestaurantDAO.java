@@ -18,6 +18,30 @@ public class RestaurantDAO extends MyDAO {
 
     private AddressDAO ad = new AddressDAO();
 
+    public Restaurant getRestaurantByProductId_Locct(int product_id) {
+        xSql = "SELECT * FROM Restaurant WHERE product_id = ?";
+        try {
+            ps = con.prepareStatement(xSql);
+            ps.setInt(1, product_id);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Restaurant r = new Restaurant(
+                        rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getInt(4),
+                        rs.getInt(5),
+                        rs.getInt(6));
+                return r;
+            }
+            rs.close();
+            ps.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public int getRestaurantIDbyAccID(int accID) {
         xSql = "select id from [dbo].[Restaurant] where account_id = ?";
         int id = -1; // Use a sentinel value to indicate no result found
@@ -157,32 +181,31 @@ public class RestaurantDAO extends MyDAO {
         return (t);
     }
 
-    public List<Restaurant> getRestaurantByPID(String product_id) {
-        List<Restaurant> t = new ArrayList<>();
-        xSql = "SELECT * FROM Restaurant WHERE product_id = ?";
-        try {
-            ps = con.prepareStatement(xSql);
-            ps.setString(1, product_id);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                int xRestaurantId = rs.getInt("id");
-                String xName = rs.getString("name");
-                Address a = ad.getAddressById(rs.getInt("address_id"));
-                String xPhonenumber = rs.getString("phonenumber");
-                int xRestaurantRating = rs.getInt("restaurant_id");
-                int xAccountId = rs.getInt("account_id");
-
-                Restaurant x = new Restaurant(xRestaurantId, xName, xPhonenumber, a, xRestaurantRating, xAccountId);
-                t.add(x);
-            }
-            rs.close();
-            ps.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return t;
-    }
-
+//    public List<Restaurant> getRestaurantByPID(String product_id) {
+//        List<Restaurant> t = new ArrayList<>();
+//        xSql = "SELECT * FROM Restaurant WHERE product_id = ?";
+//        try {
+//            ps = con.prepareStatement(xSql);
+//            ps.setString(1, product_id);
+//            rs = ps.executeQuery();
+//            while (rs.next()) {
+//                int xRestaurantId = rs.getInt("id");
+//                String xName = rs.getString("name");
+//                Address a = ad.getAddressById(rs.getInt("address_id"));
+//                String xPhonenumber = rs.getString("phonenumber");
+//                int xRestaurantRating = rs.getInt("restaurant_id");
+//                int xAccountId = rs.getInt("account_id");
+//
+//                Restaurant x = new Restaurant(xRestaurantId, xName, xPhonenumber, a, xRestaurantRating, xAccountId);
+//                t.add(x);
+//            }
+//            rs.close();
+//            ps.close();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return t;
+//    }
     public Restaurant getRestaurantByID_Loc(int resID) {
         xSql = "select * from Restaurant where id = ?";
         Restaurant r = null;
@@ -343,9 +366,22 @@ public class RestaurantDAO extends MyDAO {
         return null;
     }
 
+    public void deleteRestaurantByAccountId(int accountId) {
+        xSql = "DELETE FROM [dbo].[Restaurant]\n"
+                + "      WHERE account_id =?";
+        try {
+            ps = con.prepareStatement(xSql);
+            ps.setInt(1, accountId);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void main(String[] args) {
         RestaurantDAO rd = new RestaurantDAO();
-        Restaurant r = new Restaurant("TestRestaurant", 0, 12);
-        rd.insertRestaurant(r);
+        Restaurant r = rd.getRestaurantByProductId_Locct(29);
+        System.out.println(r);
+
     }
 }

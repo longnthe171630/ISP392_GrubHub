@@ -17,6 +17,21 @@ public class ProductDAO extends MyDAO {
     private CategoryDAO cd = new CategoryDAO();
     private RestaurantDAO rt = new RestaurantDAO();
 
+    public int getRestaurantIdByProductId(int product_id) {
+        xSql = "select restaurant_id from Product where id = ?";
+        try {
+            ps = con.prepareStatement(xSql);
+            ps.setInt(1, product_id);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
     public List<Product> getProducts() {
         List<Product> t = new ArrayList<>();
         xSql = "select * from Product ";
@@ -434,6 +449,7 @@ public class ProductDAO extends MyDAO {
         // Return the list of products
         return productList;
     }
+
     public Product getProductVu(int ProductId) {
         xSql = "SELECT * FROM Product WHERE id = ?";
         Product x = null;
@@ -453,7 +469,7 @@ public class ProductDAO extends MyDAO {
                 int xCategoryId = rs.getInt("category_id");
                 int xRestaurantId = rs.getInt("restaurant_id");
                 float xRating = rs.getFloat("rating");
-                x= new Product(xProductId,xName, xPrice, xQuantity, xDescription, xImage, xStatus, xRating, xCreate_date, xCategoryId, xRestaurantId);
+                x = new Product(xProductId, xName, xPrice, xQuantity, xDescription, xImage, xStatus, xRating, xCreate_date, xCategoryId, xRestaurantId);
             }
             rs.close();
             ps.close();
@@ -463,13 +479,35 @@ public class ProductDAO extends MyDAO {
         return x;
     }
 
+    public List<Product> getProductById_LocCT(int id) {
+        List<Product> list = new ArrayList<>();
+        xSql = "select * from Product where id = ?";
+        try {
+            ps = con.prepareStatement(xSql);
+            ps.setInt(1, id);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new Product(rs.getInt(1),
+                        rs.getString(2),
+                        rs.getInt(3),
+                        rs.getInt(4),
+                        rs.getString(5),
+                        rs.getString(6),
+                        rs.getBoolean(7),
+                        rs.getFloat(8),
+                        rs.getDate(9),
+                        rs.getInt(10),
+                        rs.getInt(11)));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
     public static void main(String[] args) {
         ProductDAO pd = new ProductDAO();
-        Product p = pd.getProductVu(1);
-        System.out.println(p);
-        p.setQuantity(50);
-        p.setName("testProduct");
-        pd.insert(p);
-        System.out.println(p);
+        int restaurantid = pd.getRestaurantIdByProductId(29);
+        System.out.println(restaurantid);
     }
 }

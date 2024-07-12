@@ -19,6 +19,14 @@ import model.Order;
  * @author manh0
  */
 public class OrderDAO extends MyDAO {
+    
+    public int getRestaurantIdByOrderId(int orderID){
+        xSql = "select restaurant_id from [Order] where id = ?";
+        try {
+            
+        } catch (Exception e) {
+        }
+    }
 
     public List<Order> getOrder() {
         List<Order> t = new ArrayList<>();
@@ -268,37 +276,32 @@ public class OrderDAO extends MyDAO {
         }
     }
 
-    public static void main(String[] args) {
-//        OrderDAO d = new OrderDAO();
-//        List<Order> lo = d.getOrder();
-//        for (Order order : lo) {
-//            System.out.println(order);
-//        }
-//        d.getOrderById(1);
-        int resID = 1;
-        int countOrder = 0, countProduct = 0;
-        String status = "Đang xử lí";
+    public List<Order> getAllOrderOf1Customer(int customerID) {
+        List<Order> list = new ArrayList<>();
+        xSql = "select * from [Order] where customer_id = ?";
+        try {
+            ps = con.prepareStatement(xSql);
+            ps.setInt(1, customerID);
+            rs = ps.executeQuery();
 
-        // Tính toán số lượng đơn hàng mới
-        OrderDAO cd = new OrderDAO();
-        AccountDAO ad = new AccountDAO();
-        CustomerDAO c = new CustomerDAO();
-        Map<Customer, Order> mapCusOrder = new HashMap<>();
-        Map<Customer, Account> mapAccCus = new HashMap<>();
-        List<Order> lo = cd.getOrder();
-        List<Order> lod = new ArrayList<>();
-        for (Order order : lo) {
-            if (order.getRestaurant_id() == resID && order.getStatus().equals(status)) {
-                countOrder++;
-                Customer cus = c.getCustomerByID_VuPL(order.getCustomer_id());
-
-                Account acc = ad.getAccountByID(cus.getAccountID());
-
-                mapCusOrder.put(cus, order);
-                mapAccCus.put(cus, acc);
-
+            while (rs.next()) {
+                list.add(new Order(rs.getInt(1),
+                        rs.getInt(2),
+                        rs.getInt(3),
+                        rs.getInt(4),
+                        rs.getString(5),
+                        rs.getDate(6)));
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        System.out.println(mapCusOrder);
+        return list;
+    }
+
+    public static void main(String[] args) {
+        OrderDAO od = new OrderDAO();
+        List<Order> list = od.getAllOrderOf1Customer(2);
+        System.out.println(list);
+                
     }
 }

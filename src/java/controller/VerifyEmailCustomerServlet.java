@@ -16,6 +16,7 @@ import model.Account;
 import model.Customer;
 import dao.AccountDAO;
 import dao.CustomerDAO;
+import dao.RestaurantDAO;
 
 /**
  *
@@ -31,6 +32,8 @@ public class VerifyEmailCustomerServlet extends HttpServlet {
     throws ServletException, IOException {
         AccountDAO accountDAO = new AccountDAO();
         CustomerDAO cd = new CustomerDAO();
+        
+        RestaurantDAO rd = new RestaurantDAO();
         String email = request.getParameter("email");
         String token = request.getParameter("token");
         if (email == null || token == null || email.isEmpty() || token.isEmpty()) {
@@ -48,6 +51,8 @@ public class VerifyEmailCustomerServlet extends HttpServlet {
         } else{
             Account a= accountDAO.getAccountByEmail_VuPL(email);
             cd.deleteCustomerByAccountId(a.getId());
+            rd.deleteRestaurantByAccountId(a.getId());
+            
             accountDAO.deleteAcountById(a.getId()); 
         }
         response.sendRedirect("LoginCus.jsp");

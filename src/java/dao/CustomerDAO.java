@@ -8,9 +8,28 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import model.Customer;
 
 public class CustomerDAO extends MyDAO {
+    
+    public String getNameByAccID(int accID){
+        xSql = "SELECT [name] from Customer where account_id=?";
+        String customerName = null;
+        try {
+            ps = con.prepareStatement(xSql);
+            ps.setInt(1, accID);
+            rs = ps.executeQuery();
+            while (rs.next()){
+                    customerName = rs.getString("name");           
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return customerName;
+    }
 
     public int getAddressIdByCusId(int cusID) {
         xSql = "select address_id from [dbo].Customer where id = ?";
@@ -400,15 +419,68 @@ public class CustomerDAO extends MyDAO {
                 + "      WHERE account_id =?";
         try {
             ps = con.prepareStatement(xSql);
+            ps.setInt(1, accountId);
             ps.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+    
+    public int getCusIdByAccId(int accID){
+        xSql = "select id from Customer where account_id = ? ";
+        int id = 0;
+        try {
+            ps = con.prepareStatement(xSql);
+            ps.setInt(1, accID);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                id = rs.getInt("id");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return id;
+    }
+    
+//     public Map<Integer, String> getCustomerNamesByIDs(List<Integer> customerIDs)throws SQLException{
+//        Map<Integer, String> customerNames = new HashMap<>();
+//        if (customerIDs.isEmpty()) return customerNames;
+//
+//        StringBuilder sql = new StringBuilder("SELECT id, name FROM Customer WHERE id IN (");
+//        for (int i = 0; i < customerIDs.size(); i++) {
+//            sql.append("?");
+//            if (i < customerIDs.size() - 1) {
+//                sql.append(", ");
+//            }
+//        }
+//        sql.append(")");
+//
+//        try {
+//            ps = con.prepareStatement(sql.toString());
+//            for (int i = 0; i < customerIDs.size(); i++) {
+//                ps.setInt(i + 1, customerIDs.get(i));
+//            }
+//            rs = ps.executeQuery();
+//            while (rs.next()) {
+//                customerNames.put(rs.getInt("id"), rs.getString("name"));
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        } finally {
+//            try {
+//                if (rs != null) rs.close();
+//                if (ps != null) ps.close();
+//            } catch (SQLException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//        return customerNames;
+//    }
 
     public static void main(String[] args) {
         CustomerDAO cd = new CustomerDAO();
-        Customer c = cd.getCustomerByAccID(4);
-        System.out.println(c);
+        int accid = 4;
+        cd.deleteCustomerByAccountId(16);
+        System.out.println("done");
     }
 }
