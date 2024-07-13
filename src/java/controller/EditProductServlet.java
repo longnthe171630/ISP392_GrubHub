@@ -45,20 +45,15 @@ public class EditProductServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Check if any field is empty
-        if (isAnyFieldEmpty(request)) {
-            response.sendRedirect("editproduct.jsp?error=empty_fields");
-            return;
-        }
 
         try {
             int productId = Integer.parseInt(request.getParameter("productId"));
             String action = request.getParameter("action");
             ProductDAO pd = new ProductDAO();
-            Product p = pd.getProduct(productId);
+            Product p = pd.getProductVu(productId);
 
             switch (action) {
-                case "save":
+                case "save" -> {
                     String name = request.getParameter("name");
                     int categoryId = Integer.parseInt(request.getParameter("category"));
                     int price = Integer.parseInt(request.getParameter("price"));
@@ -71,6 +66,7 @@ public class EditProductServlet extends HttpServlet {
                     if (part != null && part.getSize() > 0) {
                         String realPath = request.getServletContext().getRealPath("/images/Product");
                         filename = Paths.get(part.getSubmittedFileName()).getFileName().toString();
+                        
                         if (!Files.exists(Paths.get(realPath))) {
                             Files.createDirectory(Paths.get(realPath));
                         }
@@ -88,18 +84,13 @@ public class EditProductServlet extends HttpServlet {
                     // Update product in database
                     pd.updateProduct(p);
                     break;
+                }
 
-                case "delete":
-                    // Delete product from database
+                case "delete" -> // Delete product from database
                     pd.delete(productId);
-                    break;
+                    
 
-                default:
-                    // Handle unknown action
-                    break;
             }
-
-            // Redirect to dashboard after processing
             response.sendRedirect("productofrestaurant");
 
         } catch (NumberFormatException e) {
@@ -117,27 +108,4 @@ public class EditProductServlet extends HttpServlet {
         }
     }
 
-// Phương thức để kiểm tra xem có trường nào trống không
-    private boolean isAnyFieldEmpty(HttpServletRequest request) {
-        String name = request.getParameter("name");
-        String category = request.getParameter("category");
-        String price = request.getParameter("price");
-        String quantity = request.getParameter("quantity");
-        String description = request.getParameter("description");
-
-        return name.isEmpty() || category.isEmpty() || price.isEmpty() || quantity.isEmpty() || description.isEmpty();
-    }
-
-// Phương thức để kiểm tra xem một chuỗi có phải là số không
-    private boolean isNumeric(String str) {
-        if (str == null || str.isEmpty()) {
-            return false;
-        }
-        try {
-            Integer.parseInt(str);
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
-        }
-    }
 }

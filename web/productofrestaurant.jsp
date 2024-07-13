@@ -55,19 +55,19 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="restaurantfeedback">
                         <i class='bx bxs-group' ></i>
-                        <span class="text">Team</span>
+                        <span class="text">Feedback</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="loadres" id="edit">
+                        <i class='bx bxs-group' ></i>
+                        <span class="text">Edit Restaurant</span>
                     </a>
                 </li>
             </ul>
             <ul class="side-menu">
-                <li>
-                    <a href="#">
-                        <i class='bx bxs-cog' ></i>
-                        <span class="text">Settings</span>
-                    </a>
-                </li>
                 <li>
                     <a href="#" class="logout">
                         <i class='bx bxs-log-out-circle' ></i>

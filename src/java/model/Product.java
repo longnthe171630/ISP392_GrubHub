@@ -23,6 +23,7 @@ public class Product {
     private Restaurant restaurant;
     private Category category;
     private int categoryId, restaurantId;
+    private SubProducts subProduct;
 
     public Product() {
     }
@@ -87,6 +88,39 @@ public class Product {
         this.categoryId = categoryId;
         this.restaurantId = restaurantId;
     }
+
+    public Product(int id, String name, int price, int quantity, String description, String image, boolean status, float rating, Date create_date, Restaurant restaurant, Category category, int categoryId, int restaurantId, SubProducts subProduct) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.quantity = quantity;
+        this.description = description;
+        this.image = image;
+        this.status = status;
+        this.rating = rating;
+        this.create_date = create_date;
+        this.restaurant = restaurant;
+        this.category = category;
+        this.categoryId = categoryId;
+        this.restaurantId = restaurantId;
+        this.subProduct = subProduct;
+    }
+
+    public Product(String name, int price, int quantity, String description, String image, boolean status, float rating, Date create_date, int categoryId, int restaurantId, SubProducts subProduct) {
+        this.name = name;
+        this.price = price;
+        this.quantity = quantity;
+        this.description = description;
+        this.image = image;
+        this.status = status;
+        this.rating = rating;
+        this.create_date = create_date;
+        this.categoryId = categoryId;
+        this.restaurantId = restaurantId;
+        this.subProduct = subProduct;
+    }
+    
+    
     
     
 
@@ -210,6 +244,15 @@ public class Product {
     public void setRating(float rating) {
         this.rating = rating;
     }
+
+    public SubProducts getSubProduct() {
+        return subProduct;
+    }
+
+    public void setSubProduct(SubProducts subProduct) {
+        this.subProduct = subProduct;
+    }
+    
 
     @Override
     public String toString() {
