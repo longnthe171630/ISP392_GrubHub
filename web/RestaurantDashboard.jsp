@@ -16,7 +16,7 @@ Author     : phaml
         <!-- Boxicons -->
         <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
         <!-- My CSS -->
-        <link rel="stylesheet" href="css\restaurant_dashboard.css">
+        <link rel="stylesheet" href="css/restaurant_dashboard.css">
 
         <title>Restaurant</title>
     </head>
@@ -51,9 +51,9 @@ Author     : phaml
                     </a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="revenue">
                         <i class='bx bxs-message-dots' ></i>
-                        <span class="text">Message</span>
+                        <span class="text">Revenue</span>
                     </a>
                 </li>
                 <li>

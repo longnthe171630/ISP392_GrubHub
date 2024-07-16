@@ -505,9 +505,81 @@ public class ProductDAO extends MyDAO {
         return list;
     }
 
+    public List<Product> getAllProducts() {
+        List<Product> productList = new ArrayList<>();
+        String sql = "SELECT * FROM Product";
+
+        try {
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String name = rs.getString("name");
+                int price = rs.getInt("price");
+                int quantity = rs.getInt("quantity");
+                String description = rs.getString("description");
+                String image = rs.getString("image");
+                boolean isActive = rs.getBoolean("status");
+                float rating = rs.getFloat("rating");
+                Date dateAdded = rs.getDate("create_date");
+                int categoryId = rs.getInt("category_id");
+                int restaurantId = rs.getInt("restaurant_id");
+
+                Product product = new Product(id, name, price, quantity, description, image, isActive, rating, dateAdded, categoryId, restaurantId);
+                productList.add(product);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return productList;
+    }
+
+    public int getTotalProductOfRestaurant(int restaurantId) {
+        xSql = "select count(*) from product where restaurant_id = ?";
+        try {
+            ps = con.prepareStatement(xSql);
+            ps.setInt(1, restaurantId);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                return rs.getInt(1);
+
+            }
+        } catch (Exception e) {
+
+        }
+        return 0;
+    }
+    
+    public List<Product> paginProduct(int index, int restaurantId){
+        List<Product> lp = new ArrayList<>();
+        xSql ="Select * from product where restaurant_id = ? \n"
+                + "order by id\n"
+                + "offset ? rows fetch next 5 rows only;";
+        try {
+            ps = con.prepareStatement(xSql);
+            ps.setInt(1, restaurantId);
+            ps.setInt(2, (index-1)*5);
+            rs = ps.executeQuery();
+            while (rs.next()) {                
+                lp.add(new Product(rs.getInt(1), rs.getString(2), 
+                       rs.getInt(3), rs.getInt(4),
+                        rs.getString(5), rs.getString(6),
+                        rs.getBoolean(7), rs.getFloat(8),
+                        rs.getDate(9), rs.getInt(10), rs.getInt(11)));
+            }
+        } catch (Exception e) {
+        }
+        return lp;
+    }
+
     public static void main(String[] args) {
         ProductDAO pd = new ProductDAO();
-        int restaurantid = pd.getRestaurantIdByProductId(29);
-        System.out.println(restaurantid);
+        List<Product>  lp  = pd.paginProduct(2,1);
+        for (Product product : lp) {
+            System.out.println(product);
+        }
+        
     }
 }

@@ -148,7 +148,7 @@
                     </div>
                     <div class="form-group">
                         <label for="img">Ảnh sản phẩm:</label>
-                        <input type="file" id="img" name="img" value="<%= p.getImage() %>">
+                        <input type="file" id="img" name="img" accept=".jpg, .jpeg, .png, .gif" value="<%= p.getImage() %>">
                     </div>
                 </div>
                 <div class="buttons">

@@ -7,6 +7,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ page import="model.*" %> 
 <%@ page import="java.util.*" %> 
+<%@ page import="java.text.NumberFormat, java.util.Locale" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -34,6 +35,55 @@
         </style>
 
         <style>
+            .hidden {
+                display: none;
+            }
+
+            .search-container {
+                display: flex;
+                align-items: center;
+                margin-bottom: 20px;
+            }
+
+            .search-container input[type="text"] {
+                padding: 10px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                margin-right: 10px;
+                flex: 1;
+                font-size: 16px;
+            }
+
+            .search-container button {
+                padding: 10px 20px;
+                background-color: #007bff;
+                color: white;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 16px;
+            }
+
+            .search-container button:hover {
+                background-color: #0056b3;
+            }
+
+            .filter-dropdown {
+                display: inline-block;
+                margin-left: 20px;
+            }
+
+            .filter-dropdown label {
+                font-size: 16px;
+                margin-right: 10px;
+            }
+
+            .filter-dropdown select {
+                padding: 10px;
+                font-size: 16px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+            }
             .search-container {
                 display: flex;
                 align-items: center;
@@ -80,6 +130,26 @@
                 border-radius: 4px;
             }
         </style>
+        <%!
+    // Method to format currency
+    public String formatCurrency(double amount) {
+        Locale localeVN = new Locale("vi", "VN");
+        NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(localeVN);
+        return currencyFormatter.format(amount);
+    }
+        public String getStatusClass(String status) {
+        switch (status) {
+            case "Đang chờ":
+                return "process";
+            case "Từ chối":
+                return "pending";
+            case "Đã giao":
+                return "completed";
+            default:
+                return "";
+        }
+    }
+        %>
         <body>
 
 
@@ -93,7 +163,7 @@
                     <li>
                         <a href="restaurantdashboard">
                             <i class='bx bxs-dashboard' ></i>
-                            <span class="text">Dashboard</span>
+                            <span class="text">History</span>
                         </a>
                     </li>
                     <li>
@@ -111,7 +181,7 @@
                     <li>
                         <a href="#">
                             <i class='bx bxs-message-dots' ></i>
-                            <span class="text">Message</span>
+                            <span class="text">Revenue</span>
                         </a>
                     </li>
                     <li>
@@ -168,7 +238,7 @@
                 <main>
                     <div class="head-title">
                         <div class="left">
-                            <h1>Dashboard</h1>
+                            <h1>History</h1>
                             <ul class="breadcrumb">
                                 <li>
                                     <a href="#">Dashboard</a>
@@ -181,88 +251,82 @@
                         </div>
                     </div>
                     <div class="table-data">
+
                         <div class="order">
                             <div class="head">
-                                <h3>Orders</h3>
-                                <div class="search-container">
-                                    <input type="text" id="searchInput" placeholder="Search by user...">
-                                    <button type="button" onclick="searchOrders()">Search</button>
-                                </div>
-                                <div class="filter-dropdown">
-                                    <label for="filterDropdown">Filter:</label>
-                                    <select id="filterDropdown" onchange="filterOrders(this.value)">
-                                        <option value="All">All</option>
-                                        <option value="Đang chờ">Đang chờ</option>
-                                        <option value="Từ chối">Từ chối</option>
-                                        <option value="Đã giao">Đã giao</option>
-                                    </select>
-                                </div>
+                                <h3>Order</h3>
+                                <i class='bx bx-search' onclick="toggleSearchContainer()"></i>
+                                <i class='bx bx-filter' onclick="toggleFilterDropdown()"></i>
                             </div>
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>User</th>
-                                        <th>Amount</th>
-                                        <th>Date Order</th>
-                                        <th>Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <% 
-                                    Map<Customer, Order> customerOrderMap = (Map<Customer, Order>) request.getAttribute("MapCusOrder");
-                                    if (customerOrderMap != null && !customerOrderMap.isEmpty()) {
-                                        for (Map.Entry<Customer, Order> entry : customerOrderMap.entrySet()) {
-                                            Customer customer = entry.getKey();
-                                            Order order = entry.getValue();
-                                    %>
-                                    <tr>
-                                        <td class="table-link">
-                                            <a href="detailofhistory?idCustomer=<%= customer.getId() %>&idOrder=<%= order.getId() %>">
-                                                <%= customer.getName() %>
-                                            </a>
-                                        </td>
-                                        <td class="table-link">
-                                            <a href="detailofhistory?idCustomer=<%= customer.getId() %>&idOrder=<%= order.getId() %>">
-                                                <%= order.getTotal_amount() %>
-                                            </a>
-                                        </td>
-                                        <td class="table-link">
-                                            <a href="detailofhistory?idCustomer=<%= customer.getId() %>&idOrder=<%= order.getId() %>">
-                                                <%= order.getOrder_date() %>
-                                            </a>
-                                        </td>
-                                        <td>
-                                            <%
-                                            String status = order.getStatus();
-                                            if ("Đang chờ".equals(status)) {
-                                            %>
-                                            <span class="status process"><%= status %></span>
-                                            <%
-                                        } else if ("Từ chối".equals(status)) {
-                                            %>
-                                            <span class="status pending"><%= status %></span>
-                                            <%
-                                        } else if ("Đã giao".equals(status)) {
-                                            %>
-                                            <span class="status completed"><%= status %></span>
-                                            <%
-                                        }
-                                            %>
-                                        </td>
-                                    </tr>
-                                    <% 
-                                }
-                            } else {
-                                    %>
-                                    <tr>
-                                        <td colspan="4">Không có đơn hàng đang xử lý.</td>
-                                    </tr>
-                                    <% 
-                                } 
-                                    %>
-                                </tbody>
-                            </table>
+                            <div id="searchContainer" class="search-container hidden">
+                                <input type="text" id="searchInput" onkeyup="searchOrders()" placeholder="Search for orders...">
+                                <button type="button" onclick="searchOrders()">Search</button>
+                            </div>
+                            <div id="filterDropdown" class="filter-dropdown hidden">
+                                <label for="filterStatus">Filter by Status:</label>
+                                <select id="filterStatus" onchange="filterOrders(this.value)">
+                                    <option value="All">All</option>
+                                    <option value="Đang chờ">Đang chờ</option>
+                                    <option value="Từ chối">Từ chối</option>
+                                    <option value="Đã giao">Đã giao</option>
+                                </select>
+                            </div>
+                            <div class="head">
+                                <!-- Search and filter dropdown section omitted for brevity -->
 
+                                <!-- Orders table -->
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>User</th>
+                                            <th>Amount</th>
+                                            <th>Date Order</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Iterate through customerOrderMap to display orders -->
+                                        <% 
+                                        Map<Customer, Order> customerOrderMap = (Map<Customer, Order>) request.getAttribute("MapCusOrder");
+                                        if (customerOrderMap != null && !customerOrderMap.isEmpty()) {
+                                            for (Map.Entry<Customer, Order> entry : customerOrderMap.entrySet()) {
+                                                Customer customer = entry.getKey();
+                                                Order order = entry.getValue();
+                                        %>
+                                        <tr>
+                                            <td class="table-link">
+                                                <a href="detailofhistory?idCustomer=<%= customer.getId() %>&idOrder=<%= order.getId() %>">
+                                                    <%= customer.getName() %>
+                                                </a>
+                                            </td>
+                                            <td class="table-link">
+                                                <a href="detailofhistory?idCustomer=<%= customer.getId() %>&idOrder=<%= order.getId() %>">
+                                                    <%= formatCurrency(order.getTotal_amount()) %>
+                                                </a>
+                                            </td>
+                                            <td class="table-link">
+                                                <a href="detailofhistory?idCustomer=<%= customer.getId() %>&idOrder=<%= order.getId() %>">
+                                                    <%= order.getOrder_date() %>
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <%-- Display status with appropriate CSS class based on status --%>
+                                                <span class="status <%= getStatusClass(order.getStatus()) %>"><%= order.getStatus() %></span>
+                                            </td>
+                                        </tr>
+                                        <% 
+                                            }
+                                        } else {
+                                        %>
+                                        <tr>
+                                            <td colspan="4">Không có đơn hàng đang xử lý.</td>
+                                        </tr>
+                                        <% 
+                                        } 
+                                        %>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
 
@@ -275,33 +339,33 @@
             <script src="js\restaurant_dashboard.js"></script>
         </body>
         <script>
-                                        function filterOrders(status) {
-                                            const rows = document.querySelectorAll('.order table tbody tr');
+                                    function filterOrders(status) {
+                                        const rows = document.querySelectorAll('.order table tbody tr');
 
-                                            rows.forEach(row => {
-                                                const statusCell = row.querySelector('td:nth-child(4)');
-                                                const rowStatus = statusCell.textContent.trim();
+                                        rows.forEach(row => {
+                                            const statusCell = row.querySelector('td:nth-child(4)');
+                                            const rowStatus = statusCell.textContent.trim();
 
-                                                if (status === 'All' || rowStatus === status) {
-                                                    row.style.display = '';
-                                                } else {
-                                                    row.style.display = 'none';
-                                                }
-                                            });
-                                        }
-
-                                        function getStatusClass(status) {
-                                            switch (status) {
-                                                case 'Đang chờ':
-                                                    return 'process';
-                                                case 'Từ chối':
-                                                    return 'pending';
-                                                case 'Đã giao':
-                                                    return 'completed';
-                                                default:
-                                                    return '';
+                                            if (status === 'All' || rowStatus === status) {
+                                                row.style.display = '';
+                                            } else {
+                                                row.style.display = 'none';
                                             }
+                                        });
+                                    }
+
+                                    function getStatusClass(status) {
+                                        switch (status) {
+                                            case 'Đang chờ':
+                                                return 'process';
+                                            case 'Từ chối':
+                                                return 'pending';
+                                            case 'Đã giao':
+                                                return 'completed';
+                                            default:
+                                                return '';
                                         }
+                                    }
         </script>
 
         <script>

@@ -28,17 +28,23 @@ public class ProductOfRestaurantServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
        int resId = 1;
+       String indexPage = request.getParameter("index");
+       if (indexPage == null) {
+           indexPage = "1";
+       }
+       int index = Integer.parseInt(indexPage);
        ProductDAO pd = new ProductDAO();
-       List<Product> lp;
-       List<Product> xLp = new ArrayList<>();
-       lp = pd.getProductsRestaurant();
-        for (Product product : lp) {
-            if (product.getRestaurantId()== resId) {
-                xLp.add(product);
-            }
-        }
-        request.setAttribute("listProduct", xLp);
-        request.getRequestDispatcher("productofrestaurant.jsp").forward(request, response);
+       int count = pd.getTotalProductOfRestaurant(resId);
+       int endPage = count / 5;
+       if (count % 5 != 0) {
+           endPage++;
+       }
+       List<Product> lp = pd.paginProduct(index, resId);
+       
+       request.setAttribute("currentPage", index);
+       request.setAttribute("endP", endPage);
+       request.setAttribute("listProduct", lp);
+       request.getRequestDispatcher("productofrestaurant.jsp").forward(request, response);
     } 
 
     @Override

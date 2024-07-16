@@ -16,12 +16,11 @@
         <!-- Boxicons -->
         <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
         <!-- My CSS -->
-        <link rel="stylesheet" href="css\restaurant_dashboard.css">
+        <link rel="stylesheet" href="css/restaurant_dashboard.css">
 
         <title>Restaurant</title>
     </head>
     <body>
-
 
         <!-- SIDEBAR -->
         <section id="sidebar">
@@ -51,7 +50,7 @@
                 <li>
                     <a href="#">
                         <i class='bx bxs-message-dots' ></i>
-                        <span class="text">Message</span>
+                        <span class="text">Revenue</span>
                     </a>
                 </li>
                 <li>
@@ -77,8 +76,6 @@
             </ul>
         </section>
         <!-- SIDEBAR -->
-
-
 
         <!-- CONTENT -->
         <section id="content">
@@ -119,15 +116,20 @@
                             </li>
                         </ul>
                     </div>
-                    <a href="addnewproduct" class="btn-download">
-                        <i class='bx bxs-cloud-download' ></i>
-                        <span class="text">Add new product</span>
-                    </a>
+                    <div class="dropdown">
+                        <button class="btn-download dropdown-toggle">
+                            <i class='bx bxs-cloud-download'></i>
+                            <span class="text">Add new product</span>
+                        </button>
+                        <div class="dropdown-menu">
+                            <a href="addnewproduct">Add New Product</a>
+                            <a href="uploadfromfile.jsp">Add Products from File</a>
+                        </div>
+                    </div>
                 </div>
                 <div class="table-data">
                     <div class="order">
                         <div class="head">
-                            <h3>Recent Orders</h3>
                             <i class='bx bx-search' ></i>
                             <i class='bx bx-filter' ></i>
                         </div>
@@ -139,36 +141,53 @@
                                     <th>Quantity</th>
                                     <th>Rating</th>
                                     <th>Action</th>
-
                                 </tr>
                             </thead>
                             <tbody>
-                                <%-- Lặp qua danh sách sản phẩm từ thuộc tính "listProduct" trong request --%>
-                                <% 
-                                    List<Product> productList = (List<Product>) request.getAttribute("listProduct");
-                                    if (productList != null && !productList.isEmpty()) {
-                                        for (Product product : productList) {
-                                %>
-                                <tr>
-                                    <td><%= product.getName() %></td>
-                                    <td><%= product.getPrice() %></td>
-                                    <td><%= product.getQuantity() %></td>
-                                    <td><%= product.getRating() %> </td>
-                                    <td><a href="editproduct?id=<%= product.getId() %>"><span class="status completed">Edit</span></a></td>
-                                </tr>
-                                <% 
-                                        }
-                                    } else {
-                                %>
-                                <tr>
-                                    <td colspan="5">No products available.</td>
-                                </tr>
-                                <% } %>
+                            <script>
+                                function formatCurrency(price) {
+                                    return price.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'});
+                                }
+                            </script>
+                            <% 
+                                List<Product> productList = (List<Product>) request.getAttribute("listProduct");
+                                if (productList != null && !productList.isEmpty()) {
+                                    for (Product product : productList) {
+                            %>
+                            <tr>
+                                <td><%= product.getName() %></td>
+                                <td><script>document.write(formatCurrency(<%= product.getPrice() %>))</script></td>
+                                <td><%= product.getQuantity() %></td>
+                                <td><%= product.getRating() %></td>
+                                <td><a href="editproduct?id=<%= product.getId() %>"><span class="status completed">Edit</span></a></td>
+                            </tr>
+                            <% 
+                                    }
+                                } else {
+                            %>
+                            <tr>
+                                <td colspan="5">No products available.</td>
+                            </tr>
+                            <% } %>
                             </tbody>
                         </table>
+                        <div class="pagination">
+                            <ul>
+                                <% 
+                                    int currentPage = (int) request.getAttribute("currentPage");
+                                    int endPage = (int) request.getAttribute("endP");
+                                    for (int i = 1; i <= endPage; i++) {
+                                %>
+                                <li class="<%= (i == currentPage) ? "active" : "" %>">
+                                    <a href="productofrestaurant?index=<%= i %>"><%= i %></a>
+                                </li>
+                                <% } %>
+                            </ul>
+                        </div>
                     </div>
-                </div>
-                <%-- Đoạn mã JSP để hiển thị thông báo lỗi --%>
+
+                </div>  
+                <!-- Error message section -->
                 <div id="error-message" style="color: red;">
                     <% 
                     String errorMessage = request.getParameter("error");
@@ -183,13 +202,11 @@
                     }
                     %>
                 </div>
-
             </main>
             <!-- MAIN -->
         </section>
         <!-- CONTENT -->
 
-
-        <script src="js\restaurant_dashboard.js"></script>
+        <script src="js/restaurant_dashboard.js"></script>
     </body>
 </html>

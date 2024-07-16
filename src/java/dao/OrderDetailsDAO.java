@@ -12,8 +12,8 @@ import model.OrderDetails;
  *
  * @author Long1
  */
-public class OrderDetailsDAO extends MyDAO{
-    
+public class OrderDetailsDAO extends MyDAO {
+
     public List<OrderDetails> getOrderDetails() {
         List<OrderDetails> t = new ArrayList<>();
         xSql = "select * from [OrderDetails]";
@@ -42,15 +42,15 @@ public class OrderDetailsDAO extends MyDAO{
         }
         return (t);
     }
-    
-    public List<OrderDetails> getOrderDetailsByOrder_Locct(int orderID){
+
+    public List<OrderDetails> getOrderDetailsByOrder_Locct(int orderID) {
         List<OrderDetails> list = new ArrayList<>();
         xSql = "SELECT * FROM OrderDetails WHERE order_id = ?";
         try {
             ps = con.prepareStatement(xSql);
             ps.setInt(1, orderID);
             rs = ps.executeQuery();
-            while (rs.next()) {                
+            while (rs.next()) {
                 list.add(new OrderDetails(rs.getInt(1),
                         rs.getInt(2),
                         rs.getInt(3),
@@ -62,12 +62,12 @@ public class OrderDetailsDAO extends MyDAO{
         }
         return list;
     }
-    
-    public OrderDetails getOrderDetailsByOrder(int order_id){
+
+    public OrderDetails getOrderDetailsByOrder(int order_id) {
         String sql = "SELECT * FROM [OrderDetails] where [order_id] = ?";
         int xId, xOrder_id, xProduct_id, xQuantity;
         float xPrice;
-             
+
         try {
             // Chuẩn bị câu lệnh SQL
             ps = connection.prepareStatement(sql);
@@ -81,7 +81,7 @@ public class OrderDetailsDAO extends MyDAO{
                 xProduct_id = rs.getInt("product_id");
                 xQuantity = rs.getInt("quantity");
                 xPrice = rs.getFloat("price");
-  
+
                 return new OrderDetails(xId, xOrder_id, xProduct_id, xQuantity, xPrice);
             }
         } catch (Exception e) {
@@ -101,11 +101,12 @@ public class OrderDetailsDAO extends MyDAO{
         }
         return null;
     }
-    
+
+
+
     public static void main(String[] args) {
         OrderDetailsDAO o = new OrderDetailsDAO();
         List<OrderDetails> lo = o.getOrderDetailsByOrder_Locct(1);
-        System.out.println(lo);
-       
+
     }
 }

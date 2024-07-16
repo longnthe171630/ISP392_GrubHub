@@ -83,8 +83,8 @@
                 <label for="description">Description:</label>
                 <input type="text" id="description" name="description" required>
 
-                <label for="img">Image:</label>
-                <input type="file" id="img" name="img" required>
+                <label for="img">Image (.jpg, .jpeg, .png, .gif):</label>
+                <input type="file" id="img" name="img" accept=".jpg, .jpeg, .png, .gif" required>
 
                 <label for="category">Category:</label>
                 <select id="category" name="category">
