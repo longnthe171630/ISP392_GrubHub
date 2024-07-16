@@ -89,7 +89,8 @@ public class LoginServlet extends HttpServlet {
             request.getRequestDispatcher("Login.jsp").forward(request, response);
         } else {
             HttpSession session = request.getSession();
-            session.setAttribute("account", a);
+            session.setAttribute("acc", a);
+            session.setAttribute("username", user);
             //luu account len cookie
             Cookie u = new Cookie("userA", user);
             Cookie p = new Cookie("passA", pass);
@@ -110,13 +111,13 @@ public class LoginServlet extends HttpServlet {
                     response.sendRedirect("home");
                     break;
                 case 2: // Customer
-                    response.sendRedirect("CustomerDashboard.jsp");
+                    response.sendRedirect("home");
                     break;
                 case 3: // Restaurant
                     response.sendRedirect("RestaurantDashboard.jsp");
                     break;
                 case 4: // Shipper
-                    response.sendRedirect("ShipperDashboard.jsp");
+                    response.sendRedirect("deliverydashboard");
                     break;
                 default:
                     response.sendRedirect("Home.jsp");

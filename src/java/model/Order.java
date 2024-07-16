@@ -16,14 +16,16 @@ public class Order {
     private int customer_id;
     private int total_amount;
     private String status;
-    private Date order_date;
+    private java.sql.Timestamp order_date;
     private Address fromAddress;
     private Address toAddress;
+    private Customer customer;
+    private String res_name, res_phone, cus_name, cus_phone;
     
     public Order() {
     }
 
-    public Order(int id, int total_amount, String status, Date order_date, Address fromAddress, Address toAddress) {
+    public Order(int id, int total_amount, String status, java.sql.Timestamp order_date, Address fromAddress, Address toAddress) {
         this.id = id;
         this.total_amount = total_amount;
         this.status = status;
@@ -33,13 +35,32 @@ public class Order {
     }
 
     
-    public Order(int id, int restaurant_id, int customer_id, int total_amount, String status, Date order_date) {
+    public Order(int id, int restaurant_id, int customer_id, int total_amount, String status, java.sql.Timestamp order_date) {
         this.id = id;
         this.restaurant_id = restaurant_id;
         this.customer_id = customer_id;
         this.total_amount = total_amount;
         this.status = status;
         this.order_date = order_date;
+    }
+
+    public Order(int id, int restaurant_id, int total_amount, String status, java.sql.Timestamp order_date, Customer customer) {
+        this.id = id;
+        this.restaurant_id = restaurant_id;
+        this.total_amount = total_amount;
+        this.status = status;
+        this.order_date = order_date;
+        this.customer = customer;
+    }
+    
+    public Order(int id, String status, java.sql.Timestamp order_date, String res_name, String res_phone, String cus_name, String cus_phone) {
+        this.id = id;
+        this.status = status;
+        this.order_date = order_date;
+        this.res_name = res_name;
+        this.res_phone = res_phone;
+        this.cus_name = cus_name;
+        this.cus_phone = cus_phone;
     }
 
     public int getId() {
@@ -82,11 +103,11 @@ public class Order {
         this.status = status;
     }
 
-    public Date getOrder_date() {
+    public java.sql.Timestamp getOrder_date() {
         return order_date;
     }
 
-    public void setOrder_date(Date order_date) {
+    public void setOrder_date(java.sql.Timestamp order_date) {
         this.order_date = order_date;
     }
 
@@ -105,6 +126,17 @@ public class Order {
     public void setToAddress(Address toAddress) {
         this.toAddress = toAddress;
     }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+
+    
 
     @Override
     public String toString() {

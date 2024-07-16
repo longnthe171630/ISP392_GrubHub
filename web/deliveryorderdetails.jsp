@@ -14,28 +14,29 @@
     </head>
 
     <body>
-        <h2>Chi tiết đơn hàng</h2><br>
-        <p><strong>Mã đơn: </strong> ${order1.id}</p><br>
-        <p><strong>Tên sản phẩm:</strong> ${productname}</p><br>
-        <p><strong>Số lượng</strong> ${orderdetails.quantity}</p><br>
-        <p><strong>Giá sản phẩm:</strong> ${orderdetails.price}</p> <br>
-        <p><strong>Cước vận chuyển:</strong> ${ship_price}</p><br>
-        <p><strong>Trạng thái:</strong> ${order1.status}</p><br>
-
-        <iframe 
-            src="${directionsURL}"
-            width="330px"
-            height="390px;" 
-            frameborder="0" 
-            style="border:1px; margin-left: 340px; margin-top: -250px;" 
-            allowfullscreen>
-        </iframe>
-
         <form action = "deliverystatus" method = "POST">
-            <div class="order-details" style ="margin-top: -50px">    
-                <h3>Bạn có muốn nhận đơn này không?</h3>
-                <button type = "submit" name = "accept">Đồng ý</button>
-                <button type = "submit" name = "reject">Bỏ qua</button>
+            <h2>Chi tiết đơn hàng</h2><br>
+            <p><strong>Mã đơn: </strong> ${order1.id}</p>
+            <input type="hidden" name="id" value="${order1.id}">
+            <p><strong>Tên sản phẩm:</strong> ${productname}</p>
+            <p><strong>Số lượng:</strong> ${orderdetails.quantity}</p>
+            <p><strong>Giá sản phẩm:</strong> ${orderdetails.price}</p>
+            <p><strong>Cước vận chuyển:</strong> ${ship_price}</p><br>
+            <p><strong>Trạng thái:</strong> ${order1.status}</p>
+
+            <iframe 
+                src="${directionsURL}"
+                width="300px"
+                height="350px;" 
+                frameborder="0" 
+                style="border:1px; margin-left: 360px; margin-top: -180px;" 
+                allowfullscreen>
+            </iframe>
+
+            <div class="order-details" style = "margin-top: -20px;">    
+                <h3>Do you want to receive this order?</h3>
+                <button type = "submit" name = "action" value = "accept">Yes</button>
+                <button type = "submit" name = "action" value = "reject">No</button>
             </div>
         </form>
     </body>

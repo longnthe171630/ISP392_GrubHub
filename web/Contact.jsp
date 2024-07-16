@@ -1,9 +1,3 @@
-<%-- 
-    Document   : contact
-    Created on : May 25, 2024, 9:30:59 PM
-    Author     : manh0
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -27,69 +21,49 @@
 
         <!-- header section starts      -->
 
-        <header>
-            <a href="home" class="logo"><i class="fas fa-utensils"></i>GrubHub</a>
-
-            <nav class="navbar">
-                <a class="active" href="home">home</a>
-                <a href="About.jsp">about</a>
-                <a href="Contact.jsp">contact</a>
-            </nav>
-
-            <div class="icons">
-                <i class="fas fa-bars" id="menu-bars"></i>
-                <i class="fas fa-search" id="search-icon"></i>
-                <a href="#" class="fas fa-shopping-cart"></a>
-                <a href="login" class="login-btn">login</a>
-
-            </div> 
-
-        </header>
+        <jsp:include page="Hearder.jsp"></jsp:include>
 
         <!-- header section ends-->
 
         <!-- search form  -->
-
-        <form action="" id="search-form">
-            <input type="search" placeholder="search here..." name="" id="search-box">
-            <label for="search-box" class="fas fa-search"></label>
-            <i class="fas fa-times" id="close"></i>
-        </form>
 
         <section class="order" id="contact">
 
             <!--        <h3 class="sub-heading"> order now </h3>-->
             <h1 class="heading"> Send your query </h1>
 
-            <form action="">
-
+            <form action="contact" method="post">
                 <div class="inputBox">
                     <div class="input">
                         <span>your name</span>
-                        <input type="text" placeholder="enter your name">
+                        <input type="text" name="name" placeholder="enter your name" required>
                     </div>
                 </div>
                 <div class="inputBox">
                     <div class="input">
                         <span>your number</span>
-                        <input type="text" placeholder="enter your number">
+                        <input type="text" name="number" placeholder="enter your number" required>
+                    </div>
+                </div>
+                <div class="inputBox">
+                    <div class="input">
+                        <span>your email</span>
+                        <input type="email" name="email" placeholder="enter your email" required>
                     </div>
                 </div>
                 <div class="inputBox">
                     <div class="input">
                         <span>subject</span>
-                        <textarea name="" placeholder="enter your subject" id="" cols="30" rows="10"></textarea>
+                        <textarea name="subject" placeholder="enter your subject" cols="30" rows="10" required></textarea>
                     </div>
                 </div>
                 <div class="inputBox">
                     <div class="input">
                         <span>your message</span>
-                        <textarea name="" placeholder="enter your query/feedback" id="" cols="30" rows="10"></textarea>
+                        <textarea name="message" placeholder="enter your query/feedback" cols="30" rows="10" required></textarea>
                     </div>
                 </div>
-
                 <input type="submit" value="Submit" class="btn">
-
             </form>
 
         </section>

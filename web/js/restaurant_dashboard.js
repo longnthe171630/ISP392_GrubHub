@@ -74,3 +74,16 @@ switchMode.addEventListener('change', function () {
 		document.body.classList.remove('dark');
 	}
 })
+ document.addEventListener('DOMContentLoaded', function() {
+            document.querySelector('.dropdown-toggle').addEventListener('click', function(event) {
+                event.preventDefault(); // Prevent the default link behavior
+                document.querySelector('.dropdown-menu').classList.toggle('show');
+            });
+
+            // Close the dropdown if the user clicks outside of it
+            document.addEventListener('click', function(event) {
+                if (!event.target.closest('.dropdown')) {
+                    document.querySelector('.dropdown-menu').classList.remove('show');
+                }
+            });
+        });

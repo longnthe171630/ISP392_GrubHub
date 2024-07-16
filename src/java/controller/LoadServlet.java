@@ -4,6 +4,8 @@
  */
 package controller;
 
+import dao.AccountDAO;
+import dao.AddressDAO;
 import dao.CustomerDAO;
 import model.Customer;
 import jakarta.servlet.ServletException;
@@ -18,6 +20,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import model.Account;
+import model.Address;
 
 /**
  *
@@ -55,9 +59,23 @@ public class LoadServlet extends HttpServlet {
 
         HttpSession session = request.getSession();
         CustomerDAO dao = new CustomerDAO();
+        AddressDAO adDAO = new AddressDAO();
+        AccountDAO ad = new AccountDAO();
         String username = (String) session.getAttribute("username");
-        Customer c = dao.getCustomer(username);
+        int accID = ad.getAccountID(username);
+//        int ID = dao.getCusIdByUsername(username);
+
+        int addressID = ad.getAddressIdByAccId(accID);
+        Address address = adDAO.getAddressById(addressID);
+        request.setAttribute("address", address);
+
+        Customer c = dao.getCustomerByAccID(accID);
         request.setAttribute("customer", c);
+
+        Account a = ad.getAccountByID(accID);
+        request.setAttribute("acc", a);
+
+        session.setAttribute("username", username);
         request.getRequestDispatcher("Showinfo.jsp").forward(request, response);
 
     }
@@ -75,7 +93,7 @@ public class LoadServlet extends HttpServlet {
             throws ServletException, IOException {
         processRequest(request, response);
     }
-    
+
     @Override
     public String getServletInfo() {
         return "Short description";

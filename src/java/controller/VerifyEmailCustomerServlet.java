@@ -12,7 +12,11 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import model.Account;
 import model.Customer;
+import dao.AccountDAO;
+import dao.CustomerDAO;
+import dao.RestaurantDAO;
 
 /**
  *
@@ -21,65 +25,43 @@ import model.Customer;
 @WebServlet(name="VerifyEmailCustomerServlet", urlPatterns={"/verifyemailcustomer"})
 public class VerifyEmailCustomerServlet extends HttpServlet {
    
-    /** 
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet VerifyEmailCustomerServlet</title>");  
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet VerifyEmailCustomerServlet at " + request.getContextPath () + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
-    } 
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /** 
-     * Handles the HTTP <code>GET</code> method.
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        Customer cus = (Customer)request.getAttribute("cus");
-        response.sendRedirect("cuslogin");
+        AccountDAO accountDAO = new AccountDAO();
+        CustomerDAO cd = new CustomerDAO();
+        
+        RestaurantDAO rd = new RestaurantDAO();
+        String email = request.getParameter("email");
+        String token = request.getParameter("token");
+        if (email == null || token == null || email.isEmpty() || token.isEmpty()) {
+            response.sendRedirect("registercustomer.jsp");
+            return;
+        }
+        String verifiedEmail = accountDAO.checkToken(email, token);
+        if (verifiedEmail != null) {
+            Account a= accountDAO.getAccountByEmail_VuPL(email);
+            a.setActive(1);
+            accountDAO.ResetToken(a.getId());
+            accountDAO.updateAccount(a);
+            request.setAttribute("msg", "Successful account registration");
+            request.getRequestDispatcher("LoginCus.jsp");
+        } else{
+            Account a= accountDAO.getAccountByEmail_VuPL(email);
+            cd.deleteCustomerByAccountId(a.getId());
+            rd.deleteRestaurantByAccountId(a.getId());
+            
+            accountDAO.deleteAcountById(a.getId()); 
+        }
+        response.sendRedirect("LoginCus.jsp");
+        
     } 
 
-    /** 
-     * Handles the HTTP <code>POST</code> method.
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
     }
-
-    /** 
-     * Returns a short description of the servlet.
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
 
 }

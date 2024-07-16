@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="6.0" xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
+    <filter>
+        <filter-name>NotificationFilter</filter-name>
+        <filter-class>filter.NotificationFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>NotificationFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
     <servlet>
         <servlet-name>ForgotPasswordServlet</servlet-name>
         <servlet-class>controller.ForgotPasswordServlet</servlet-class>
@@ -25,8 +33,76 @@
         <servlet-class>controller.EditServlet</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>LoadServlet</servlet-name>
-        <servlet-class>controller.LoadServlet</servlet-class>
+        <servlet-name>EditResServlet</servlet-name>
+        <servlet-class>controller.EditResServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>MonthlyRevenueServlet</servlet-name>
+        <servlet-class>controller.MonthlyRevenueServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>NotificationServlet</servlet-name>
+        <servlet-class>controller.NotificationServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ContactServlet</servlet-name>
+        <servlet-class>controller.ContactServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ApplyVoucherServlet</servlet-name>
+        <servlet-class>controller.ApplyVoucherServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>OrderServlet</servlet-name>
+        <servlet-class>controller.OrderServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>FavoriteServlet</servlet-name>
+        <servlet-class>controller.FavoriteServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CancelOrderServlet</servlet-name>
+        <servlet-class>controller.CancelOrderServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>LoadRestaurantServlet</servlet-name>
+        <servlet-class>controller.LoadRestaurantServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>RegisterAccountServlet</servlet-name>
+        <servlet-class>controller.RegisterAccountServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>RestaurantFeedbackServlet</servlet-name>
+        <servlet-class>controller.RestaurantFeedbackServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CusFeedbackServlet</servlet-name>
+        <servlet-class>controller.CusFeedbackServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CustomerHistoryOrderServlet</servlet-name>
+        <servlet-class>controller.CustomerHistoryOrderServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>HistoryDetailsServlet</servlet-name>
+        <servlet-class>controller.HistoryDetailsServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UpdateFeedbackServlet</servlet-name>
+        <servlet-class>controller.UpdateFeedbackServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SaveUpdatedFeedbackServet</servlet-name>
+        <servlet-class>controller.SaveUpdatedFeedbackServet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DeleteFeedback</servlet-name>
+        <servlet-class>controller.DeleteFeedback</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AddFeedbackServlet</servlet-name>
+        <servlet-class>controller.AddFeedbackServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>ForgotPasswordServlet</servlet-name>
@@ -52,6 +128,10 @@
         <url-pattern>/logout</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+        <servlet-name>MonthlyRevenueServlet</servlet-name>
+        <url-pattern>/monthlyrevenue</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>BuyServlet</servlet-name>
         <url-pattern>/buy</url-pattern>
     </servlet-mapping>
@@ -64,8 +144,72 @@
         <url-pattern>/edit</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>LoadServlet</servlet-name>
-        <url-pattern>/load</url-pattern>
+        <servlet-name>EditResServlet</servlet-name>
+        <url-pattern>/editres</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LoadRestaurantServlet</servlet-name>
+        <url-pattern>/loadres</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>NotificationServlet</servlet-name>
+        <url-pattern>/notifications</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ContactServlet</servlet-name>
+        <url-pattern>/contact</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ApplyVoucherServlet</servlet-name>
+        <url-pattern>/applyvoucher</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>OrderServlet</servlet-name>
+        <url-pattern>/order</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RegisterAccountServlet</servlet-name>
+        <url-pattern>/registeraccount</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RestaurantFeedbackServlet</servlet-name>
+        <url-pattern>/restaurantfeedback</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CusFeedbackServlet</servlet-name>
+        <url-pattern>/cusfeedback</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CustomerHistoryOrderServlet</servlet-name>
+        <url-pattern>/historyorder</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FavoriteServlet</servlet-name>
+        <url-pattern>/favorite</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>HistoryDetailsServlet</servlet-name>
+        <url-pattern>/historydetails</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CancelOrderServlet</servlet-name>
+        <url-pattern>/cancelorder</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpdateFeedbackServlet</servlet-name>
+        <url-pattern>/updatefeedback</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SaveUpdatedFeedbackServet</servlet-name>
+        <url-pattern>/saveupdatedfeedback</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeleteFeedback</servlet-name>
+        <url-pattern>/deletefeedback</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddFeedbackServlet</servlet-name>
+        <url-pattern>/addfeedback</url-pattern>
     </servlet-mapping>
     <welcome-file-list>
         <welcome-file>home</welcome-file>
@@ -77,6 +221,14 @@
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/login</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>RatingServlet</servlet-name>
+        <servlet-class>controller.RatingServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>RatingServlet</servlet-name>
+        <url-pattern>/rate</url-pattern>
     </servlet-mapping>
     <!--    <servlet>
         <servlet-name>ResetPasswordServlet</servlet-name>

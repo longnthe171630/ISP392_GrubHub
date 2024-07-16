@@ -47,7 +47,7 @@ public class CategoryServlet extends HttpServlet {
         //da lay dc category id ve roi
         ProductDAO dao = new ProductDAO();
         CategoryDAO dao2 = new CategoryDAO();
-        List<Product> list = dao.getProductByCID(cateID, index);
+        List<Product> list = dao.getProductByCID(cateID);
         List<Category> listC = dao2.getCategorys();
         
         request.setAttribute("listP", list);

@@ -55,12 +55,13 @@ public class RegisterCustomerServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int role = 2;
         Validate v = new Validate();
         CustomerDAO cd = new CustomerDAO();
-        
-        
-        AddressDAO ad = new AddressDAO();
+        AccountDAO accDAO = new AccountDAO();
 
+        AddressDAO ad = new AddressDAO();
+        // lấy dữ liệu ở form trang register
         String name = request.getParameter("name");
         String userName = request.getParameter("username");
         String email = request.getParameter("email");
@@ -147,25 +148,27 @@ public class RegisterCustomerServlet extends HttpServlet {
             idAddress = existingAddress.getId();
         }
 
-        Customer cus = cd.checkCustomer(userName, passWord);
-        if (cd.checkEmail(email) == true) {
+        Account acc = accDAO.checkAccount(userName, passWord);
+        if (accDAO.getAccountByEmail(email) != null) {
             String msg = "Your email account is already in use.";
             request.setAttribute("msg", msg);
             request.getRequestDispatcher("registercustomer.jsp").forward(request, response);
         }
-        if (cus == null) {
-            Customer newCus = new Customer(name, userName, passWord, email, phoneNumber, dob, genderValue, idAddress);
+        if (acc == null) {
+            Account newAcc = new Account(userName, passWord, email, phoneNumber, role, idAddress, 0, null, null);
             try {
 
-                cd.insertCustomer(newCus);
+                accDAO.addNewAccount(newAcc);
+                Customer cus = new Customer(name, dob, genderValue, accDAO.getIDLastAcc());
                 String token = new Token().generateRandomToken(18);
                 String url = "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/verifyemailcustomer?email=" + email + "&token=" + token;
-                cd.insertToken(cd.getIdLastCustomer(), token);
+                accDAO.insertToken(accDAO.getIDLastAcc(), token);
                 new Mail().sendEmail(email, "Verify email", "Click here to verify email: " + url);
+                cd.addNewCus(cus);
                 String url1 = "registercustomer.jsp";
                 String msg = "An email was sent. Please check your email!";
                 request.setAttribute("msg", msg);
-                request.setAttribute("cus", newCus);
+                request.setAttribute("acc", newAcc);
                 request.getRequestDispatcher(url1).forward(request, response);
             } catch (Exception e) {
                 e.printStackTrace();  // Log the exception for debugging
@@ -180,13 +183,4 @@ public class RegisterCustomerServlet extends HttpServlet {
         }
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
 }

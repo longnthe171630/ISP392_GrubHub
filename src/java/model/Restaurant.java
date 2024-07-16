@@ -12,10 +12,32 @@ public class Restaurant {
 
     private int id;
     private String name, phonenumber;
+    private int addressID;
     private Address address;
     private int restaurant_rating, account_id;
 
     public Restaurant() {
+    }
+
+    public Restaurant(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+    
+    
+    public Restaurant(String name, int restaurant_rating, int account_id) {
+        this.name = name;
+        this.restaurant_rating = restaurant_rating;
+        this.account_id = account_id;
+    }
+
+    public Restaurant(int id, String name, String phonenumber, int addressID, int restaurant_rating, int account_id) {
+        this.id = id;
+        this.name = name;
+        this.phonenumber = phonenumber;
+        this.addressID = addressID;
+        this.restaurant_rating = restaurant_rating;
+        this.account_id = account_id;
     }
 
     public Restaurant(int id, String name, String phonenumber, Address address, int restaurant_rating, int account_id) {
@@ -26,6 +48,22 @@ public class Restaurant {
         this.restaurant_rating = restaurant_rating;
         this.account_id = account_id;
     }
+
+    public Restaurant(int id, String name, int restaurant_rating, int account_id) {
+        this.id = id;
+        this.name = name;
+        this.restaurant_rating = restaurant_rating;
+        this.account_id = account_id;
+    }
+
+    public int getAddressID() {
+        return addressID;
+    }
+
+    public void setAddressID(int addressID) {
+        this.addressID = addressID;
+    }
+    
 
     public int getId() {
         return id;
