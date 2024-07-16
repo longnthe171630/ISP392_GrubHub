@@ -38,6 +38,33 @@ public class FeedbackDAO extends MyDAO {
             e.printStackTrace();
         }
     }
+    
+      public List<Feedback> getListFeedback() {
+        List<Feedback> list = new ArrayList<>();
+        try {
+            String sql = "select f.id, c.name, r.name,f.order_id, f.value,f.description\n"
+                    + "from Feedback f\n"
+                    + "join Customer c on c.id= f.customer_id\n"
+                    + "join Restaurant r on r.id= f.restaurant_id";
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Feedback a = new Feedback(rs.getInt(1),
+                        rs.getInt(2),
+                        rs.getInt(3),
+                        rs.getInt(4),
+                        rs.getInt(5),
+                        rs.getString(6),
+                        rs.getString(7),
+                        rs.getInt(8));
+                list.add(a);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return list;
+    }
 
     public void deleteFeedback(int orderId, int product_id) {
         xSql = "DELETE FROM [dbo].[Feedback]\n"

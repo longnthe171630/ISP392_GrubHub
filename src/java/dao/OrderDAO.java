@@ -12,20 +12,52 @@ import model.Account;
 import model.Address;
 import model.CartItem;
 import model.Customer;
+import model.Notification;
 import model.Order;
+import model.OrderDetails;
+import model.Product;
+import utils.Mail;
 
 /**
  *
  * @author manh0
  */
-public class OrderDAO extends MyDAO {
-
-    public int getRestaurantIdByOrderId(int orderID) {
-        xSql = "select restaurant_id from [Order] where id = ?";
+public class OrderDAO extends MyDAO {    
+    
+    public Map<String, Double> getMonthlyRevenue() {
+        Map<String, Double> revenue = new HashMap<>();
+        String sql = """
+                     SELECT FORMAT(order_date, 'yyyy-MM') AS month, SUM(total_amount) AS revenue
+                     FROM [Order]
+                     GROUP BY FORMAT(order_date, 'yyyy-MM')
+                     ORDER BY FORMAT(order_date, 'yyyy-MM')""";
         try {
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                revenue.put(rs.getString("month"), rs.getDouble("revenue"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return revenue;
+    }
 
+    public double totalMoneyMonth(int month, int year) {
+        String sql = """
+                     select SUM(total_amount) from [Order]
+                                     where MONTH(order_date)= ? and year(order_date)= ?""";
+        try {
+            ps = connection.prepareStatement(sql);
+            ps.setInt(1, month);
+            ps.setInt(2, year);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                return rs.getDouble(1);
+            }
         } catch (Exception e) {
         }
+        return 0;
     }
 
     public List<Order> getOrder() {
@@ -74,45 +106,225 @@ public class OrderDAO extends MyDAO {
         }
         return 1;
     }
-
-    public void addOrder(Customer u, Cart cart) {
-        xSql = "insert to [order](customer_id,total_amount,order_date) values [?, ? , ?]";
-        LocalDate curDate = LocalDate.now();
-        Date date = Date.valueOf(curDate); // Convert LocalDate to java.sql.Date
-
+public List<Order> getListOrder() {
+        List<Order> list = new ArrayList<>();
         try {
-            ps = con.prepareStatement(xSql);
-            ps.setDate(1, date);
-            ps.setInt(2, u.getId());
-            ps.setDouble(3, cart.getTotalMoney());
-            ps.executeUpdate();
+            String sql = """
+                        SELECT 
+                             o.id AS id,
+                             r.id AS restaurant_id,
+                             c.id AS customer_id,
+                             o.total_amount,
+                             o.status,
+                             o.order_date
+                         FROM 
+                             [Order] AS o
+                         JOIN 
+                             Restaurant AS r ON r.id = o.restaurant_id
+                         JOIN 
+                             Customer AS c ON c.id = o.customer_id
+                         order by order_date desc""";
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
 
-            xSql = "select top 1 id from [Order] order by id desc";
-            ps = con.prepareStatement(xSql);
-            ps.executeQuery();
-            if (rs.next()) {
-                int oid = rs.getInt(1);
-                for (CartItem i : cart.getItems()) {
-                    xSql = "insert to [OrderDetails](order_id,product_id,quantity,price) values(?, ?, ?, ?)";
-                    ps = con.prepareStatement(xSql);
-                    ps.setInt(1, oid);
-                    ps.setInt(2, i.getProduct().getId());
-                    ps.setInt(3, i.getQuantity());
-                    ps.setDouble(4, i.getPrice());
-                    ps.executeUpdate();
+            while (rs.next()) {
+                int orderId = rs.getInt("id");
+                int restaurantName = rs.getInt("restaurant_id");
+                int customerName = rs.getInt("customer_id");
+                int totalAmount = rs.getInt("total_amount");
+                String status = rs.getString("status");
+                Date orderDate = rs.getDate("order_date");
+
+                Order a = new Order(orderId, restaurantName, customerName, totalAmount, status, orderDate);
+                list.add(a);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        } finally {
+            // Close resources
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                System.out.println(e);
+            }
+        }
+        return list;
+    }
+
+    public Order addOrder(Customer customer, Cart cart) {
+        String sql;
+        ps = null;
+        rs = null;
+        Order order = new Order();
+        try {
+            // Start transaction
+            con.setAutoCommit(false);
+
+            // Group items by restaurant
+            Map<Integer, List<CartItem>> itemsByRestaurant = new HashMap<>();
+            for (CartItem item : cart.getItems()) {
+                Product product = item.getProduct();
+                if (product != null && product.getRestaurantId() != 0) {
+                    int restaurantId = product.getRestaurantId();
+                    itemsByRestaurant.computeIfAbsent(restaurantId, k -> new ArrayList<>()).add(item);
+                } else {
+                    System.out.println("Invalid product or restaurant: " + product);
 
                 }
             }
-            xSql = "update product set quantity=quantity-? where product_id = ?";
-            ps = con.prepareStatement(xSql);
-            for (CartItem i : cart.getItems()) {
-                ps.setInt(1, i.getQuantity());
-                ps.setInt(1, i.getProduct().getId());
+
+            // Process each group of items
+            for (Map.Entry<Integer, List<CartItem>> entry : itemsByRestaurant.entrySet()) {
+                int restaurantId = entry.getKey();
+                List<CartItem> items = entry.getValue();
+
+                // Calculate total amount for this order
+                double totalAmount = items.stream().mapToDouble(item -> item.getProduct().getPrice() * item.getQuantity()).sum();
+
+                // Log the calculated total amount for debugging
+                System.out.println("Total amount for restaurant ID " + restaurantId + ": " + totalAmount);
+
+                // Insert order into 'Order' table
+                LocalDate curDate = LocalDate.now();
+                Date date = Date.valueOf(curDate); // Convert LocalDate to java.sql.Date
+
+                sql = "INSERT INTO [Order] (restaurant_id, customer_id, total_amount, status, order_date) VALUES (?, ?, ?, ?, ?)";
+                ps = con.prepareStatement(sql, ps.RETURN_GENERATED_KEYS);
+                ps.setInt(1, restaurantId);
+                ps.setInt(2, customer.getId());
+                ps.setDouble(3, totalAmount);
+                ps.setString(4, "Đang xử lí");
+                ps.setDate(5, date);
+
+                System.out.println("Executing query: " + ps.toString());
                 ps.executeUpdate();
+
+                // Retrieve the generated order ID
+                rs = ps.getGeneratedKeys();
+                int orderId = 0;
+                if (rs.next()) {
+                    orderId = rs.getInt(1);
+                    order = new Order(orderId, restaurantId, customer.getId(), (int) totalAmount, "Đang xử lí", date);
+                }
+
+                // Insert order details into 'Orderdetails' table
+                sql = "INSERT INTO Orderdetails (order_id, product_id, quantity, price) VALUES (?, ?, ?, ?)";
+                ps = con.prepareStatement(sql);
+                for (CartItem item : items) {
+                    ps.setInt(1, orderId);
+                    ps.setInt(2, item.getProduct().getId());
+                    ps.setInt(3, item.getQuantity());
+                    ps.setDouble(4, item.getProduct().getPrice());
+                    System.out.println("Inserting order detail: " + ps.toString());
+                    ps.executeUpdate();
+                }
+
+                // Update product quantity
+                sql = "UPDATE product SET quantity = quantity - ? WHERE id = ?";
+                ps = con.prepareStatement(sql);
+                for (CartItem item : items) {
+                    ps.setInt(1, item.getQuantity());
+                    ps.setInt(2, item.getProduct().getId());
+                    System.out.println("Updating product quantity: " + ps.toString());
+                    ps.executeUpdate();
+                }
             }
 
-        } catch (Exception e) {
+            // Commit transaction
+            con.commit();
+
+            // Send order confirmation email
+            Mail.sendOrderConfirmationEmail(customer, cart);
+
+        } catch (SQLException e) {
+            try {
+                // Rollback transaction on error
+                if (con != null) {
+                    con.rollback();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+            e.printStackTrace();
+        } finally {
+            try {
+                // Restore auto-commit mode
+                if (con != null) {
+                    con.setAutoCommit(true);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            // Clean up
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
+
+        return order;
+    }
+    
+     public List<Notification> getNotificationsByAccountId(int accountId) {
+        List<Notification> notifications = new ArrayList<>();
+        String sql = "SELECT * FROM Notification WHERE account_id = ?";
+        try {
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, accountId);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String desciption = rs.getString("descripsion");
+                int order_id = rs.getInt("order_id");
+//                notifications.add(new Notification(id, desciption, accountId, order_id));
+            }
+            rs.close();
+            ps.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println("Notifications size: " + notifications.size());
+        return notifications;
+    }
+
+    public List<OrderDetails> getOrderDetailsByOrderId(int orderId) {
+        List<OrderDetails> orderDetailsList = new ArrayList<>();
+        try {
+            String sql = "SELECT * FROM OrderDetails WHERE order_id = ?";
+            ps = connection.prepareStatement(sql);
+            ps.setInt(1, orderId);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                OrderDetails orderDetails = new OrderDetails();
+                orderDetails.setId(rs.getInt("id"));
+                orderDetails.setOrder_id(rs.getInt("order_id"));
+                orderDetails.setProduct_id(rs.getInt("product_id"));
+                orderDetails.setQuantity(rs.getInt("quantity"));
+                orderDetails.setPrice(rs.getFloat("price"));
+                // Set other fields if necessary
+                orderDetailsList.add(orderDetails);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return orderDetailsList;
     }
 
     public List<Order> getAddressRestaurant_CustomerWithId() {

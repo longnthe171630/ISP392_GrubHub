@@ -1,18 +1,20 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
         <!-- Boxicons -->
         <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
         <!-- My CSS -->
         <link rel="stylesheet" href="css/admin.css">
+
         <title>AdminHub</title>
     </head>
     <body>
+
+
         <!-- SIDEBAR -->
         <section id="sidebar">
             <a href="#" class="brand">
@@ -20,7 +22,7 @@
                 <span class="text">AdminHub</span>
             </a>
             <ul class="side-menu top">
-                <li class="active">
+                <li >
                     <a href="admin?action=home">
                         <i class='bx bxs-dashboard' ></i>
                         <span class="text">Dashboard</span>
@@ -32,7 +34,7 @@
                         <span class="text">Customer Account </span>
                     </a>
                 </li>
-                <li>
+                <li class="active">
                     <a href="admin?action=res">
                         <i class='bx bx-restaurant'></i>
                         <span class="text">Restaurant Account</span>
@@ -56,13 +58,6 @@
                         <span class="text">Ban</span>
                     </a>
                 </li>
-                <li>
-                    <a href="monthlyrevenue">
-                        <i class='bx bxs-dollar-circle' ></i>
-                        <span class="text">Monthly Revenue</span>
-                    </a>
-                </li>
-
             </ul>
             <ul class="side-menu">
                 <li>
@@ -72,7 +67,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="home" class="logout">
+                    <a href="Home.jsp" class="logout">
                         <i class='bx bxs-log-out-circle' ></i>
                         <span class="text">Logout</span>
                     </a>
@@ -81,11 +76,14 @@
         </section>
         <!-- SIDEBAR -->
 
+
+
         <!-- CONTENT -->
         <section id="content">
             <!-- NAVBAR -->
             <nav>
                 <i class='bx bx-menu' ></i>
+                <!--			<a href="#" class="nav-link">Categories</a>-->
                 <form action="DashboardServlet">
                     <div class="form-input">
                         <input type="search" placeholder="Search...">
@@ -115,46 +113,17 @@
                             </li>
                             <li><i class='bx bx-chevron-right' ></i></li>
                             <li>
-                                <a class="active" href="#">Home</a>
+                                <a class="active" href="#">Restaurant Account</a>
                             </li>
                         </ul>
                     </div>
-                </div>
 
-                <ul class="box-info">
-                    <li>
-                        <i class='bx bxs-calendar-check' ></i>
-                        <span class="text">
-                            <h3>
-                                <c:out value="${orderCount}"/>
-                            </h3>
-                            <p>Order</p>
-                        </span>
-                    </li>
-                    <li>
-                        <i class='bx bxs-group' ></i>
-                        <span class="text">
-                            <h3>
-                                <c:out value="${NumofUser}"/>
-                            </h3>
-                            <p>User</p>
-                        </span>
-                    </li>
-                    <li>
-                        <i class='bx bxs-dollar-circle' ></i>
-                        <span class="text">
-                            <h3>
-                                <c:out value="${totalRevenue}"/> Ä
-                            </h3>
-                            <p>Total Revenue</p>
-                        </span>
-                    </li>
-                </ul>
+                </div>
 
                 <div class="table-data">
                     <div class="order">
                         <div class="head">
-                            <h3>All Orders</h3>
+                            <h3>List User</h3>
                             <i class='bx bx-search' ></i>
                             <i class='bx bx-filter' ></i>
                         </div>
@@ -162,32 +131,48 @@
                             <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Restaurant</th>
-                                    <th>Customer</th>
-                                    <th>Total_amount</th>
-                                    <th>Status</th>
-                                    <th>OrderDate</th>
+                                    <th>Name</th>
+                                    <th>Phonenumber</th>
+                                    <th>Detail</th>
+                                    <th>State</th>
+                                    <th>Street</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <c:forEach items="${requestScope.listOrder}" var="o">
-                                    <tr>
+
+                                <c:forEach items="${requestScope.listRes}" var="o">
+                                    <tr onclick="openModal(${o.id})" style="cursor: pointer;">
+                                    
                                         <td>${o.id}</td>
-                                        <td>${o.restaurant_id}</td>
-                                        <td>${o.customer_id}</td>
-                                        <td>${o.total_amount}</td>
-                                        <td><span class="status completed">${o.status}</span></td>
-                                        <td>${o.order_date}</td>
+                                        <td>${o.name}</td>
+                                        <td>${o.phonenumber}</td>
+                                        <td>${o.details}</td>
+                                        <td>${o.state}</td>
+                                        <td>${o.street}</td>      
                                     </tr>
                                 </c:forEach>
+
                             </tbody>
                         </table>
+                        <div id="myModal" class="modal">
+                            <div class="modal-content">
+                                <span class="close" onclick="closeModal();">&times;</span>
+                                <div id="modalContent">
+                                    <!-- N?i dung chi ti?t ??n hàng s? ???c t?i vào ?ây -->
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
                 </div>
+
+
+
             </main>
             <!-- MAIN -->
         </section>
         <!-- CONTENT -->
+
 
         <script src="js/admin.js"></script>
     </body>

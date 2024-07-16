@@ -31,7 +31,7 @@ public class NotificationDAO extends MyDAO {
                 + "           ,?)";
         try {
             ps = con.prepareStatement(xSql);
-            ps.setString(1, no.getDescription());
+            ps.setString(1, no.getDescripsion());
             ps.setInt(2, no.getOrder_id());
             ps.executeUpdate();
         } catch (Exception e) {

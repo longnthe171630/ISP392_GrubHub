@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import model.Account;
 
 /**
@@ -147,6 +148,80 @@ public class AccountDAO extends MyDAO {
             System.out.println(e);
         }
         return null;
+    }
+    
+     public List<Account> getListAccount() {
+        List<Account> list = new ArrayList<>();
+        String sql = "select * from Account where active=1";
+
+        Account a;
+        try {
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                PreparedStatement st = con.prepareStatement(sql);
+                int xId = rs.getInt("id");
+                String xUsername = rs.getString("username");
+                String xPassword = rs.getString("password");
+                String xEmail = rs.getString("email");
+                String xPhonenumber = rs.getString("phonenumber");
+                int xRole = rs.getInt("role");
+                a = new Account(xId, xUsername, xPassword, xEmail, xPhonenumber, xRole);
+                list.add(a);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return list;
+    }
+
+    public void banAccount(int accountId) {
+        String sql = "UPDATE Account SET active =0 where id= ?";
+        try {
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, accountId); //Thiếu dòng này để set giá trị cho dấu ?
+            ps.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
+
+    public void unbanAccount(int accountId) {
+        String sql = "UPDATE Account SET active =1 where id= ?";
+        try {
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, accountId); //Thiếu dòng này để set giá trị cho dấu ?
+            ps.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
+
+    public List<Account> getListBanedAccount() {
+        List<Account> list = new ArrayList<>();
+        String sql = "select * from Account where active=0";
+
+        Account a;
+        try {
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                PreparedStatement st = con.prepareStatement(sql);
+                int xId = rs.getInt("id");
+                String xUsername = rs.getString("username");
+                String xPassword = rs.getString("password");
+                String xEmail = rs.getString("email");
+                String xPhonenumber = rs.getString("phonenumber");
+                int xRole = rs.getInt("role");
+                a = new Account(xId, xUsername, xPassword, xEmail, xPhonenumber, xRole);
+                list.add(a);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return list;
     }
 
     //đăng kí

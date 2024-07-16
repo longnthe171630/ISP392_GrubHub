@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Cart {
+
     private int cartId;
     private int quantity;
     private int customerId;
     private List<CartItem> items;
+    private double discount = 0.0;
 
     public Cart() {
         this.items = new ArrayList<>();
@@ -65,6 +67,24 @@ public class Cart {
             total += item.getQuantity() * item.getProduct().getPrice();
         }
         return total;
+    }
+
+    public double getDiscountedTotalMoney() {
+        double total = getTotalMoney();
+        return total - (total * discount);
+    }
+
+    public double getDiscountAmount() {
+        double total = getTotalMoney();
+        return total * discount;
+    }
+
+    public void setDiscount(double discount) {
+        this.discount = discount;
+    }
+
+    public double getDiscount() {
+        return discount;
     }
 
     public Cart(int cartId, int quantity, int customerId) {

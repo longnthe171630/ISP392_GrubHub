@@ -7,6 +7,7 @@ package dao;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import model.Account;
 import model.Address;
 import model.Restaurant;
 
@@ -17,30 +18,6 @@ import model.Restaurant;
 public class RestaurantDAO extends MyDAO {
 
     private AddressDAO ad = new AddressDAO();
-
-    public Restaurant getRestaurantByProductId_Locct(int product_id) {
-        xSql = "SELECT * FROM Restaurant WHERE product_id = ?";
-        try {
-            ps = con.prepareStatement(xSql);
-            ps.setInt(1, product_id);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                Restaurant r = new Restaurant(
-                        rs.getInt(1),
-                        rs.getString(2),
-                        rs.getString(3),
-                        rs.getInt(4),
-                        rs.getInt(5),
-                        rs.getInt(6));
-                return r;
-            }
-            rs.close();
-            ps.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
 
     public int getRestaurantIDbyAccID(int accID) {
         xSql = "select id from [dbo].[Restaurant] where account_id = ?";
@@ -120,13 +97,25 @@ public class RestaurantDAO extends MyDAO {
 
     public List<Restaurant> getRestaurants() {
         List<Restaurant> t = new ArrayList<>();
-        xSql = "select * from Restaurant ";
+        xSql = """
+                SELECT 
+                               r.id, 
+                               r.name, 
+                               a.phonenumber, 
+                               r.restaurant_rating, 
+                               r.account_id, 
+                               a.address_id 
+                           FROM 
+                               Restaurant AS r
+                           JOIN 
+                               Account AS a ON r.account_id = a.id""";
         int xRestaurantId;
         String xName;
         Address a;
         String xPhonenumber;
         int xRestaurantRating;
         int xAccountId;
+        Account acc = new Account();
         Restaurant x;
         try {
             ps = con.prepareStatement(xSql);
@@ -181,31 +170,37 @@ public class RestaurantDAO extends MyDAO {
         return (t);
     }
 
-//    public List<Restaurant> getRestaurantByPID(String product_id) {
-//        List<Restaurant> t = new ArrayList<>();
-//        xSql = "SELECT * FROM Restaurant WHERE product_id = ?";
-//        try {
-//            ps = con.prepareStatement(xSql);
-//            ps.setString(1, product_id);
-//            rs = ps.executeQuery();
-//            while (rs.next()) {
-//                int xRestaurantId = rs.getInt("id");
-//                String xName = rs.getString("name");
-//                Address a = ad.getAddressById(rs.getInt("address_id"));
-//                String xPhonenumber = rs.getString("phonenumber");
-//                int xRestaurantRating = rs.getInt("restaurant_id");
-//                int xAccountId = rs.getInt("account_id");
-//
-//                Restaurant x = new Restaurant(xRestaurantId, xName, xPhonenumber, a, xRestaurantRating, xAccountId);
-//                t.add(x);
-//            }
-//            rs.close();
-//            ps.close();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return t;
-//    }
+    public List<Restaurant> getRestaurantByPID(String product_id) {
+        List<Restaurant> t = new ArrayList<>();
+        xSql = """
+               SELECT r.id, r.name, acc.phonenumber, r.restaurant_rating, r.account_id, a.street AS address_street, a.details AS address_details, a.state AS address_state
+               FROM Restaurant r
+               JOIN Account acc ON r.account_id = acc.id
+               JOIN Address a ON acc.address_id = a.id
+               WHERE r.id IN (SELECT restaurant_id FROM Product WHERE id = ?)""";
+        try {
+            ps = con.prepareStatement(xSql);
+            ps.setString(1, product_id);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                int xRestaurantId = rs.getInt("id");
+                String xName = rs.getString("name");
+                Address a = ad.getAddressById(rs.getInt("address_id"));
+                String xPhonenumber = rs.getString("phonenumber");
+                int xRestaurantRating = rs.getInt("restaurant_id");
+                int xAccountId = rs.getInt("account_id");
+
+                Restaurant x = new Restaurant(xRestaurantId, xName, xPhonenumber, a, xRestaurantRating, xAccountId);
+                t.add(x);
+            }
+            rs.close();
+            ps.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return t;
+    }
+
     public Restaurant getRestaurantByID_Loc(int resID) {
         xSql = "select * from Restaurant where id = ?";
         Restaurant r = null;
@@ -253,7 +248,7 @@ public class RestaurantDAO extends MyDAO {
     }
 
     public Restaurant getRestaurantById(int RestaurantId) {
-        xSql = "SELECT * FROM Restaurant WHERE ID = ?";
+        xSql = "SELECT * FROM Restaurant WHERE id = ?";
         try {
             ps = con.prepareStatement(xSql);
             ps.setInt(1, RestaurantId);
@@ -262,8 +257,6 @@ public class RestaurantDAO extends MyDAO {
                 Restaurant r = new Restaurant();
                 r.setId(rs.getInt("id"));
                 r.setName(rs.getString("name"));
-                Address a = ad.getAddressById(rs.getInt("address_id"));
-                r.setPhonenumber(rs.getString("phonenumber"));
                 r.setRestaurant_rating(rs.getInt("restaurant_rating"));
                 return r;
             }
@@ -276,28 +269,44 @@ public class RestaurantDAO extends MyDAO {
     }
 
     public Restaurant getRestaurant(String xxRestaurantId) {
-        xSql = "SELECT * FROM Restaurant WHERE ID = ?";
-        Restaurant x = null;
+        String xSql = """
+                   SELECT 
+                       r.id, 
+                       r.name, 
+                       a.phonenumber, 
+                       r.restaurant_rating, 
+                       r.account_id, 
+                       a.address_id 
+                   FROM 
+                       Restaurant AS r
+                   JOIN 
+                       Account AS a ON r.account_id = a.id 
+                   WHERE 
+                       r.id = ?""";
+        Restaurant restaurant = null;
+
         try {
             ps = con.prepareStatement(xSql);
             ps.setString(1, xxRestaurantId);
             rs = ps.executeQuery();
+
             if (rs.next()) {
                 int xRestaurantId = rs.getInt("id");
                 String xName = rs.getString("name");
-                Address a = ad.getAddressById(rs.getInt("address_id"));
-                String xPhonenumber = rs.getString("phonenumber");
+                String xPhonenumber = rs.getString("phonenumber"); // Corrected here
+                Address a = ad.getAddressById(rs.getInt("address_id")); // Corrected to use address_id
                 int xRestaurantRating = rs.getInt("restaurant_rating");
                 int xAccountId = rs.getInt("account_id");
 
-                x = new Restaurant(xRestaurantId, xName, xPhonenumber, a, xRestaurantRating, xAccountId);
+                restaurant = new Restaurant(xRestaurantId, xName, xPhonenumber, a, xRestaurantRating, xAccountId);
             }
+
             rs.close();
             ps.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return x;
+        return restaurant;
     }
 
     public void insert(Restaurant x) {
@@ -366,22 +375,9 @@ public class RestaurantDAO extends MyDAO {
         return null;
     }
 
-    public void deleteRestaurantByAccountId(int accountId) {
-        xSql = "DELETE FROM [dbo].[Restaurant]\n"
-                + "      WHERE account_id =?";
-        try {
-            ps = con.prepareStatement(xSql);
-            ps.setInt(1, accountId);
-            ps.executeUpdate();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     public static void main(String[] args) {
         RestaurantDAO rd = new RestaurantDAO();
-        Restaurant r = rd.getRestaurantByProductId_Locct(29);
+        Restaurant r = rd.getRestaurant("1");
         System.out.println(r);
-
     }
 }

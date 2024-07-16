@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="6.0" xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
+    <filter>
+        <filter-name>NotificationFilter</filter-name>
+        <filter-class>filter.NotificationFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>NotificationFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
     <servlet>
         <servlet-name>ForgotPasswordServlet</servlet-name>
         <servlet-class>controller.ForgotPasswordServlet</servlet-class>
@@ -27,6 +35,34 @@
     <servlet>
         <servlet-name>EditResServlet</servlet-name>
         <servlet-class>controller.EditResServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>MonthlyRevenueServlet</servlet-name>
+        <servlet-class>controller.MonthlyRevenueServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>NotificationServlet</servlet-name>
+        <servlet-class>controller.NotificationServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ContactServlet</servlet-name>
+        <servlet-class>controller.ContactServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ApplyVoucherServlet</servlet-name>
+        <servlet-class>controller.ApplyVoucherServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>OrderServlet</servlet-name>
+        <servlet-class>controller.OrderServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>FavoriteServlet</servlet-name>
+        <servlet-class>controller.FavoriteServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CancelOrderServlet</servlet-name>
+        <servlet-class>controller.CancelOrderServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>LoadRestaurantServlet</servlet-name>
@@ -92,6 +128,10 @@
         <url-pattern>/logout</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+        <servlet-name>MonthlyRevenueServlet</servlet-name>
+        <url-pattern>/monthlyrevenue</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>BuyServlet</servlet-name>
         <url-pattern>/buy</url-pattern>
     </servlet-mapping>
@@ -112,6 +152,22 @@
         <url-pattern>/loadres</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+        <servlet-name>NotificationServlet</servlet-name>
+        <url-pattern>/notifications</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ContactServlet</servlet-name>
+        <url-pattern>/contact</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ApplyVoucherServlet</servlet-name>
+        <url-pattern>/applyvoucher</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>OrderServlet</servlet-name>
+        <url-pattern>/order</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>RegisterAccountServlet</servlet-name>
         <url-pattern>/registeraccount</url-pattern>
     </servlet-mapping>
@@ -128,8 +184,16 @@
         <url-pattern>/historyorder</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+        <servlet-name>FavoriteServlet</servlet-name>
+        <url-pattern>/favorite</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>HistoryDetailsServlet</servlet-name>
         <url-pattern>/historydetails</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CancelOrderServlet</servlet-name>
+        <url-pattern>/cancelorder</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>UpdateFeedbackServlet</servlet-name>

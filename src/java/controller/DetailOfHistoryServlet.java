@@ -68,7 +68,7 @@ public class DetailOfHistoryServlet extends HttpServlet {
             String no= null;
             for (Notification notification : ln) {
                 if (notification.getOrder_id() == order.getId()) {
-                    no = notification.getDescription();
+                    no = notification.getDescripsion();
                 }
             }
             for (OrderDetails orderDetails : od) {

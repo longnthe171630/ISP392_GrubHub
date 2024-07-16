@@ -7,6 +7,7 @@ package dao;
 import java.util.ArrayList;
 import java.util.List;
 import model.OrderDetails;
+import model.Product;
 
 /**
  *
@@ -41,6 +42,39 @@ public class OrderDetailsDAO extends MyDAO {
             e.printStackTrace();
         }
         return (t);
+    }
+    
+      public List<OrderDetails> getOrderDetailsByOrderId(int orderId) {
+        List<OrderDetails> orderDetailsList = new ArrayList<>();
+        try {
+            String sql = "SELECT * FROM OrderDetails WHERE order_id = ?";
+            ps = connection.prepareStatement(sql);
+            ps.setInt(1, orderId);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                ProductDAO dao = new ProductDAO();
+                OrderDetails orderDetails = new OrderDetails();
+                int orderDetailsId = rs.getInt("id");
+                int productId = rs.getInt("product_id");
+                float price = rs.getFloat("price");
+                int quantity = rs.getInt("quantity");
+
+                // Fetch product details
+                Product product = dao.getProduct(productId);
+
+                // Set values to OrderDetails object
+                orderDetails.setId(orderDetailsId);
+                orderDetails.setOrder_id(rs.getInt("order_id"));
+                orderDetails.setProduct(product); // Set the Product object, not product_id
+                orderDetails.setPrice(price);
+                orderDetails.setQuantity(quantity);
+                orderDetailsList.add(orderDetails);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return orderDetailsList;
     }
 
     public List<OrderDetails> getOrderDetailsByOrder_Locct(int orderID) {

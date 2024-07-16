@@ -1,5 +1,7 @@
 package controller;
 
+import dao.CartDAO;
+import dao.CustomerDAO;
 import dao.ProductDAO;
 import model.Cart;
 import model.CartItem;
@@ -13,6 +15,8 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.util.List;
+import model.Account;
+import model.Customer;
 
 public class BuyServlet extends HttpServlet {
 
@@ -20,6 +24,15 @@ public class BuyServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
+        Account account = (Account) session.getAttribute("acc");
+
+        // Check if user is logged in
+        if (account == null || account.getRole() != 2) { // Role 2 for customers
+            // Redirect to login page or show error message
+            response.sendRedirect("login"); // Change "login" to your actual login page URL
+            return;
+        }
+
         Cart cart = null;
         Object o = session.getAttribute("cart");
         if (o != null) {
@@ -34,11 +47,20 @@ public class BuyServlet extends HttpServlet {
         try {
             num = Integer.parseInt(tnum);
             id = Integer.parseInt(tid);
+            System.out.println("Product ID: " + id + ", Quantity: " + num);  // Debugging line
+
+            CustomerDAO customerDAO = new CustomerDAO();
+            Customer customer = customerDAO.getCustomerByAccID(account.getId());
+            if (customer != null) {
+                CartDAO cartDAO = new CartDAO();
+                cartDAO.addProductToCart(customer.getId(), id, num);  // Add product to cart in database
+            } else {
+                System.out.println("Customer not found for account ID: " + account.getId());
+            }
 
             ProductDAO dao = new ProductDAO();
             Product p = dao.getProduct(id);
-            double price = p.getPrice() * 1.2;  // Assuming 1.2 is the price multiplier
-            CartItem t = new CartItem(p, num,(int) price);  // Ensure price is double
+            CartItem t = new CartItem(p, num, p.getPrice());  // Ensure price is double
             cart.addItem(t);
         } catch (NumberFormatException e) {
             num = 1;  // Default quantity

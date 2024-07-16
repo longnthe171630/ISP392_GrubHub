@@ -46,8 +46,23 @@ public class Product {
         this.restaurant = restaurant;
         this.category = category;
     }
+    
+        public Product(int id, String name, int price, int quantity, String description, String image, boolean status, float rating, Date create_date, Restaurant restaurant, Category category) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.quantity = quantity;
+        this.description = description;
+        this.image = image;
+        this.status = status;
+        this.rating = rating;
+        this.create_date = create_date;
+        this.restaurant = restaurant;
+        this.category = category;
+    }
+    
 
-    public Product(int id, String name, int price, String description, String image, boolean status, Date create_date, int quantity, Restaurant restaurant, Category category) {
+    public Product(int id, String name, int price, String description, String image, boolean status,float rating, Date create_date, int quantity, Restaurant restaurant, Category category) {
 
         this.id = id;
         this.name = name;
@@ -56,7 +71,7 @@ public class Product {
         this.image = image;
         this.status = status;
         this.create_date = create_date;
-
+        this.rating = rating;
         this.quantity = quantity;
         this.restaurant = restaurant;
         this.category = category;

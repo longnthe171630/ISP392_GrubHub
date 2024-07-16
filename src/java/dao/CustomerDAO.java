@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import model.Account;
 import model.Customer;
 
 public class CustomerDAO extends MyDAO {
@@ -29,6 +30,25 @@ public class CustomerDAO extends MyDAO {
             e.printStackTrace();
         }
         return customerName;
+    }
+
+    
+        public Account getAccountByCustomerId(int customerId) {
+        xSql = "SELECT a.id, a.email FROM [Account] a JOIN [Customer] c ON a.id = c.account_id WHERE c.id = ?";
+        Account account = null;
+        try {
+            ps = con.prepareStatement(xSql);
+            ps.setInt(1, customerId);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                account = new Account();
+                account.setId(rs.getInt("id"));
+                account.setEmail(rs.getString("email"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return account;
     }
 
     public int getAddressIdByCusId(int cusID) {
