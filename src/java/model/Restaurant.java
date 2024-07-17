@@ -14,9 +14,44 @@ public class Restaurant {
     private String name, phonenumber;
     private int addressID;
     private Address address;
-    private int restaurant_rating, account_id;
-
+    private int restaurant_rating, account_id;  
+    private int addres_id;  
+     private String details;
+    private String state;
+    private String street;
     public Restaurant() {
+    }
+
+    public int getAddres_id() {
+        return addres_id;
+    }
+
+    public void setAddres_id(int addres_id) {
+        this.addres_id = addres_id;
+    }
+
+    public String getDetails() {
+        return details;
+    }
+
+    public void setDetails(String details) {
+        this.details = details;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getStreet() {
+        return street;
+    }
+
+    public void setStreet(String street) {
+        this.street = street;
     }
 
     public Restaurant(int id, String name) {
@@ -38,6 +73,14 @@ public class Restaurant {
         this.addressID = addressID;
         this.restaurant_rating = restaurant_rating;
         this.account_id = account_id;
+    }
+    public Restaurant(int id, String name, String phonenumber, String details, String state, String street) {
+        this.id = id;
+        this.name = name;
+        this.phonenumber = phonenumber;
+        this.details = details;
+        this.state = state;
+        this.street = street;
     }
 
     public Restaurant(int id, String name, String phonenumber, Address address, int restaurant_rating, int account_id) {

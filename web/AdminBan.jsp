@@ -60,12 +60,7 @@
                 </li>
             </ul>
             <ul class="side-menu">
-                <li>
-                    <a href="#">
-                        <i class='bx bxs-cog' ></i>
-                        <span class="text">Settings</span>
-                    </a>
-                </li>
+                
                 <li>
                     <a href="Home.jsp" class="logout">
                         <i class='bx bxs-log-out-circle' ></i>
@@ -122,7 +117,7 @@
                 <div class="table-data">
                     <div class="order">
                         <div class="head">
-                            <h3>List User</h3>
+                            <h3>List Baned</h3>
                             <i class='bx bx-search' ></i>
                             <i class='bx bx-filter' ></i>
                         </div>

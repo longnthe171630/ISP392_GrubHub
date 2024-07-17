@@ -30,6 +30,15 @@ public class Product {
 
     
     
+    public Product(int id, String name, int price, int quantity, String image, float rating, Category category) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.quantity = quantity;
+        this.image = image;
+        this.rating = rating;
+        this.category = category;
+    }
     
 
     

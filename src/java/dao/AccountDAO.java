@@ -552,6 +552,33 @@ public class AccountDAO extends MyDAO {
         }
     }
 
+    public List<Account> getAccountByID2(int c_id) {
+        List<Account> list = new ArrayList<>();
+        String sql = "select * from Account a\n"
+                + "where a.id=?";
+
+        Account a;
+        try {
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, c_id);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                PreparedStatement st = con.prepareStatement(sql);
+                int xId = rs.getInt("id");
+                String xUsername = rs.getString("username");
+                String xPassword = rs.getString("password");
+                String xEmail = rs.getString("email");
+                String xPhonenumber = rs.getString("phonenumber");
+                int xRole = rs.getInt("role");
+                a = new Account(xId, xUsername, xPassword, xEmail, xPhonenumber, xRole);
+                list.add(a);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return list;
+    }
+
     public Account getAccountByID(int account_id) {
         xSql = "select * from Account where id =?";
         try {

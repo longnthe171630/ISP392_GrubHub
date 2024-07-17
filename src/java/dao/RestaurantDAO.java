@@ -4,6 +4,7 @@
  */
 package dao;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -36,6 +37,31 @@ public class RestaurantDAO extends MyDAO {
         return id;
     }
 
+    public List<Restaurant> getListRestaurant() {
+        List<Restaurant> list = new ArrayList<>();
+        try {
+            String sql = "select r.id, r.name, ac.phonenumber, a.details, a.state, a.street \n"
+                    + "from Restaurant r \n"
+                    + "join Account ac on ac.id= r.account_id  \n"
+                    + "join Address a on a.id = ac.address_id";
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                int xId = rs.getInt("id");
+                String xName = rs.getString("name");
+                String xPhonenumber = rs.getString("phonenumber");
+                String xDetail = rs.getString("details");
+                String xState = rs.getString("state");
+                String xStreet = rs.getString("street");
+                Restaurant a = new Restaurant(xId, xName, xPhonenumber, xDetail, xState, xStreet);
+                list.add(a);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return list;
+    }
     public void insertRestaurant(Restaurant r) {
         xSql = "INSERT INTO [dbo].[Restaurant]\n"
                 + "           ([name]\n"
@@ -377,7 +403,9 @@ public class RestaurantDAO extends MyDAO {
 
     public static void main(String[] args) {
         RestaurantDAO rd = new RestaurantDAO();
-        Restaurant r = rd.getRestaurant("1");
-        System.out.println(r);
+       List<Restaurant> rl = rd.getListRestaurant();
+        for( Restaurant res: rl){
+            System.out.println(res);
     }
+}
 }

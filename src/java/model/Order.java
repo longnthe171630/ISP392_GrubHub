@@ -25,6 +25,38 @@ public class Order {
     public Order() {
     }
 
+    public String getRes_name() {
+        return res_name;
+    }
+
+    public void setRes_name(String res_name) {
+        this.res_name = res_name;
+    }
+
+    public String getRes_phone() {
+        return res_phone;
+    }
+
+    public void setRes_phone(String res_phone) {
+        this.res_phone = res_phone;
+    }
+
+    public String getCus_name() {
+        return cus_name;
+    }
+
+    public void setCus_name(String cus_name) {
+        this.cus_name = cus_name;
+    }
+
+    public String getCus_phone() {
+        return cus_phone;
+    }
+
+    public void setCus_phone(String cus_phone) {
+        this.cus_phone = cus_phone;
+    }
+
     public Order(int id, int total_amount, String status, java.sql.Timestamp order_date, Address fromAddress, Address toAddress) {
         this.id = id;
         this.total_amount = total_amount;

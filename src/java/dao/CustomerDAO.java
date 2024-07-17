@@ -8,6 +8,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,6 +50,25 @@ public class CustomerDAO extends MyDAO {
             e.printStackTrace();
         }
         return account;
+    }
+        public List<Customer> getListCustomer(){
+        List<Customer> list = new ArrayList<>();
+       String sql = "select*from Customer";
+       try {
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+               int xId= rs.getInt("id");
+                String xName= rs.getString("name");
+                String xDob= rs.getString("dob");
+                Boolean xGender= rs.getBoolean("gender");
+                Customer c= new Customer(xId, xName, xDob, xGender);
+                list.add(c);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return list;
     }
 
     public int getAddressIdByCusId(int cusID) {
