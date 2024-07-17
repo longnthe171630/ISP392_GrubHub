@@ -152,7 +152,7 @@ public class AccountDAO extends MyDAO {
     
      public List<Account> getListAccount() {
         List<Account> list = new ArrayList<>();
-        String sql = "select * from Account where active=1";
+        String sql = "select * from Account where active=1 and id <>1";
 
         Account a;
         try {
@@ -608,7 +608,7 @@ public class AccountDAO extends MyDAO {
     public static void main(String[] args) {
         AccountDAO accountDAO = new AccountDAO();
 //        Account a = new Account("vupl", "123", "ganhataox3@gmail.com", "0987654321", 2, 11, 1, null, null);
-        int a = accountDAO.getIDLastAcc();
+        Account a= accountDAO.getAccountByID(1);
         System.out.println(a);
 
     }

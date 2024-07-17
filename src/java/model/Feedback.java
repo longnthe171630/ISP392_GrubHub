@@ -20,6 +20,14 @@ public class Feedback {
     
     public Feedback() {
     }
+    public Feedback(int id, int customer_id, int restaurant_id, int order_id, int value, String description) {
+        this.id = id;
+        this.customer_id = customer_id;
+        this.restaurant_id = restaurant_id;
+        this.order_id = order_id;
+        this.value = value;
+        this.description = description;
+    }
 
     public Feedback(int id, int customerID, int restaurantID, int orderID, int value, String description, String img,int productID) {
         this.id = id;

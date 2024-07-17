@@ -110,6 +110,30 @@ public class OrderDAO extends MyDAO {
         }
         return 1;
     }
+    public List<Order> getListOrder2() {
+        List<Order> list = new ArrayList<>();
+        try {
+            String sql = "select o.id, r.name, c.name , total_amount, status, order_date\n"
+                    + "from [Order] o\n"
+                    + "join Restaurant r on r.id= o.restaurant_id\n"
+                    + "join Customer c on c.id= o.customer_id";
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Order a = new Order(rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getInt(4),
+                        rs.getString(5),
+                        rs.getTimestamp(6));
+                list.add(a);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return list;
+    }
 
     public List<Order> getListOrder() {
         List<Order> list = new ArrayList<>();
@@ -796,11 +820,11 @@ public class OrderDAO extends MyDAO {
 
     public static void main(String[] args) {
         OrderDAO od = new OrderDAO();
-//        List<Order> list = od.getAllOrderOf1Customer(2);
-        Map<String, Integer> map = od.getRevenueForPeriod(1, 6, 2024, 1);
-        for (Map.Entry<String, Integer> entry : map.entrySet()) {
-            System.out.println(entry.getKey() + ": " + entry.getValue());
-        }
+       List<Order> list = od.getListOrder2();
+       for(Order o: list){
+           System.out.println(o);
+       } 
+       
 
     }
 }

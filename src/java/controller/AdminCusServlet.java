@@ -74,8 +74,8 @@ public class AdminCusServlet extends HttpServlet {
             throws ServletException, IOException {
         int cusId = Integer.parseInt(request.getParameter("id"));
         AccountDAO dao = new AccountDAO();
-        List<Account> list = dao.getAccountByID2(cusId);
-        request.setAttribute("listDetail", list);
+        Account a = dao.getAccountByID(cusId);
+        request.setAttribute("accountDetail",a);
         request.getRequestDispatcher("DetailCus.jsp").forward(request, response);
     }
 

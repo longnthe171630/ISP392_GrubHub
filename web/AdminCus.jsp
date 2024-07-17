@@ -82,8 +82,7 @@
                 <form action="DashboardServlet">
                     
                 </form>
-                <input type="checkbox" id="switch-mode" hidden>
-                <label for="switch-mode" class="switch-mode"></label>
+               
                 
                 <a href="#" class="profile">
                     <img src="img/people.png">
@@ -113,7 +112,7 @@
                         <div class="head">
                             <h3>List User</h3>
                             <div class="search-container">
-                                <input type="search" id="searchInput" placeholder="Search...">
+                                <input type="search" id="searchInput" placeholder="Search for name,email, phone">
                                 <button type="button" class="search-btn" onclick="searchCus()"><i class='bx bx-search'></i></button>
                             </div>
                             <i class='bx bx-filter' onclick="sortCus()"></i>

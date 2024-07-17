@@ -21,8 +21,24 @@ public class Order {
     private Address toAddress;
     private Customer customer;
     private String res_name, res_phone, cus_name, cus_phone;
-    
+     private Date order_date2;
+
+    public Date getOrder_date2() {
+        return order_date2;
+    }
+
+    public void setOrder_date2(Date order_date2) {
+        this.order_date2 = order_date2;
+    }
     public Order() {
+    }
+    public Order(int id, String nameRes, String nameCus, int total_amount, String status, java.sql.Timestamp order_date) {
+        this.id = id;
+        this.res_name = nameRes;
+        this.cus_name = nameCus;
+        this.total_amount = total_amount;
+        this.status = status;
+        this.order_date = order_date;
     }
 
     public String getRes_name() {

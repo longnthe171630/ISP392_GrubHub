@@ -520,7 +520,9 @@ public class CustomerDAO extends MyDAO {
     public static void main(String[] args) {
         CustomerDAO cd = new CustomerDAO();
         int accid = 4;
-        cd.deleteCustomerByAccountId(16);
-        System.out.println("done");
+        List<Customer> cl= cd.getListCustomer();
+        for(Customer c: cl ){
+            System.out.println(c);
+        }
     }
 }

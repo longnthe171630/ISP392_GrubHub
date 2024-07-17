@@ -17,7 +17,7 @@
 
         <!-- SIDEBAR -->
         <section id="sidebar">
-            <a href="Admin.jsp" class="brand">
+            <a href="admin?action=home" class="brand">
                 <i class='bx bxs-smile'></i>
                 <span class="text">AdminHub</span>
             </a>
@@ -80,17 +80,10 @@
                 <i class='bx bx-menu' ></i>
                 <!--			<a href="#" class="nav-link">Categories</a>-->
                 <form action="DashboardServlet">
-                    <div class="form-input">
-                        <input type="search" placeholder="Search...">
-                        <button type="submit" class="search-btn"><i class='bx bx-search' ></i></button>
-                    </div>
+                    
                 </form>
-                <input type="checkbox" id="switch-mode" hidden>
-                <label for="switch-mode" class="switch-mode"></label>
-                <a href="#" class="notification">
-                    <i class='bx bxs-bell' ></i>
-                    <span class="num">8</span>
-                </a>
+                
+                
                 <a href="#" class="profile">
                     <img src="img/people.png">
                 </a>
@@ -108,7 +101,7 @@
                             </li>
                             <li><i class='bx bx-chevron-right' ></i></li>
                             <li>
-                                <a class="active" href="#">Ban</a>
+                                <a class="active" href="#">Delivery</a>
                             </li>
                         </ul>
                     </div>

@@ -84,7 +84,7 @@ public class AdminServlet extends HttpServlet {
                 request.setAttribute("orderCount", orderCount);
 
                 OrderDAO dao2 = new OrderDAO();
-                List<Order> list = dao2.getListOrder();
+                List<Order> list = dao2.getListOrder2();
                 request.setAttribute("listOrder", list);
                 request.getRequestDispatcher("Admin.jsp").forward(request, response);
                 break;
@@ -116,7 +116,7 @@ public class AdminServlet extends HttpServlet {
                 List<Customer> listCus1 = dao9.getListCustomer();
                 HashMap<Feedback, Customer> map1 = new HashMap<>();
                 HashMap<Feedback, Restaurant> map2 = new HashMap<>();
-                
+
                 for (Feedback f : listFeed) {
                     for (Customer c : listCus1) {
                         if (c.getId() == f.getCustomer_id()) {
@@ -132,7 +132,7 @@ public class AdminServlet extends HttpServlet {
                 }
                 List<Map.Entry<Feedback, Customer>> sortedEntries = new ArrayList<>(map1.entrySet());
                 sortedEntries.sort(Comparator.comparing(entry -> entry.getKey().getId()));
-                
+
                 request.setAttribute("map1", map1);
                 request.setAttribute("sortedEntries", sortedEntries);
                 request.setAttribute("listRes1", listRes1);
@@ -160,7 +160,7 @@ public class AdminServlet extends HttpServlet {
                 List<Account> listBan2 = dao8.getListBanedAccount();
                 request.setAttribute("listBan", listBan2);
                 request.getRequestDispatcher("AdminBan.jsp").forward(request, response);
-                break;
+                break;            
             default:
                 // Xử lý giá trị mặc định hoặc trả về lỗi nếu action không hợp lệ
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid action parameter.");

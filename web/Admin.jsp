@@ -18,7 +18,7 @@
 
         <!-- SIDEBAR -->
         <section id="sidebar">
-            <a href="#" class="brand">
+            <a href="admin?action=home" class="brand">
                 <i class='bx bxs-smile'></i>
                 <span class="text">AdminHub</span>
             </a>
@@ -61,9 +61,9 @@
                 </li>
             </ul>
             <ul class="side-menu">
-                
+
                 <li>
-                    <a href="Home.jsp" class="logout">
+                    <a href="logout" class="logout">
                         <i class='bx bxs-log-out-circle' ></i>
                         <span class="text">Logout</span>
                     </a>
@@ -81,17 +81,10 @@
                 <i class='bx bx-menu' ></i>
                 <!--			<a href="#" class="nav-link">Categories</a>-->
                 <form action="DashboardServlet">
-                    <div class="form-input">
-                        <input type="search" placeholder="Search...">
-                        <button type="submit" class="search-btn"><i class='bx bx-search' ></i></button>
-                    </div>
+
                 </form>
-                <input type="checkbox" id="switch-mode" hidden>
-                <label for="switch-mode" class="switch-mode"></label>
-                <a href="#" class="notification">
-                    <i class='bx bxs-bell' ></i>
-                    <span class="num">8</span>
-                </a>
+
+
                 <a href="#" class="profile">
                     <img src="img/people.png">
                 </a>
@@ -159,12 +152,12 @@
                             <tbody>
                                 <c:forEach items="${requestScope.listOrder}" var="o">
                                     <tr>
-                                        
+
                                         <td>${o.id}</td>
                                         <td>${o.res_name}</td>
                                         <td>${o.cus_name}</td>
                                         <td>${o.total_amount}</td>
-                                        <td><span class="status completed">${o.status}</span></td>
+                                         <td><span class="status completed">${o.status}</span></td>
                                         <td>${o.order_date}</td>
                                     </tr>
                                 </c:forEach>
