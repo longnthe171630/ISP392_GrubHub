@@ -2,6 +2,9 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <link rel = "icon" 
+              href="images/icon/logo.png" 
+              type="image/x-icon">
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -30,8 +33,8 @@
                 </li>
                 <li >
                     <a href="admin?action=cus">
-                    <i class='bx bxs-user'></i>
-                    <span class="text">Customer Account</span>
+                        <i class='bx bxs-user'></i>
+                        <span class="text">Customer Account</span>
                     </a>
                 </li>
                 <li  >
@@ -119,7 +122,7 @@
                     </div>
 
                 </div>
-<div class="table-data">
+                <div class="table-data">
                     <div class="order">
                         <div class="head">
                             <h3>List User</h3>
@@ -139,16 +142,16 @@
                             </thead>
                             <tbody>
 
-                            <c:forEach items="${requestScope.listDeli}" var="o">
-                                <tr>
-                                    <td>${o.id}</td>
-                                    <td>${o.order_id}</td>
-                                    <td>${o.deliPerson}</td>
-                                    <td>${o.ship_price}</td>
-                                    <td>${o.delivery_date}</td>
-                                    <td><span class="status completed">${o.status}</span></td>
-                                </tr>
-                            </c:forEach>
+                                <c:forEach items="${requestScope.listDeli}" var="o">
+                                    <tr>
+                                        <td>${o.id}</td>
+                                        <td>${o.order_id}</td>
+                                        <td>${o.deliPerson}</td>
+                                        <td>${o.ship_price}</td>
+                                        <td>${o.delivery_date}</td>
+                                        <td><span class="status completed">${o.status}</span></td>
+                                    </tr>
+                                </c:forEach>
 
                             </tbody>
                         </table>

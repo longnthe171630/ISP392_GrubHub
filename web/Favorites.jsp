@@ -5,6 +5,9 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <link rel = "icon" 
+              href="images/icon/logo.png" 
+              type="image/x-icon">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Favorites</title>
         <link rel="icon" href="images/logo1.png"/>

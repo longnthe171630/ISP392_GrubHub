@@ -114,7 +114,7 @@ public class LoginServlet extends HttpServlet {
                     response.sendRedirect("home");
                     break;
                 case 3: // Restaurant
-                    response.sendRedirect("RestaurantDashboard.jsp");
+                    response.sendRedirect("restaurantdashboard");
                     break;
                 case 4: // Shipper
                     response.sendRedirect("ShipperDashboard.jsp");

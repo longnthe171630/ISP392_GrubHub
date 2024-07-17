@@ -2,6 +2,9 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <link rel = "icon" 
+              href="images/icon/logo.png" 
+              type="image/x-icon">
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -30,8 +33,8 @@
                 </li>
                 <li >
                     <a href="admin?action=cus">
-                    <i class='bx bxs-user'></i>
-                    <span class="text">Customer Account</span>
+                        <i class='bx bxs-user'></i>
+                        <span class="text">Customer Account</span>
                     </a>
                 </li>
                 <li href="admin?action=res" >
@@ -137,7 +140,7 @@
                             </thead>
                             <tbody>
 
-                            <c:forEach items="${requestScope.listBan}" var="o">
+                                <c:forEach items="${requestScope.listBan}" var="o">
                                     <tr>
                                         <td>${o.id}</td>
                                         <td>${o.username}</td>

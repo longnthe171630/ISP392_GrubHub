@@ -9,6 +9,9 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <link rel = "icon" 
+              href="images/icon/logo.png" 
+              type="image/x-icon">
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -240,38 +243,38 @@
 
         <script src="js\restaurant_dashboard.js"></script>
         <script type="text/javascript">
-            function changeType(button) {
-                var inputElements = document.querySelectorAll(".form-control");
-                var genderRadioButtons = document.querySelectorAll('input[type="radio"][name="gender"]');
+                                                function changeType(button) {
+                                                    var inputElements = document.querySelectorAll(".form-control");
+                                                    var genderRadioButtons = document.querySelectorAll('input[type="radio"][name="gender"]');
 
-                if (button.id === "edit") {
-                    button.id = "save";
-                    button.textContent = "Save";
-                    inputElements.forEach(x => {
-                        if (x.name !== "username") {
-                            x.readOnly = false;
-                            x.classList.add("default_input");
-                        }
-                    });
-                    genderRadioButtons.forEach(rb => {
-                        rb.disabled = false; // Remove the disabled attribute
-                    });
-                } else {
-                    document.getElementById("form-1").submit();
-                    button.id = "edit";
-                    button.textContent = "Edit";
-                    inputElements.forEach(x => {
-                        if (x.name !== "username") {
-                            x.readOnly = true;
-                            x.classList.remove("default_input");
-                        }
-                    });
-                    genderRadioButtons.forEach(rb => {
-                        rb.disabled = true; // Add the disabled attribute back
-                    });
-                    document.getElementById("form-1").submit();
-                }
-            }
+                                                    if (button.id === "edit") {
+                                                        button.id = "save";
+                                                        button.textContent = "Save";
+                                                        inputElements.forEach(x => {
+                                                            if (x.name !== "username") {
+                                                                x.readOnly = false;
+                                                                x.classList.add("default_input");
+                                                            }
+                                                        });
+                                                        genderRadioButtons.forEach(rb => {
+                                                            rb.disabled = false; // Remove the disabled attribute
+                                                        });
+                                                    } else {
+                                                        document.getElementById("form-1").submit();
+                                                        button.id = "edit";
+                                                        button.textContent = "Edit";
+                                                        inputElements.forEach(x => {
+                                                            if (x.name !== "username") {
+                                                                x.readOnly = true;
+                                                                x.classList.remove("default_input");
+                                                            }
+                                                        });
+                                                        genderRadioButtons.forEach(rb => {
+                                                            rb.disabled = true; // Add the disabled attribute back
+                                                        });
+                                                        document.getElementById("form-1").submit();
+                                                    }
+                                                }
         </script>
     </body>
 </html>

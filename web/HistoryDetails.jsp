@@ -2,6 +2,9 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <link rel = "icon" 
+              href="images/icon/logo.png" 
+              type="image/x-icon">
         <meta charset="UTF-8">
         <title>Order Details</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">

@@ -198,7 +198,7 @@ public List<Order> getListOrder() {
                 ps.setInt(1, restaurantId);
                 ps.setInt(2, customer.getId());
                 ps.setDouble(3, totalAmount);
-                ps.setString(4, "Đang xử lí");
+                ps.setString(4, "Waiting restaurant");
                 ps.setDate(5, date);
 
                 System.out.println("Executing query: " + ps.toString());
@@ -420,6 +420,26 @@ public List<Order> getListOrder() {
             e.printStackTrace();
         }
         return x;
+    }
+        public void cancelOrder(int orderId) {
+        String sql = "UPDATE [Order] SET status = 'Cancelled' WHERE id = ?";
+        try {
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, orderId);
+            ps.executeUpdate();
+            System.out.println("Order with ID " + orderId + " has been cancelled.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            // Close resources
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public List<Order> getOrderByStatus() {

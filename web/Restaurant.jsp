@@ -27,7 +27,6 @@
             <div class="row">
                 <c:forEach items="${requestScope.listR}" var="o">
                     <div class="box">
-                        <a href="#" class="fas fa-heart"></a>
                         <a href="restaurantDetails?restaurant_id=${o.id}" >
                             <h3>${o.name}</h3>
 

@@ -2,6 +2,9 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <link rel = "icon" 
+              href="images/icon/logo.png" 
+              type="image/x-icon">
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -119,7 +122,7 @@
                     </div>
 
                 </div>
-                 <div class="table-data">
+                <div class="table-data">
                     <div class="order">
                         <div class="head">
                             <h3>List User</h3>
@@ -139,7 +142,7 @@
                             </thead>
                             <tbody>
 
-                            <c:forEach items="${requestScope.listFeed}" var="o">
+                                <c:forEach items="${requestScope.listFeed}" var="o">
                                     <tr>
                                         <td>${o.id}</td>
                                         <td>${o.nameCus}</td>

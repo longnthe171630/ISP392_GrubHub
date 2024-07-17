@@ -8,6 +8,9 @@
 <!DOCTYPE html>
 <html lang="vi">
     <head>
+        <link rel = "icon" 
+              href="images/icon/logo.png" 
+              type="image/x-icon">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
 
@@ -18,25 +21,7 @@
         <link rel="stylesheet" href="css/style.css">
     </head>
     <body>
-        <header>
-            <a href="home" class="logo"><i class="fas fa-utensils"></i>GrubHub</a>
-
-            <nav class="navbar">
-                <a class="active" href="home">home</a>
-                <a href="About.jsp">about</a>
-                <a href="Contact.jsp">contact</a>
-            </nav>
-
-            <div class="icons">
-                <i class="fas fa-bars" id="menu-bars"></i>
-                <i class="fas fa-search" id="search-icon"></i>
-                <a href="#" class="fas fa-heart"></a>
-                <a href="#" class="fas fa-shopping-cart"></a>
-                <a href="login" class="login-btn">login</a>
-
-            </div> 
-
-        </header>
+        <jsp:include page="Hearder.jsp"></jsp:include>
         <br>
 
         <section class="about" id="about">

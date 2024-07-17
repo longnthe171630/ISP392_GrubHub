@@ -93,7 +93,7 @@ public class RestaurantOrderDetailServlet extends HttpServlet {
         Customer cus = cd.getCustomerByID_VuPL(o.getCustomer_id());
         String email = ad.getAccountByID(cus.getAccountID()).getEmail();
         if ("accept".equalsIgnoreCase(action)) {
-            o.setStatus("Đang chờ");
+            o.setStatus("Waiting by shipper");
             od.updateStatusOrder(o);
             new Mail().sendEmail(email, "Cập nhật đơn hàng", "Đơn hàng của bạn được mua ngày: "+o.getOrder_date()+ " đang trong quá trình vận chuyển" );
             response.sendRedirect("restaurantdashboard");

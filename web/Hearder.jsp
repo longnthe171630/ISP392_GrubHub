@@ -3,6 +3,9 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <link rel = "icon" 
+              href="images/icon/logo.png" 
+              type="image/x-icon">
         <link rel = "icon" href="images/icon/logo.png" type="image/x-icon">
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -12,7 +15,7 @@
         <!-- font awesome cdn link  -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
         <!-- custom css file link  -->
-        <link rel="stylesheet" href="css/style.css">
+
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/css/nice-select.min.css">
         <style>
             li a:hover {
@@ -83,6 +86,22 @@
                 z-index: 9;
                 border: 2px solid #232323;
             }
+            #search-results {
+                position: absolute;
+                background: white;
+                border: 1px solid #ccc;
+                z-index: 1000;
+                width: 100%;
+            }
+
+            .product-item {
+                padding: 10px;
+                border-bottom: 1px solid #ccc;
+            }
+
+            .product-item:last-child {
+                border-bottom: none;
+            }
         </style>
     </head>
     <body>
@@ -134,7 +153,7 @@
         <!-- header section ends-->
         <!-- search form  -->
         <form action="search" method="post" id="search-form">
-            <input value="${txtS}" name="txt" type="search" placeholder="What do you want?" id="search-box">
+            <input value="${txtS}" name="txt" oninput="searchByName()" type="search" placeholder="What do you want?" id="search-box">
             <label for="search-box" class="fas fa-search"></label>
             <i class="fas fa-times" id="close"></i>
         </form>
@@ -161,6 +180,22 @@
                     }
                 });
             });
+            function searchByName() {
+                var text = document.querySelector("#searchId").value;
+                $.ajax({
+                    url: "search",
+                    type: "get",
+                    data: {
+                        txt: text
+                    },
+                    success: function (data) {
+                        var row = document.getElementById("contentt");
+                        row.innerHTML = data;
+                    },
+                    error: function (xhr) {
+                    }
+                });
+            }
         </script>
 
 

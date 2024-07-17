@@ -2,6 +2,9 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <link rel = "icon" 
+              href="images/icon/logo.png" 
+              type="image/x-icon">
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -142,7 +145,7 @@
 
                                 <c:forEach items="${requestScope.listRes}" var="o">
                                     <tr onclick="openModal(${o.id})" style="cursor: pointer;">
-                                    
+
                                         <td>${o.id}</td>
                                         <td>${o.name}</td>
                                         <td>${o.phonenumber}</td>

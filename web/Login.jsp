@@ -9,6 +9,9 @@
 <!doctype html>
 <html lang="en">
     <head>
+        <link rel = "icon" 
+              href="images/icon/logo.png" 
+              type="image/x-icon">
         <title>Login</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -25,27 +28,11 @@
     </head>
     <body>
         <!-- header section starts      -->
-        <header>
-            <a href="home" class="logo"><i class="fas fa-utensils"></i>GrubHub</a>
-
-            <nav class="navbar">
-                <a class="active" href="home">Home</a>
-                <a href="About.jsp">About</a>
-                <a href="Contact.jsp">Contact</a>
-            </nav>
-
-            <div class="icons">
-                <i class="fas fa-bars" id="menu-bars"></i>
-                <i class="fas fa-search" id="search-icon"></i>
-                <a href="#" class="fas fa-shopping-cart"></a>
-                <a href="Login.jsp" class="login-btn">Login</a>
-
-            </div> 
-        </header>
-        <!-- header section ends-->
-        <!-- search form  -->
-        <form action="search" method="post" id="search-form">
-            <input value="${txtS}" name="txt" type="search" placeholder="What do you want?" id="search-box">
+        <jsp:include page="Hearder.jsp"></jsp:include>
+            <!-- header section ends-->
+            <!-- search form  -->
+            <form action="search" method="post" id="search-form">
+                <input value="${txtS}" name="txt" type="search" placeholder="What do you want?" id="search-box">
             <label for="search-box" class="fas fa-search"></label>
             <i class="fas fa-times" id="close"></i>
         </form>
@@ -120,8 +107,8 @@
 //                                              console.log(response);
                                                 if (response) {
                                                     form.submit();
-                                                }else{
-                                                    error.textContent ="Please verify that you not a robot!";
+                                                } else {
+                                                    error.textContent = "Please verify that you not a robot!";
                                                 }
                                             }
         </script>

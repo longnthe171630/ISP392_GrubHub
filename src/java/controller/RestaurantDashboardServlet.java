@@ -39,7 +39,7 @@ public class RestaurantDashboardServlet extends HttpServlet {
         RestaurantDAO rd = new RestaurantDAO();
 //        int resID = 1;
         int countOrder = 0, countProduct = 0;
-        String status = "Đang xử lí";
+        String status = "Waiting restaurant";
 
         // Tính toán số lượng đơn hàng mới
         OrderDAO cd = new OrderDAO();
