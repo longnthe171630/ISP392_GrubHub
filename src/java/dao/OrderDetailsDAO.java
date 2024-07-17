@@ -5,7 +5,10 @@
 package dao;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import model.Order;
 import model.OrderDetails;
 import model.Product;
 
@@ -135,12 +138,48 @@ public class OrderDetailsDAO extends MyDAO {
         }
         return null;
     }
+    
 
 
 
     public static void main(String[] args) {
-        OrderDetailsDAO o = new OrderDetailsDAO();
-        List<OrderDetails> lo = o.getOrderDetailsByOrder_Locct(1);
+    OrderDAO od = new OrderDAO();
+    OrderDetailsDAO odd = new OrderDetailsDAO();
+    Map<Order, List<OrderDetails>> mapListOrderDetail = new HashMap<>();
+    List<Order> lo = new ArrayList<>();
+    
+    try {
+        lo = od.getListOrderByDate(1, 6, 2024, 1, "Đã giao");
 
+        for (Order order : lo) {
+            List<OrderDetails> lod = odd.getOrderDetailsByOrderId(order.getId());
+            mapListOrderDetail.put(order, lod); // Thêm order và danh sách order details tương ứng vào map
+        }
+
+        // In thông tin từ mapListOrderDetail
+        for (Map.Entry<Order, List<OrderDetails>> entry : mapListOrderDetail.entrySet()) {
+            Order order = entry.getKey();
+            List<OrderDetails> details = entry.getValue();
+
+            System.out.println("Order ID: " + order.getId());
+            System.out.println("Restaurant ID: " + order.getRestaurant_id());
+            System.out.println("Customer ID: " + order.getCustomer_id());
+            System.out.println("Total Amount: " + order.getTotal_amount());
+            System.out.println("Status: " + order.getStatus());
+            System.out.println("Order Date: " + order.getOrder_date());
+
+            System.out.println("Order Details:");
+            for (OrderDetails detail : details) {
+                System.out.println("   Detail ID: " + detail.getId());
+                System.out.println("   Quantity: " + detail.getQuantity());
+                System.out.println("   Product ID: " + detail.getProduct_id()); // Assume you have a getProductID method in OrderDetails
+                // In các thông tin chi tiết khác nếu cần
+            }
+            System.out.println("--------------------------------------");
+        }
+
+    } catch (Exception e) {
+        e.printStackTrace();
     }
+}
 }

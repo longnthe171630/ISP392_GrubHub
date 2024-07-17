@@ -40,6 +40,14 @@ public class Order {
         this.status = status;
         this.order_date = order_date;
     }
+    public Order(int id, int restaurant_id, int customer_id, int total_amount, String status, Date order_date) {
+        this.id = id;
+        this.restaurant_id = restaurant_id;
+        this.customer_id = customer_id;
+        this.total_amount = total_amount;
+        this.status = status;
+        this.order_date2 = order_date;
+    }
 
     public String getRes_name() {
         return res_name;

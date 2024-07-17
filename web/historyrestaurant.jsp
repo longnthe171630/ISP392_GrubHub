@@ -155,15 +155,14 @@
 
             <!-- SIDEBAR -->
             <section id="sidebar">
-                <a href="#" class="brand">
-                    <i class='bx bxs-smile'></i>
-                    <span class="text">Product</span>
-                </a>
+                
+                
                 <ul class="side-menu top">
+                    
                     <li>
                         <a href="restaurantdashboard">
                             <i class='bx bxs-dashboard' ></i>
-                            <span class="text">History</span>
+                            <span class="text">Dashboard</span>
                         </a>
                     </li>
                     <li>
@@ -179,7 +178,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="#">
+                        <a href="revenue">
                             <i class='bx bxs-message-dots' ></i>
                             <span class="text">Revenue</span>
                         </a>
@@ -213,7 +212,7 @@
             <!-- CONTENT -->
             <section id="content">
                 <!-- NAVBAR -->
-                <nav>
+<!--                <nav>
                     <i class='bx bx-menu' ></i>
                     <a href="#" class="nav-link">Categories</a>
                     <form action="#">
@@ -231,7 +230,7 @@
                     <a href="#" class="profile">
                         <img src="img/people.png">
                     </a>
-                </nav>
+                </nav>-->
                 <!-- NAVBAR -->
 
                 <!-- MAIN -->
@@ -260,7 +259,7 @@
                             </div>
                             <div id="searchContainer" class="search-container hidden">
                                 <input type="text" id="searchInput" onkeyup="searchOrders()" placeholder="Search for orders...">
-                                <button type="button" onclick="searchOrders()">Search</button>
+                                <!--<button type="button" onclick="searchOrders()">Search</button>-->
                             </div>
                             <div id="filterDropdown" class="filter-dropdown hidden">
                                 <label for="filterStatus">Filter by Status:</label>

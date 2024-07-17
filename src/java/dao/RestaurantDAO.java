@@ -400,6 +400,17 @@ public class RestaurantDAO extends MyDAO {
         }
         return null;
     }
+     public void deleteRestaurantByAccountId(int accountId) {
+        xSql = "DELETE FROM [dbo].[Restaurant]\n"
+                + "      WHERE account_id =?";
+        try {
+            ps = con.prepareStatement(xSql);
+            ps.setInt(1, accountId);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     public static void main(String[] args) {
         RestaurantDAO rd = new RestaurantDAO();

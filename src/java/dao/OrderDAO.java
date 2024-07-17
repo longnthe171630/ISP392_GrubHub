@@ -110,6 +110,7 @@ public class OrderDAO extends MyDAO {
         }
         return 1;
     }
+
     public List<Order> getListOrder2() {
         List<Order> list = new ArrayList<>();
         try {
@@ -537,35 +538,38 @@ public class OrderDAO extends MyDAO {
     }
 
     public Map<String, Integer> getRevenueForPeriod(int startMonth, int endMonth, int year, int restaurantId) {
-        xSql = "SELECT \n"
-                + "    MONTH(order_date) AS month, \n"
-                + "    SUM(total_amount) AS totalamount \n"
-                + "FROM \n"
-                + "    [Order] \n"
-                + "WHERE \n"
-                + "    restaurant_id = ? \n"
-                + "    AND (\n"
-                + "        (YEAR(order_date) = ? AND MONTH(order_date) BETWEEN ? AND ?)\n"
-                + "        OR (YEAR(order_date) = ? AND MONTH(order_date) BETWEEN 1 AND ?)\n"
-                + "    )\n"
-                + "GROUP BY \n"
-                + "    MONTH(order_date);";
+        String sql = "SELECT "
+                + "    MONTH(order_date) AS month, "
+                + "    SUM(total_amount) AS totalamount "
+                + "FROM "
+                + "    [Order] "
+                + "WHERE "
+                + "    restaurant_id = ? "
+                + "    AND ( "
+                + "        (YEAR(order_date) = ? AND MONTH(order_date) BETWEEN ? AND ?) "
+                + "        OR (YEAR(order_date) = ? AND MONTH(order_date) BETWEEN 1 AND ?) "
+                + "    ) "
+                + "    AND status = N'đã giao' "
+                + "GROUP BY "
+                + "    MONTH(order_date)";
+
         Map<String, Integer> revenueMap = new HashMap<>();
         try {
-            ps = con.prepareStatement(xSql);
+            ps = con.prepareStatement(sql);
             ps.setInt(1, restaurantId);
             ps.setInt(2, year);
             ps.setInt(3, startMonth);
-            ps.setInt(4, 12);
-            ps.setInt(5, year + 1);
+            ps.setInt(4, endMonth);
+            ps.setInt(5, year);
             ps.setInt(6, endMonth);
             rs = ps.executeQuery();
+
             while (rs.next()) {
                 int month = rs.getInt("month");
                 int totalAmount = rs.getInt("totalamount");
                 revenueMap.put(String.valueOf(month), totalAmount);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             try {
@@ -579,7 +583,32 @@ public class OrderDAO extends MyDAO {
                 e.printStackTrace();
             }
         }
+
         return revenueMap;
+    }
+
+    public List<Order> getOrderByRestaurantID(int restaurantID) {
+        List<Order> lo = new ArrayList<>();
+        Order o;
+        xSql = "select * from [order] where restaurant_id =?";
+        try {
+            ps = con.prepareStatement(xSql);
+            ps.setInt(1, restaurantID);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                int xId = rs.getInt("id");
+                int xRestaurant_Id = rs.getInt("restaurant_id");
+                int xCustomer_Id = rs.getInt("customer_id");
+                int xTotal_amount = rs.getInt("total_amount");
+                String xStatus = rs.getString("status");
+                java.sql.Date xOrder_date = rs.getDate("order_date");
+
+                o = new Order(xId, xRestaurant_Id, xCustomer_Id, xTotal_amount, xStatus, xOrder_date);
+                lo.add(o);
+            }
+        } catch (Exception e) {
+        }
+        return lo;
     }
 
     public List<Order> getAddressRestaurant_CustomerWithId(Boolean sortList) {
@@ -818,13 +847,54 @@ public class OrderDAO extends MyDAO {
         return orders;
     }
 
-    public static void main(String[] args) {
+    public List<Order> getListOrderByDate(int startMonth, int endMonth, int year, int restaurantId, String status) throws SQLException {
+        List<Order> orders = new ArrayList<>();
+        String xSql = "SELECT id, restaurant_id, customer_id, total_amount, status, order_date \n"
+                + "FROM [order] \n"
+                + "WHERE ((YEAR(order_date) = ? AND MONTH(order_date) BETWEEN ? AND ?)	\n"
+                + "   OR (YEAR(order_date) = ? AND MONTH(order_date) BETWEEN 1 AND ?))\n"
+                + "   AND restaurant_id = ? and status = ?";
+
+        try {
+            ps = con.prepareStatement(xSql);
+            ps.setInt(1, year);
+            ps.setInt(2, startMonth);
+            ps.setInt(3, endMonth);
+            ps.setInt(4, year);
+            ps.setInt(5, endMonth);
+            ps.setInt(6, restaurantId);
+            ps.setString(7, status);
+
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Order order = new Order();
+                order.setId(rs.getInt("id"));
+                order.setRestaurant_id(rs.getInt("restaurant_id"));
+                order.setCustomer_id(rs.getInt("customer_id"));
+                order.setTotal_amount(rs.getInt("total_amount"));
+                order.setStatus(rs.getString("status"));
+                order.setOrder_date(rs.getTimestamp("order_date"));
+                orders.add(order);
+            }
+        } finally {
+            // Close resources in a finally block to ensure they are closed properly
+            if (rs != null) {
+                rs.close();
+            }
+            if (ps != null) {
+                ps.close();
+            }
+        }
+
+        return orders;
+    }
+
+    public static void main(String[] args) throws SQLException {
         OrderDAO od = new OrderDAO();
-       List<Order> list = od.getListOrder2();
-       for(Order o: list){
-           System.out.println(o);
-       } 
-       
+        List<Order> list = od.getListOrderByDate(1, 6, 2024, 1, "Đã giao");
+        for (Order o : list) {
+            System.out.println(o);
+        }
 
     }
 }
