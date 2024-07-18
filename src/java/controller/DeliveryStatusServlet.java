@@ -22,6 +22,7 @@ import java.io.InputStream;
 import java.net.URLEncoder;
 import model.Account;
 import model.Delivery;
+import model.Order;
 import utils.Image;
 
 /**
@@ -62,19 +63,30 @@ public class DeliveryStatusServlet extends HttpServlet {
         Image image = new Image();
         switch (action) {
             case "accept":
-                if (delivery.getDeliveryPersonIdByOrderId(order_id) != 0) { // Kiểm tra nếu không có delivery_person_id
-                    String err = "The order was just received by someone else!";
-                    request.getSession().setAttribute("err", err);
-                    response.sendRedirect("deliveryorder");
-                    break;
-                } else {
-                    delivery.updateDeliveryPersonId(id, order_id);
+
+                Order o = order.getOrderById(order_id);
+                Delivery x = new Delivery();
+                x.setDelivery_person_id(id); // Thiết lập người giao hàng
+                x.setShip_price(5000);
+                x.setStatus("Picking Up");
+                // Đơn của order cũng sẽ xuất hiện ở delivery
+                delivery.insert(x, o);
+                
+                if (delivery.getDeliveryPersonIdByOrderId(order_id) != -1) { // Kiểm tra nếu không có delivery_person_id
+//                    delivery.updateDeliveryPersonId(id, order_id);
                     order.updateStatusOrder(order_id);
                     delivery.updateStatusDelivery(order_id);
                     String err = "You have successfully received this order!";
                     request.getSession().setAttribute("err", err);
                     response.sendRedirect("deliverydashboard");
                     break;
+                } else {
+                    delivery.delete();
+                    String err = "The order was just received by someone else!";
+                    request.getSession().setAttribute("err", err);
+                    response.sendRedirect("deliveryorder");
+                    break;
+
                 }
             case "reject":
                 String err2 = "Okay, let's look at the other orders";
@@ -134,7 +146,7 @@ public class DeliveryStatusServlet extends HttpServlet {
                         order.updateStatusOrder_3(order_id);
                         String err3 = "The order has been delivered failure!";
                         request.getSession().setAttribute("err", err3);
-                        notice.InsertNotice("The order has been delivered failure!<br>Reason: "+reason, order_id);
+                        notice.InsertNotice("The order has been delivered failure!<br>Reason: " + reason, order_id);
                         response.sendRedirect("deliveryhistory");
                     } catch (Exception e) {
                         String err3 = "Lỗi catch rồi!";

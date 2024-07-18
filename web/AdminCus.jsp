@@ -1,4 +1,4 @@
-    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -60,12 +60,7 @@
                 </li>
             </ul>
             <ul class="side-menu">
-                <li>
-                    <a href="#">
-                        <i class='bx bxs-cog' ></i>
-                        <span class="text">Settings</span>
-                    </a>
-                </li>
+
                 <li>
                     <a href="Home.jsp" class="logout">
                         <i class='bx bxs-log-out-circle' ></i>
@@ -85,17 +80,10 @@
                 <i class='bx bx-menu' ></i>
                 <!--			<a href="#" class="nav-link">Categories</a>-->
                 <form action="DashboardServlet">
-                    <div class="form-input">
-                        <input type="search" placeholder="Search...">
-                        <button type="submit" class="search-btn"><i class='bx bx-search' ></i></button>
-                    </div>
+                    
                 </form>
-                <input type="checkbox" id="switch-mode" hidden>
-                <label for="switch-mode" class="switch-mode"></label>
-                <a href="#" class="notification">
-                    <i class='bx bxs-bell' ></i>
-                    <span class="num">8</span>
-                </a>
+               
+                
                 <a href="#" class="profile">
                     <img src="img/people.png">
                 </a>
@@ -118,32 +106,18 @@
                         </ul>
                     </div>
 
-                </div>
-
-                <!--                <ul class="box-info">
-                                    <li>
-                                        <i class='bx bxs-calendar-check' ></i>
-                                        <span class="text">
-                                            <h3>1020</h3>
-                                            <p>Order</p>
-                                        </span>
-                                    </li>
-                                    <li>
-                                        <i class='bx bxs-group' ></i>
-                                        <span class="text">
-                                            <h3>2834</h3>
-                                            <p>User</p>
-                                        </span>
-                                    </li>
-                
-                                </ul>-->
+                </div>               
                 <div class="table-data">
                     <div class="order">
                         <div class="head">
                             <h3>List User</h3>
-                            <i class='bx bx-search' ></i>
-                            <i class='bx bx-filter' ></i>
+                            <div class="search-container">
+                                <input type="search" id="searchInput" placeholder="Search for name,email, phone">
+                                <button type="button" class="search-btn" onclick="searchCus()"><i class='bx bx-search'></i></button>
+                            </div>
+                            <i class='bx bx-filter' onclick="sortCus()"></i>
                         </div>
+
                         <table>
                             <thead>
                                 <tr>
@@ -155,20 +129,30 @@
                             </thead>
                             <tbody>
 
-                                <c:forEach items="${requestScope.listCus}" var="o">
-                                    <tr>
+                                <c:forEach items="${requestScope.listAccount}" var="o" varStatus="loop">
+                                    <tr id="row${loop.index + 1}" onclick="openModalCus(${o.id})" style="cursor: pointer;">
                                         <td>${o.id}</td>
                                         <td>${o.username}</td>
                                         <td>${o.email}</td>
                                         <td>${o.phonenumber}</td>   
                                         <td>
-                                            <a href="admin?action=ban&accountId=${o.id}" class="ban-btn">Ban</a> <!-- Thêm nút Ban vào m?i dòng -->
+                                            <a href="admin?action=ban&accountId=${o.id}" class="ban-btn">Ban</a>
                                         </td>
                                     </tr>
                                 </c:forEach>
 
+
                             </tbody>
                         </table>
+                        <div id="myModal" class="modal">
+                            <div class="modal-content">
+                                <span class="close" onclick="closeModal();">&times;</span>
+                                <div id="modalContent">
+                                    <!-- N?i dung chi ti?t s? ???c t?i vào ?ây -->
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
 
                 </div>
@@ -181,5 +165,61 @@
 
 
         <script src="js/admin.js"></script>
+        <script>
+                                    let sorted = false; // Track current sort state
+
+                                    function sortCus() {
+                                        let table = document.querySelector("table");
+                                        let rows = Array.from(table.querySelectorAll("tbody tr"));
+
+                                        rows.sort((row1, row2) => {
+                                            let username1 = row1.querySelector("td:nth-child(2)").textContent.trim();
+                                            let username2 = row2.querySelector("td:nth-child(2)").textContent.trim();
+
+                                            // Toggle sorting order based on current state
+                                            if (sorted) {
+                                                return username1.localeCompare(username2); // Ascending order
+                                            } else {
+                                                return username2.localeCompare(username1); // Descending order
+                                            }
+                                        });
+
+                                        // Remove existing rows from table
+                                        rows.forEach(row => table.querySelector("tbody").removeChild(row));
+
+                                        // Append sorted rows back to the table
+                                        rows.forEach(row => table.querySelector("tbody").appendChild(row));
+
+                                        sorted = !sorted; // Toggle sort state
+                                    }
+
+                                    function searchCus() {
+                                        let input = document.getElementById("searchInput").value.toUpperCase();
+                                        let table = document.querySelector("table");
+                                        let rows = table.getElementsByTagName("tr");
+
+                                        for (let i = 0; i < rows.length; i++) {
+                                            let usernameCol = rows[i].getElementsByTagName("td")[1];
+                                            let emailCol = rows[i].getElementsByTagName("td")[2];
+                                            let phoneCol = rows[i].getElementsByTagName("td")[3];
+
+                                            if (usernameCol || emailCol || phoneCol) {
+                                                let usernameText = usernameCol.textContent || usernameCol.innerText;
+                                                let emailText = emailCol.textContent || emailCol.innerText;
+                                                let phoneText = phoneCol.textContent || phoneCol.innerText;
+
+                                                if (usernameText.toUpperCase().indexOf(input) > -1 ||
+                                                        emailText.toUpperCase().indexOf(input) > -1 ||
+                                                        phoneText.toUpperCase().indexOf(input) > -1) {
+                                                    rows[i].style.display = "";
+                                                } else {
+                                                    rows[i].style.display = "none";
+                                                }
+                                            }
+                                        }
+                                    }
+
+
+        </script>
     </body>
 </html>

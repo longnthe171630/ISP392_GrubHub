@@ -20,6 +20,8 @@ import model.Account;
  */
 public class AccountDAO extends MyDAO {
 
+   
+
     public int getAddressIdByAccId(int accID) {
         xSql = "select address_id from [dbo].[Account] where id =?";
         int id = 0;
@@ -106,33 +108,32 @@ public class AccountDAO extends MyDAO {
     }
 
     //lấy thông tin tài khoản thông qua username
-    public Account getAccountInfo(String username) {
-        xSql = "SELECT [id],[username],[password],[email],[phonenumber],[role] FROM [dbo].[Account] where username =?";
-        try {
-            ps = con.prepareStatement(xSql);
-            ps.setString(1, username);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                Account a = new Account(rs.getInt(1),
-                        rs.getString(2),
-                        rs.getString(3),
-                        rs.getString(4),
-                        rs.getString(5),
-                        rs.getInt(6));
-
-                return a;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+//    public Account getAccountInfo(String username) {
+//        xSql = "SELECT [id],[username],[password],[email],[phonenumber],[role] FROM [dbo].[Account] where username =?";
+//        try {
+//            ps = con.prepareStatement(xSql);
+//            ps.setString(1, username);
+//            rs = ps.executeQuery();
+//            while (rs.next()) {
+//                Account a = new Account(rs.getInt(1),
+//                        rs.getString(2),
+//                        rs.getString(3),
+//                        rs.getString(4),
+//                        rs.getString(5),
+//                        rs.getInt(6));
+//
+//                return a;
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
 
     //kiểm tra tài khoản
     public Account checkAccount(String username, String password) {
         String sql = "SELECT * FROM Account where username = ? and password = ?";
         //String fullname = null;
-
         try {
             ps = con.prepareStatement(sql);
             ps.setString(1, username);
@@ -147,10 +148,10 @@ public class AccountDAO extends MyDAO {
         }
         return null;
     }
-
-    public List<Account> getListAccount() {
+    
+     public List<Account> getListAccount() {
         List<Account> list = new ArrayList<>();
-        String sql = "select * from Account where active=1";
+        String sql = "select * from Account where active=1 and id <>1";
 
         Account a;
         try {
@@ -550,6 +551,33 @@ public class AccountDAO extends MyDAO {
         }
     }
 
+    public List<Account> getAccountByID2(int c_id) {
+        List<Account> list = new ArrayList<>();
+        String sql = "select * from Account a\n"
+                + "where a.id=?";
+
+        Account a;
+        try {
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, c_id);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                PreparedStatement st = con.prepareStatement(sql);
+                int xId = rs.getInt("id");
+                String xUsername = rs.getString("username");
+                String xPassword = rs.getString("password");
+                String xEmail = rs.getString("email");
+                String xPhonenumber = rs.getString("phonenumber");
+                int xRole = rs.getInt("role");
+                a = new Account(xId, xUsername, xPassword, xEmail, xPhonenumber, xRole);
+                list.add(a);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return list;
+    }
+
     public Account getAccountByID(int account_id) {
         xSql = "select * from Account where id =?";
         try {
@@ -557,7 +585,7 @@ public class AccountDAO extends MyDAO {
             ps.setInt(1, account_id);
             rs = ps.executeQuery();
             while (rs.next()) {
-
+                
                 String userName = rs.getString("username");
                 String passWord = rs.getString("password");
                 String phoneNumber = rs.getString("phonenumber");
@@ -577,10 +605,10 @@ public class AccountDAO extends MyDAO {
     }
 
     public static void main(String[] args) {
-        AccountDAO a = new AccountDAO();
+        AccountDAO accountDAO = new AccountDAO();
 //        Account a = new Account("vupl", "123", "ganhataox3@gmail.com", "0987654321", 2, 11, 1, null, null);
-        
-        System.out.println(a.getAccountInfo("vupl"));
+        Account a= accountDAO.getAccountByID(1);
+        System.out.println(a);
 
     }
 }

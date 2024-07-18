@@ -104,11 +104,9 @@ public class LoginServlet extends HttpServlet {
             response.addCookie(p);
 
             switch (a.getRole()) {
-                case 0: // Admin
-                    response.sendRedirect("AdminDashboard.jsp");
-                    break;
-                case 1: // Manager
-                    response.sendRedirect("home");
+                case 1: // Admin
+                    
+                    response.sendRedirect("admin?action=home");
                     break;
                 case 2: // Customer
                     response.sendRedirect("home");

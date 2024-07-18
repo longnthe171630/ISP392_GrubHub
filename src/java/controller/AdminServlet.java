@@ -6,6 +6,7 @@ package controller;
 
 import dao.AccountDAO;
 import dao.AdminDAO;
+import dao.CustomerDAO;
 import dao.DeliveryDAO;
 import dao.FeedbackDAO;
 import dao.OrderDAO;
@@ -22,7 +23,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 import jakarta.servlet.http.HttpSession;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
 import model.Account;
+import model.Customer;
 import model.Delivery;
 import model.Feedback;
 import model.Order;
@@ -33,7 +38,7 @@ import model.Restaurant;
  *
  * @author Dell
  */
-@WebServlet(name="AdminServlet", urlPatterns={"/admin"})
+@WebServlet(name = "AdminServlet", urlPatterns = {"/admin"})
 public class AdminServlet extends HttpServlet {
 
     /**
@@ -67,7 +72,9 @@ public class AdminServlet extends HttpServlet {
         if (action == null) {
             action = "0"; // Hoặc bất kỳ giá trị mặc định nào bạn muốn sử dụng
         }
-
+        AccountDAO dao3 = new AccountDAO();
+        RestaurantDAO dao4 = new RestaurantDAO();
+        CustomerDAO dao9 = new CustomerDAO();
         switch (action) {
             case "home":
                 AdminDAO dao = new AdminDAO();
@@ -77,34 +84,58 @@ public class AdminServlet extends HttpServlet {
                 request.setAttribute("orderCount", orderCount);
 
                 OrderDAO dao2 = new OrderDAO();
-                List<Order> list = dao2.getListOrder();
+                List<Order> list = dao2.getListOrder2();
                 request.setAttribute("listOrder", list);
                 request.getRequestDispatcher("Admin.jsp").forward(request, response);
                 break;
             case "cus":
-                AccountDAO dao3 = new AccountDAO();
-                List<Account> listCus = dao3.getListAccount();
-                request.setAttribute("listCus", listCus);
+
+                List<Account> listAccount = dao3.getListAccount();
+                request.setAttribute("listAccount", listAccount);
                 request.getRequestDispatcher("AdminCus.jsp").forward(request, response);
                 break;
             case "res":
-                RestaurantDAO dao4 = new RestaurantDAO();
-                List<Restaurant> listRes = dao4.getRestaurants();
+
+                List<Restaurant> listRes = dao4.getListRestaurant();
                 request.setAttribute("listRes", listRes);
                 request.getRequestDispatcher("AdminRes.jsp").forward(request, response);
                 break;
             case "deli":
                 DeliveryDAO dao6 = new DeliveryDAO();
-                List<Delivery> listDeli = dao6.getDelivery();
+                List<Delivery> listDeli = dao6.getListDelivery();
                 request.setAttribute("listDeli", listDeli);
                 request.getRequestDispatcher("AdminDeli.jsp").forward(request, response);
 
                 break;
 
             case "feed":
+
                 FeedbackDAO dao5 = new FeedbackDAO();
                 List<Feedback> listFeed = dao5.getListFeedback();
-                request.setAttribute("listFeed", listFeed);
+                List<Restaurant> listRes1 = dao4.getListRestaurant();
+                List<Customer> listCus1 = dao9.getListCustomer();
+                HashMap<Feedback, Customer> map1 = new HashMap<>();
+                HashMap<Feedback, Restaurant> map2 = new HashMap<>();
+
+                for (Feedback f : listFeed) {
+                    for (Customer c : listCus1) {
+                        if (c.getId() == f.getCustomer_id()) {
+                            map1.put(f, c);
+                        }
+
+                    }
+                    for (Restaurant r : listRes1) {
+                        if (r.getId() == f.getRestaurant_id()) {
+                            map2.put(f, r);
+                        }
+                    }
+                }
+                List<Map.Entry<Feedback, Customer>> sortedEntries = new ArrayList<>(map1.entrySet());
+                sortedEntries.sort(Comparator.comparing(entry -> entry.getKey().getId()));
+
+                request.setAttribute("map1", map1);
+                request.setAttribute("sortedEntries", sortedEntries);
+                request.setAttribute("listRes1", listRes1);
                 request.getRequestDispatcher("AdminFeed.jsp").forward(request, response);
 
                 break;
@@ -126,10 +157,10 @@ public class AdminServlet extends HttpServlet {
                     dao8.unbanAccount(accountId);
                 } catch (Exception e) {
                 }
-                List<Account> listCus2 = dao8.getListAccount();
-                request.setAttribute("listCus", listCus2);
-                request.getRequestDispatcher("AdminCus.jsp").forward(request, response);
-                break;
+                List<Account> listBan2 = dao8.getListBanedAccount();
+                request.setAttribute("listBan", listBan2);
+                request.getRequestDispatcher("AdminBan.jsp").forward(request, response);
+                break;            
             default:
                 // Xử lý giá trị mặc định hoặc trả về lỗi nếu action không hợp lệ
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid action parameter.");
@@ -149,9 +180,9 @@ public class AdminServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String resId = request.getParameter("id");
+        int resId = Integer.parseInt(request.getParameter("id"));
         ProductDAO dao = new ProductDAO();
-        List<Product> list = dao.getProductByRID(resId);
+        List<Product> list = dao.getProductByResID(resId);
         request.setAttribute("productList", list);
         request.getRequestDispatcher("ProductList.jsp").forward(request, response);
 

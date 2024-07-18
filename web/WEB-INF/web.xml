@@ -104,6 +104,10 @@
         <servlet-name>AddFeedbackServlet</servlet-name>
         <servlet-class>controller.AddFeedbackServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AdminCusServlet</servlet-name>
+        <servlet-class>controller.AdminCusServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ForgotPasswordServlet</servlet-name>
         <url-pattern>/forgot</url-pattern>
@@ -210,6 +214,10 @@
     <servlet-mapping>
         <servlet-name>AddFeedbackServlet</servlet-name>
         <url-pattern>/addfeedback</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AdminCusServlet</servlet-name>
+        <url-pattern>/cus</url-pattern>
     </servlet-mapping>
     <welcome-file-list>
         <welcome-file>home</welcome-file>

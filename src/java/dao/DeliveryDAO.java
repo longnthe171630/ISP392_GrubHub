@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.Set;
 import model.Address;
 import model.Delivery;
+import model.Order;
 
 /**
  *
@@ -49,13 +50,37 @@ public class DeliveryDAO extends MyDAO {
                     deliveryTime = calculateDeliveryTime(xStart_time, xEnd_time);
                 }
 
-                Delivery delivery = new Delivery(xOrder_id,xDelivery_person_id,xShip_price, xDelivery_date, xStatus, deliveryTime, xStart_time, xEnd_time);
+                Delivery delivery = new Delivery(xOrder_id, xDelivery_person_id, xShip_price, xDelivery_date, xStatus, deliveryTime, xStart_time, xEnd_time);
                 list.add(delivery);
             }
             rs.close();
             ps.close();
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+        return list;
+    }
+
+    public List<Delivery> getListDelivery() {
+        List<Delivery> list = new ArrayList<>();
+        try {
+            String sql = "select d.id, d.order_id, dp.name,d. ship_price, d.delivery_date, d.status\n"
+                    + "from Delivery d\n"
+                    + "join Delivery_person dp on dp.id= d.delivery_person_id";
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Delivery a = new Delivery(rs.getInt(1),
+                        rs.getInt(2),
+                        rs.getString(3),
+                        rs.getInt(4),
+                        rs.getDate(5),
+                        rs.getString(6));
+                list.add(a);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
         }
         return list;
     }
@@ -82,7 +107,7 @@ public class DeliveryDAO extends MyDAO {
                     deliveryTime = calculateDeliveryTime(xStart_time, xEnd_time);
                 }
 
-                Delivery delivery = new Delivery(xOrder_id,xDelivery_person_id,xShip_price, xDelivery_date, xStatus, deliveryTime, xStart_time, xEnd_time);
+                Delivery delivery = new Delivery(xOrder_id, xDelivery_person_id, xShip_price, xDelivery_date, xStatus, deliveryTime, xStart_time, xEnd_time);
                 list.add(delivery);
             }
             rs.close();
@@ -187,7 +212,7 @@ public class DeliveryDAO extends MyDAO {
         xSql = "SELECT d.*\n"
                 + "FROM Delivery d\n"
                 + "JOIN Delivery_person dp ON d.delivery_person_id = dp.id\n"
-                + "WHERE (d.status = 'Delivering' OR d.status = N'Picking Up')\n"
+                + "WHERE (d.status = 'Delivering' OR d.status = 'Picking Up')\n"
                 + "AND dp.id = ? ";
 
         if (sortList != null) {
@@ -286,7 +311,7 @@ public class DeliveryDAO extends MyDAO {
     public void updateStatusDelivery(int id) {
         String xSql = "UPDATE [Delivery]\n"
                 + "SET [status] = N'Picking Up', delivery_date = CONVERT(VARCHAR(19), GETDATE(), 120), start_time = CONVERT(VARCHAR(19), GETDATE(), 120)\n"
-                + "WHERE [status] = N'Waiting delivery' AND [order_id] = ?;";
+                + "WHERE [status] = N'Waiting Delivery' AND [order_id] = ?;";
         try {
             ps = con.prepareStatement(xSql);
             ps.setInt(1, id);
@@ -411,20 +436,20 @@ public class DeliveryDAO extends MyDAO {
         return total_D;
     }
 
-    public boolean updateDeliveryPersonId(int id, int order_id) {
-        String xSql = "UPDATE delivery SET delivery_person_id = ? where order_id = ?";
-        try {
-            ps = con.prepareStatement(xSql);
-            ps.setInt(1, id);
-            ps.setInt(2, order_id);
-            ps.executeUpdate();
-            ps.close();
-            return true;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
+//    public boolean updateDeliveryPersonId(int id, int order_id) {
+//        String xSql = "UPDATE delivery SET delivery_person_id = ? where order_id = ?";
+//        try {
+//            ps = con.prepareStatement(xSql);
+//            ps.setInt(1, id);
+//            ps.setInt(2, order_id);
+//            ps.executeUpdate();
+//            ps.close();
+//            return true;
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//        return false;
+//    }
 
     public void savePathToDatabase(String pathOfFile, int order_id) {
         String xSql = "UPDATE delivery SET image = ? WHERE order_id = ?";
@@ -771,7 +796,7 @@ public class DeliveryDAO extends MyDAO {
         }
 
     }
-    
+
     public List<Delivery> getDelivery() {
         List<Delivery> t = new ArrayList<>();
         xSql = "select * from Delivery";
@@ -796,7 +821,36 @@ public class DeliveryDAO extends MyDAO {
         }
         return (t);
     }
-    
+
+    public void insert(Delivery x, Order o) {
+        String xSql = "INSERT INTO Delivery (order_id, delivery_person_id, ship_price, delivery_date, status) VALUES (?, ?, ?, ?, ?)";
+        try {
+            ps = con.prepareStatement(xSql);
+            
+            ps.setInt(1, o.getId()); // Lấy order_id từ đối tượng Order
+            ps.setInt(2, x.getDelivery_person_id());
+            ps.setInt(3, x.getShip_price());
+            ps.setTimestamp(4, new java.sql.Timestamp(System.currentTimeMillis())); // Lấy ngày hiện tại
+            ps.setString(5, x.getStatus());
+
+            ps.executeUpdate();
+            ps.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void delete() {
+        String sql = "DELETE FROM Delivery WHERE delivery_person_id IS NULL";
+        try {
+            ps = con.prepareStatement(sql);
+            ps.executeUpdate();
+            ps.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void main(String[] args) {
         DeliveryDAO d = new DeliveryDAO();
 //        List<String> ld = d.getDeliveryDatesSorted();

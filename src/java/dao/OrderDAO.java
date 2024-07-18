@@ -111,6 +111,31 @@ public class OrderDAO extends MyDAO {
         return 1;
     }
 
+    public List<Order> getListOrder2() {
+        List<Order> list = new ArrayList<>();
+        try {
+            String sql = "select o.id, r.name, c.name , total_amount, status, order_date\n"
+                    + "from [Order] o\n"
+                    + "join Restaurant r on r.id= o.restaurant_id\n"
+                    + "join Customer c on c.id= o.customer_id";
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Order a = new Order(rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getInt(4),
+                        rs.getString(5),
+                        rs.getTimestamp(6));
+                list.add(a);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return list;
+    }
+
     public List<Order> getListOrder() {
         List<Order> list = new ArrayList<>();
         try {
@@ -207,7 +232,7 @@ public class OrderDAO extends MyDAO {
                 ps.setInt(1, restaurantId);
                 ps.setInt(2, customer.getId());
                 ps.setDouble(3, totalAmount);
-                ps.setString(4, "Đang xử lí");
+                ps.setString(4, "Waiting Restaurant");
                 ps.setTimestamp(5, date);
 
                 System.out.println("Executing query: " + ps.toString());
@@ -352,7 +377,7 @@ public class OrderDAO extends MyDAO {
                 + "JOIN \n"
                 + "restaurant r ON o.restaurant_id = r.id\n"
                 + "JOIN\n"
-                + "address r_address ON r.address_id = r_address.id where o.status = N'Waiting delivery'";
+                + "address r_address ON r.address_id = r_address.id where o.status = N'Waiting Delivery'";
 
         try {
             ps = con.prepareStatement(xSql);
@@ -522,35 +547,38 @@ public class OrderDAO extends MyDAO {
     }
 
     public Map<String, Integer> getRevenueForPeriod(int startMonth, int endMonth, int year, int restaurantId) {
-        xSql = "SELECT \n"
-                + "    MONTH(order_date) AS month, \n"
-                + "    SUM(total_amount) AS totalamount \n"
-                + "FROM \n"
-                + "    [Order] \n"
-                + "WHERE \n"
-                + "    restaurant_id = ? \n"
-                + "    AND (\n"
-                + "        (YEAR(order_date) = ? AND MONTH(order_date) BETWEEN ? AND ?)\n"
-                + "        OR (YEAR(order_date) = ? AND MONTH(order_date) BETWEEN 1 AND ?)\n"
-                + "    )\n"
-                + "GROUP BY \n"
-                + "    MONTH(order_date);";
+        String sql = "SELECT "
+                + "    MONTH(order_date) AS month, "
+                + "    SUM(total_amount) AS totalamount "
+                + "FROM "
+                + "    [Order] "
+                + "WHERE "
+                + "    restaurant_id = ? "
+                + "    AND ( "
+                + "        (YEAR(order_date) = ? AND MONTH(order_date) BETWEEN ? AND ?) "
+                + "        OR (YEAR(order_date) = ? AND MONTH(order_date) BETWEEN 1 AND ?) "
+                + "    ) "
+                + "    AND status = N'đã giao' "
+                + "GROUP BY "
+                + "    MONTH(order_date)";
+
         Map<String, Integer> revenueMap = new HashMap<>();
         try {
-            ps = con.prepareStatement(xSql);
+            ps = con.prepareStatement(sql);
             ps.setInt(1, restaurantId);
             ps.setInt(2, year);
             ps.setInt(3, startMonth);
-            ps.setInt(4, 12);
-            ps.setInt(5, year + 1);
+            ps.setInt(4, endMonth);
+            ps.setInt(5, year);
             ps.setInt(6, endMonth);
             rs = ps.executeQuery();
+
             while (rs.next()) {
                 int month = rs.getInt("month");
                 int totalAmount = rs.getInt("totalamount");
                 revenueMap.put(String.valueOf(month), totalAmount);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             try {
@@ -564,7 +592,32 @@ public class OrderDAO extends MyDAO {
                 e.printStackTrace();
             }
         }
+
         return revenueMap;
+    }
+
+    public List<Order> getOrderByRestaurantID(int restaurantID) {
+        List<Order> lo = new ArrayList<>();
+        Order o;
+        xSql = "select * from [order] where restaurant_id =?";
+        try {
+            ps = con.prepareStatement(xSql);
+            ps.setInt(1, restaurantID);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                int xId = rs.getInt("id");
+                int xRestaurant_Id = rs.getInt("restaurant_id");
+                int xCustomer_Id = rs.getInt("customer_id");
+                int xTotal_amount = rs.getInt("total_amount");
+                String xStatus = rs.getString("status");
+                java.sql.Date xOrder_date = rs.getDate("order_date");
+
+                o = new Order(xId, xRestaurant_Id, xCustomer_Id, xTotal_amount, xStatus, xOrder_date);
+                lo.add(o);
+            }
+        } catch (Exception e) {
+        }
+        return lo;
     }
 
     public List<Order> getAddressRestaurant_CustomerWithId(Boolean sortList) {
@@ -585,7 +638,7 @@ public class OrderDAO extends MyDAO {
                 + "JOIN restaurant r ON o.restaurant_id = r.id\n"
                 + "JOIN account r_account ON r.account_id = r_account.id\n"
                 + "JOIN address r_address ON r_account.address_id = r_address.id\n"
-                + "WHERE o.status = N'Waiting delivery' ";
+                + "WHERE o.status = N'Waiting Delivery' ";
 
         if (sortList != null) {
             String time = sortList ? "ASC" : "DESC";
@@ -621,7 +674,7 @@ public class OrderDAO extends MyDAO {
 
     public List<Order> getOrderByStatus() {
         List<Order> t = new ArrayList<>();
-        xSql = "SELECT * FROM [Order] WHERE [status] IN (N'Waiting delivery');";
+        xSql = "SELECT * FROM [Order] WHERE [status] IN (N'Waiting Delivery');";
         Order x;
         try {
             ps = con.prepareStatement(xSql);
@@ -803,13 +856,54 @@ public class OrderDAO extends MyDAO {
         return orders;
     }
 
-    public static void main(String[] args) {
+    public List<Order> getListOrderByDate(int startMonth, int endMonth, int year, int restaurantId, String status) throws SQLException {
+        List<Order> orders = new ArrayList<>();
+        String xSql = "SELECT id, restaurant_id, customer_id, total_amount, status, order_date \n"
+                + "FROM [order] \n"
+                + "WHERE ((YEAR(order_date) = ? AND MONTH(order_date) BETWEEN ? AND ?)	\n"
+                + "   OR (YEAR(order_date) = ? AND MONTH(order_date) BETWEEN 1 AND ?))\n"
+                + "   AND restaurant_id = ? and status = ?";
+
+        try {
+            ps = con.prepareStatement(xSql);
+            ps.setInt(1, year);
+            ps.setInt(2, startMonth);
+            ps.setInt(3, endMonth);
+            ps.setInt(4, year);
+            ps.setInt(5, endMonth);
+            ps.setInt(6, restaurantId);
+            ps.setString(7, status);
+
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                Order order = new Order();
+                order.setId(rs.getInt("id"));
+                order.setRestaurant_id(rs.getInt("restaurant_id"));
+                order.setCustomer_id(rs.getInt("customer_id"));
+                order.setTotal_amount(rs.getInt("total_amount"));
+                order.setStatus(rs.getString("status"));
+                order.setOrder_date(rs.getTimestamp("order_date"));
+                orders.add(order);
+            }
+        } finally {
+            // Close resources in a finally block to ensure they are closed properly
+            if (rs != null) {
+                rs.close();
+            }
+            if (ps != null) {
+                ps.close();
+            }
+        }
+
+        return orders;
+    }
+
+    public static void main(String[] args) throws SQLException {
         OrderDAO od = new OrderDAO();
-//        List<Order> list = od.getAllOrderOf1Customer(2);
-//        Map<String, Integer> map = od.getRevenueForPeriod(1, 6, 2024, 1);
-//        for (Map.Entry<String, Integer> entry : map.entrySet()) {
-//            System.out.println(entry.getKey() + ": " + entry.getValue());
-//        }
-        System.out.println(od.getRestaurant_Customer_ByOrderId(1));
+        List<Order> list = od.getListOrderByDate(1, 6, 2024, 1, "Đã giao");
+        for (Order o : list) {
+            System.out.println(o);
+        }
+
     }
 }

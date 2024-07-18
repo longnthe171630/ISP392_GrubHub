@@ -17,7 +17,7 @@
 
         <!-- SIDEBAR -->
         <section id="sidebar">
-            <a href="#" class="brand">
+            <a href="admin?action=home" class="brand">
                 <i class='bx bxs-smile'></i>
                 <span class="text">AdminHub</span>
             </a>
@@ -60,12 +60,7 @@
                 </li>
             </ul>
             <ul class="side-menu">
-                <li>
-                    <a href="#">
-                        <i class='bx bxs-cog' ></i>
-                        <span class="text">Settings</span>
-                    </a>
-                </li>
+
                 <li>
                     <a href="Home.jsp" class="logout">
                         <i class='bx bxs-log-out-circle' ></i>
@@ -85,17 +80,9 @@
                 <i class='bx bx-menu' ></i>
                 <!--			<a href="#" class="nav-link">Categories</a>-->
                 <form action="DashboardServlet">
-                    <div class="form-input">
-                        <input type="search" placeholder="Search...">
-                        <button type="submit" class="search-btn"><i class='bx bx-search' ></i></button>
-                    </div>
-                </form>
-                <input type="checkbox" id="switch-mode" hidden>
-                <label for="switch-mode" class="switch-mode"></label>
-                <a href="#" class="notification">
-                    <i class='bx bxs-bell' ></i>
-                    <span class="num">8</span>
-                </a>
+                                    </form>
+                
+                
                 <a href="#" class="profile">
                     <img src="img/people.png">
                 </a>
@@ -119,10 +106,10 @@
                     </div>
 
                 </div>
-                 <div class="table-data">
+                <div class="table-data">
                     <div class="order">
                         <div class="head">
-                            <h3>List User</h3>
+                            <h3>List Feedback</h3>
                             <i class='bx bx-search' ></i>
                             <i class='bx bx-filter' ></i>
                         </div>
@@ -138,19 +125,27 @@
                                 </tr>
                             </thead>
                             <tbody>
-
-                            <c:forEach items="${requestScope.listFeed}" var="o">
+                                <c:forEach items="${sortedEntries}" var="entry">
+                                    <c:set var="feedback" value="${entry.key}" />
+                                    <c:set var="customer" value="${entry.value}" />
                                     <tr>
-                                        <td>${o.id}</td>
-                                        <td>${o.nameCus}</td>
-                                        <td>${o.nameRes}</td>
-                                        <td>${o.orderId}</td> 
-                                        <td>${o.value}</td>
-                                        <td>${o.description}</td>
+                                        <td>${feedback.id}</td>
+                                        <td>${customer.name}</td>
+                                        <td>
+                                            <c:forEach items="${listRes1}" var="restaurant">
+                                                
+                                                <c:if test="${restaurant.id == feedback.restaurant_id}">
+                                                    ${restaurant.name}
+                                                </c:if>
+                                            </c:forEach>
+                                        </td>
+                                        <td>${feedback.order_id}</td> <!-- N?u có orderId trong Feedback -->
+                                        <td>${feedback.value}</td>
+                                        <td>${feedback.description}</td>
                                     </tr>
                                 </c:forEach>
-
                             </tbody>
+
                         </table>
                     </div>
 

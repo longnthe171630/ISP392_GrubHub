@@ -39,14 +39,16 @@ public class FeedbackDAO extends MyDAO {
         }
     }
     
-      public List<Feedback> getListFeedback() {
+     public List<Feedback> getListFeedback() {
+
         List<Feedback> list = new ArrayList<>();
         try {
-            String sql = "select f.id, c.name, r.name,f.order_id, f.value,f.description\n"
-                    + "from Feedback f\n"
-                    + "join Customer c on c.id= f.customer_id\n"
-                    + "join Restaurant r on r.id= f.restaurant_id";
-            ps = con.prepareStatement(sql);
+//            String sql = "select f.id, c.name, r.name,f.order_id, f.value,f.description\n"
+//                    + "from Feedback f\n"
+//                    + "join Customer c on c.id= f.customer_id\n"
+//                    + "join Restaurant r on r.id= f.restaurant_id";
+            xSql = " select * from feedback";
+            ps = con.prepareStatement(xSql);
             rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -55,9 +57,7 @@ public class FeedbackDAO extends MyDAO {
                         rs.getInt(3),
                         rs.getInt(4),
                         rs.getInt(5),
-                        rs.getString(6),
-                        rs.getString(7),
-                        rs.getInt(8));
+                        rs.getString(6));
                 list.add(a);
             }
         } catch (SQLException e) {
@@ -65,6 +65,7 @@ public class FeedbackDAO extends MyDAO {
         }
         return list;
     }
+
 
     public void deleteFeedback(int orderId, int product_id) {
         xSql = "DELETE FROM [dbo].[Feedback]\n"
@@ -261,7 +262,9 @@ public class FeedbackDAO extends MyDAO {
 
     public static void main(String[] args) throws SQLException {
         FeedbackDAO dao = new FeedbackDAO();
-        List<Feedback> list = dao.getFeedbackOfARestaurant(1);
-        System.out.println(list);
+        List<Feedback> list = dao.getListFeedback();
+        for(Feedback f: list){
+            System.out.println(f);
+        }
     }
 }

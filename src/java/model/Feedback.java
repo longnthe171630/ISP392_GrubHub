@@ -13,8 +13,20 @@ public class Feedback {
     int id, customerID, restaurantID, orderID, value, productID;
     String description;
     String img;
-
+    
+    private int customer_id;
+    private int restaurant_id;  
+    private int order_id;
+    
     public Feedback() {
+    }
+    public Feedback(int id, int customer_id, int restaurant_id, int order_id, int value, String description) {
+        this.id = id;
+        this.customer_id = customer_id;
+        this.restaurant_id = restaurant_id;
+        this.order_id = order_id;
+        this.value = value;
+        this.description = description;
     }
 
     public Feedback(int id, int customerID, int restaurantID, int orderID, int value, String description, String img,int productID) {
@@ -26,6 +38,30 @@ public class Feedback {
         this.description = description;
         this.img = img;
         this.productID = productID;
+    }
+
+    public int getCustomer_id() {
+        return customer_id;
+    }
+
+    public void setCustomer_id(int customer_id) {
+        this.customer_id = customer_id;
+    }
+
+    public int getRestaurant_id() {
+        return restaurant_id;
+    }
+
+    public void setRestaurant_id(int restaurant_id) {
+        this.restaurant_id = restaurant_id;
+    }
+
+    public int getOrder_id() {
+        return order_id;
+    }
+
+    public void setOrder_id(int order_id) {
+        this.order_id = order_id;
     }
 
 //    public Feedback(int customerId, int restaurantId, int orderId, int value, String description, String img) {

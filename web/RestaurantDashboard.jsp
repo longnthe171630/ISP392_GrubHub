@@ -84,7 +84,7 @@ Author     : phaml
 
         <!-- CONTENT -->
         <section id="content">
-            <!-- NAVBAR -->
+<!--             NAVBAR 
             <nav>
                 <i class='bx bx-menu' ></i>
                 <a href="#" class="nav-link">Categories</a>
@@ -103,7 +103,7 @@ Author     : phaml
                 <a href="#" class="profile">
                     <img src="img/people.png">
                 </a>
-            </nav>
+            </nav>-->
             <!-- NAVBAR -->
 
             <!-- MAIN -->

@@ -12,6 +12,7 @@ import java.util.Date;
  * @author Long1
  */
 public class Delivery {
+
     private int id, order_id, delivery_person_id;
     private int ship_price;
     private java.sql.Timestamp delivery_date;
@@ -19,10 +20,35 @@ public class Delivery {
     private String image;
     private java.sql.Timestamp start_time, end_time;
     int deliveryTime;
-
+    private Date delivery_date2;
+    private String deliPerson;
     public Delivery() {
     }
 
+    public Date getDelivery_date2() {
+        return delivery_date2;
+    }
+
+    public void setDelivery_date2(Date delivery_date2) {
+        this.delivery_date2 = delivery_date2;
+    }
+
+    public String getDeliPerson() {
+        return deliPerson;
+    }
+
+    public void setDeliPerson(String deliPerson) {
+        this.deliPerson = deliPerson;
+    }
+
+    public Delivery(int id, int order_id, String deliPerson, int ship_price, Date delivery_date, String status) {
+        this.id = id;
+        this.order_id = order_id;
+        this.deliPerson = deliPerson;
+        this.ship_price = ship_price;
+        this.delivery_date2 = delivery_date;
+        this.status = status;
+    }
     public Delivery(Timestamp start_time, Timestamp end_time, int deliveryTime) {
         this.start_time = start_time;
         this.end_time = end_time;

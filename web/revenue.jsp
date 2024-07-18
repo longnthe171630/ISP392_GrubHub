@@ -1,11 +1,9 @@
-<%-- 
-    Document   : restaurant_dashboard
-    Created on : Jun 10, 2024, 8:44:09 AM
-    Author     : phaml
---%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ page import="java.util.*" %> 
+<%@ page import="model.*" %> 
+<%@ page import="java.text.NumberFormat" %>
+<%@ page import="java.util.Locale" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -17,7 +15,6 @@
         <!-- My CSS -->
         <link rel="stylesheet" href="css/restaurant_dashboard.css">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.3/xlsx.full.min.js"></script>
 
         <title>Restaurant</title>
     </head>
@@ -42,13 +39,13 @@
                         <span class="text">Product</span>
                     </a>
                 </li>
-                <li class="active">
-                    <a href="#">
+                <li >
+                    <a href="historyrestaurant">
                         <i class='bx bxs-doughnut-chart'></i>
                         <span class="text">History</span>
                     </a>
                 </li>
-                <li>
+                <li class="active">
                     <a href="#">
                         <i class='bx bxs-message-dots'></i>
                         <span class="text">Revenue</span>
@@ -81,25 +78,25 @@
         <!-- CONTENT -->
         <section id="content">
             <!-- NAVBAR -->
-            <nav>
-                <i class='bx bx-menu'></i>
-                <a href="#" class="nav-link">Categories</a>
-                <form action="#">
-                    <div class="form-input">
-                        <input type="search" placeholder="Search...">
-                        <button type="submit" class="search-btn"><i class='bx bx-search'></i></button>
-                    </div>
-                </form>
-                <input type="checkbox" id="switch-mode" hidden>
-                <label for="switch-mode" class="switch-mode"></label>
-                <a href="#" class="notification">
-                    <i class='bx bxs-bell'></i>
-                    <span class="num">8</span>
-                </a>
-                <a href="#" class="profile">
-                    <img src="img/people.png">
-                </a>
-            </nav>
+            <!--            <nav>
+                            <i class='bx bx-menu'></i>
+                            <a href="#" class="nav-link">Categories</a>
+                            <form action="#">
+                                <div class="form-input">
+                                    <input type="search" placeholder="Search...">
+                                    <button type="submit" class="search-btn"><i class='bx bx-search'></i></button>
+                                </div>
+                            </form>
+                            <input type="checkbox" id="switch-mode" hidden>
+                            <label for="switch-mode" class="switch-mode"></label>
+                            <a href="#" class="notification">
+                                <i class='bx bxs-bell'></i>
+                                <span class="num">8</span>
+                            </a>
+                            <a href="#" class="profile">
+                                <img src="img/people.png">
+                            </a>
+                        </nav>-->
             <!-- NAVBAR -->
 
             <!-- MAIN -->
@@ -119,48 +116,92 @@
                     </div>
                 </div>
 
-                <!-- Form to select month range and year -->
-                <form action="revenue" method="get" class="search-container">
-                    <label for="startMonth">Start Month:</label>
-                    <select id="startMonth" name="startMonth">
-                        <% for (int i = 1; i <= 12; i++) { %>
-                        <option value="<%= i %>"><%= i %></option>
-                        <% } %>
-                    </select>
-
-                    <label for="endMonth">End Month:</label>
-                    <select id="endMonth" name="endMonth">
-                        <% for (int i = 1; i <= 12; i++) { %>
-                        <option value="<%= i %>"><%= i %></option>
-                        <% } %>
-                    </select>
-
-                    <label for="year">Year:</label>
-                    <select id="year" name="year">
-                        <% int currentYear = Calendar.getInstance().get(Calendar.YEAR); %>
-                        <% for (int i = currentYear; i >= currentYear - 10; i--) { %>
-                        <option value="<%= i %>"><%= i %></option>
-                        <% } %>
-                    </select>
-
-                    <button type="submit">Get Revenue</button>
-                </form>
-                <button onclick="exportToExcel()">Export to Excel</button>
-
-                <!-- Display selected period -->
-                <div id="selected-period">
-                    <% String startMonth = request.getParameter("startMonth");
-                       String endMonth = request.getParameter("endMonth");
-                       String year = request.getParameter("year");
-                       if (startMonth != null && endMonth != null && year != null) { %>
-                    <p>Selected Period: <%= startMonth %> - <%= endMonth %> <%= year %></p>
-                    <% } else { %>
-                    <p>Default Period: Last 6 Months</p>
-                    <% } %>
+                <!-- Display error message if any -->
+                <% if (request.getAttribute("errorMessage") != null) { %>
+                <div class="error-message">
+                    <%= request.getAttribute("errorMessage") %>
                 </div>
+                <% } %>
 
-                <!-- Chart.js canvas for revenue -->
-                <canvas id="salerevenue"></canvas>
+                <!-- Form to select month range and year -->
+                <table>
+                    <tbody>
+                        <tr>
+                            <td class="form-container table-cell-content">
+                                <!-- Form -->
+                                <form action="revenue" method="get" class="search-container">
+                                    <label for="startMonth">Start Month:</label>
+                                    <select id="startMonth" name="startMonth">
+                                        <% for (int i = 1; i <= 12; i++) { %>
+                                        <option value="<%= i %>" <% if (request.getAttribute("startMonth") != null && Integer.parseInt(request.getAttribute("startMonth").toString()) == i) { %> selected <% } %>><%= i %></option>
+                                        <% } %>
+                                    </select>
+
+                                    <label for="endMonth">End Month:</label>
+                                    <select id="endMonth" name="endMonth">
+                                        <% for (int i = 1; i <= 12; i++) { %>
+                                        <option value="<%= i %>" <% if (request.getAttribute("endMonth") != null && Integer.parseInt(request.getAttribute("endMonth").toString()) == i) { %> selected <% } %>><%= i %></option>
+                                        <% } %>
+                                    </select>
+
+                                    <label for="year">Year:</label>
+                                    <select id="year" name="year">
+                                        <% int currentYear = Calendar.getInstance().get(Calendar.YEAR); %>
+                                        <% for (int i = currentYear; i >= currentYear - 10; i--) { %>
+                                        <option value="<%= i %>" <% if (request.getAttribute("year") != null && Integer.parseInt(request.getAttribute("year").toString()) == i) { %> selected <% } %>><%= i %></option>
+                                        <% } %>
+                                    </select>
+
+                                    <button type="submit">Get Revenue</button>
+                                </form>
+                                <!-- Chart -->
+                                <div class="chart-container">
+                                    <canvas id="salerevenue"></canvas>
+                                </div>
+                            </td>
+                            <td>
+
+                                <%
+                                Object listOrderObj = request.getAttribute("listOrder");
+                                if (listOrderObj != null && listOrderObj instanceof Map) {
+                                    Map<Order, List<OrderDetails>> listOrder = (Map<Order, List<OrderDetails>>) listOrderObj;
+                                    int totalProductsSold = 0;
+                                    double totalRevenue = 0;
+                                    Set<Integer> uniqueCustomerIds = new HashSet<>();
+
+                                    // Calculate total products sold and unique customer ids
+                                    for (Map.Entry<Order, List<OrderDetails>> entry : listOrder.entrySet()) {
+                                        List<OrderDetails> orderDetailsList = entry.getValue();
+                                        totalProductsSold += orderDetailsList.stream().mapToInt(OrderDetails::getQuantity).sum();
+                                        totalRevenue += entry.getKey().getTotal_amount();
+                                        uniqueCustomerIds.add(entry.getKey().getCustomer_id());
+                                    }
+
+                                    int totalCustomers = uniqueCustomerIds.size();
+
+                                    // Format totalRevenue to VND
+                                    Locale locale = new Locale("vi", "VN");
+                                    NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(locale);
+                                    String formattedTotalRevenue = currencyFormatter.format(totalRevenue);
+                                %>
+                                <h3>Total orders: <%= listOrder.size() %></h3>
+                                <h3>Total products sold: <%= totalProductsSold %></h3>
+                                <h3>Total revenue: <%= formattedTotalRevenue %></h3>
+                                <h3>Total customers: <%= totalCustomers %></h3>
+                                <% } %>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+
+
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+
+
             </main>
             <!-- MAIN -->
         </section>
@@ -189,50 +230,6 @@
             const labels = Object.keys(revenueMap);
             const data = Object.values(revenueMap);
 
-            // Create chart
-            new Chart(document.getElementById("salerevenue"), {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                            label: 'Revenue (VND)',
-                            backgroundColor: 'rgba(0, 123, 255, 0.5)',
-                            borderColor: '#007bff',
-                            data: data,
-                            fill: false,
-                            tension: 0.3,
-                            pointRadius: 5,
-                            pointHoverRadius: 7
-                        }]
-                },
-                options: {
-                    scales: {
-                        yAxes: [{
-                                ticks: {
-                                    beginAtZero: true,
-                                    callback: function (value, index, values) {
-                                        return value.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'});
-                                    }
-                                },
-                                scaleLabel: {
-                                    display: true,
-                                    labelString: 'Revenue (VND)'
-                                }
-                            }],
-                        xAxes: [{
-                                scaleLabel: {
-                                    display: true,
-                                    labelString: 'Month'
-                                }
-                            }]
-                    },
-                    elements: {
-                        line: {
-                            borderWidth: 2
-                        }
-                    }
-                }
-            });
             // Thêm sự kiện onload để khởi tạo biểu đồ khi tài liệu được tải
             document.addEventListener('DOMContentLoaded', function () {
                 // Lấy context của canvas biểu đồ
@@ -292,38 +289,44 @@
                     }
                 });
             });
-
         </script>
-        <script>
-            function exportToExcel() {
-                const revenueMap = <%= request.getAttribute("revenueMap") %>;
-
-                const data = Object.keys(revenueMap).map(month => ({
-                        Month: month,
-                        Revenue: revenueMap[month]
-                    }));
-
-                const ws = XLSX.utils.json_to_sheet(data);
-                const wb = XLSX.utils.book_new();
-                XLSX.utils.book_append_sheet(wb, ws, "Revenue Data");
-
-                const wbout = XLSX.write(wb, {bookType: 'xlsx', type: 'array'});
-
-                const fileName = 'revenue_data.xlsx';
-                const blob = new Blob([wbout], {type: 'application/octet-stream'});
-
-                if (navigator.msSaveBlob) { // For IE 10+
-                    navigator.msSaveBlob(blob, fileName);
-                } else {
-                    const link = document.createElement('a');
-                    link.href = URL.createObjectURL(blob);
-                    link.setAttribute('download', fileName);
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                }
+        <style>
+            .error-message {
+                color: #ffcccc;
+                /*font-weight: bold;*/
             }
-        </script>
+            .chart-container {
+                width: 100%;
+                max-width: 600px; /* Adjust as needed */
+            }
 
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 20px;
+            }
+
+            th, td {
+                border: 1px solid #ccc;
+                padding: 10px;
+                text-align: left;
+            }
+
+            .form-container {
+                padding: 20px;
+            }
+            table, th, td {
+                border: none;
+            }
+            .table-cell-content {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                text-align: center; /* căn giữa nội dung theo chiều ngang */
+                height: 100%; /* chiều cao 100% để nội dung căn giữa */
+            }
+
+        </style>
     </body>
 </html>

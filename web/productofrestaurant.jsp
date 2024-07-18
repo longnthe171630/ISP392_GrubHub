@@ -48,7 +48,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="revenue">
                         <i class='bx bxs-message-dots' ></i>
                         <span class="text">Revenue</span>
                     </a>
@@ -81,7 +81,7 @@
         <section id="content">
             <!-- NAVBAR -->
             <nav>
-                <i class='bx bx-menu' ></i>
+<!--                <i class='bx bx-menu' ></i>
                 <a href="#" class="nav-link">Categories</a>
                 <form action="#">
                     <div class="form-input">
@@ -94,10 +94,10 @@
                 <a href="#" class="notification">
                     <i class='bx bxs-bell' ></i>
                     <span class="num">8</span>
-                </a>
-                <a href="#" class="profile">
+                </a>-->
+<!--                <a href="#" class="profile">
                     <img src="img/people.png">
-                </a>
+                </a>-->
             </nav>
             <!-- NAVBAR -->
 
@@ -122,9 +122,10 @@
                             <span class="text">Add new product</span>
                         </button>
                         <div class="dropdown-menu">
-                            <a href="addnewproduct">Add New Product</a>
-                            <a href="uploadfromfile.jsp">Add Products from File</a>
+                            
                         </div>
+                        <a href="addnewproduct">Add New Product</a>
+                            <a href="uploadfromfile.jsp">Add Products from File</a>
                     </div>
                 </div>
                 <div class="table-data">

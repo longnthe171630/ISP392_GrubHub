@@ -31,6 +31,34 @@ public class ProductDAO extends MyDAO {
         }
         return 0;
     }
+    public List<Product> getProductByResID(int cproduct_id) {
+        List<Product> t = new ArrayList<>();
+        xSql = "select p.id,p.name,p.price,p.quantity,p.image,p.rating,p.category_id\n"
+                + "from Product p\n"
+                + "where p.restaurant_id=?";
+        try {
+            ps = con.prepareStatement(xSql);
+            ps.setInt(1, cproduct_id);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                int xProductId = rs.getInt("id");
+                String xName = rs.getString("name");
+                int xPrice = rs.getInt("price");
+                String xImage = rs.getString("image");
+                int xQuantity = rs.getInt("quantity");
+                float xRate= rs.getFloat("rating");
+                Category c = cd.getCategoryId(rs.getInt("category_id"));
+                Product x= new Product(xProductId, xName, xPrice, xQuantity, xImage, xRate, c);
+
+                t.add(x);
+            }
+            rs.close();
+            ps.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return t;
+    }
     public List<Product> getProducts() {
         List<Product> t = new ArrayList<>();
         xSql = "select * from Product ";

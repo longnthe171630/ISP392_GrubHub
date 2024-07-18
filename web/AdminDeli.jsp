@@ -17,7 +17,7 @@
 
         <!-- SIDEBAR -->
         <section id="sidebar">
-            <a href="Admin.jsp" class="brand">
+            <a href="admin?action=home" class="brand">
                 <i class='bx bxs-smile'></i>
                 <span class="text">AdminHub</span>
             </a>
@@ -60,12 +60,7 @@
                 </li>
             </ul>
             <ul class="side-menu">
-                <li>
-                    <a href="#">
-                        <i class='bx bxs-cog' ></i>
-                        <span class="text">Settings</span>
-                    </a>
-                </li>
+                
                 <li>
                     <a href="Home.jsp" class="logout">
                         <i class='bx bxs-log-out-circle' ></i>
@@ -85,17 +80,10 @@
                 <i class='bx bx-menu' ></i>
                 <!--			<a href="#" class="nav-link">Categories</a>-->
                 <form action="DashboardServlet">
-                    <div class="form-input">
-                        <input type="search" placeholder="Search...">
-                        <button type="submit" class="search-btn"><i class='bx bx-search' ></i></button>
-                    </div>
+                    
                 </form>
-                <input type="checkbox" id="switch-mode" hidden>
-                <label for="switch-mode" class="switch-mode"></label>
-                <a href="#" class="notification">
-                    <i class='bx bxs-bell' ></i>
-                    <span class="num">8</span>
-                </a>
+                
+                
                 <a href="#" class="profile">
                     <img src="img/people.png">
                 </a>
@@ -113,7 +101,7 @@
                             </li>
                             <li><i class='bx bx-chevron-right' ></i></li>
                             <li>
-                                <a class="active" href="#">Ban</a>
+                                <a class="active" href="#">Delivery</a>
                             </li>
                         </ul>
                     </div>
@@ -122,7 +110,7 @@
 <div class="table-data">
                     <div class="order">
                         <div class="head">
-                            <h3>List User</h3>
+                            <h3>List Delivery</h3>
                             <i class='bx bx-search' ></i>
                             <i class='bx bx-filter' ></i>
                         </div>
@@ -145,7 +133,7 @@
                                     <td>${o.order_id}</td>
                                     <td>${o.deliPerson}</td>
                                     <td>${o.ship_price}</td>
-                                    <td>${o.delivery_date}</td>
+                                    <td>${o.delivery_date2}</td>
                                     <td><span class="status completed">${o.status}</span></td>
                                 </tr>
                             </c:forEach>
