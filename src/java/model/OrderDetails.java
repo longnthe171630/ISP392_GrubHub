@@ -10,6 +10,7 @@ package model;
  */
 public class OrderDetails {
     private int id, order_id, product_id, quantity;
+    private Product product;
     private float price;
 
     public OrderDetails() {
@@ -54,6 +55,15 @@ public class OrderDetails {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+    
 
     public float getPrice() {
         return price;

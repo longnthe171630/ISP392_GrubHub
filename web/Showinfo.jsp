@@ -1,5 +1,6 @@
 <%@ page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ page import="model.Customer" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page import="model.*" %>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -9,7 +10,7 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
         <style type="text/css">
             body{
-                margin-top:20px;
+                margin-top:50px;
                 color: #9b9ca1;
             }
             .bg-secondary-soft {
@@ -90,10 +91,13 @@
         </style>
     </head>
     <body>
+        <jsp:include page="Hearder.jsp"></jsp:include><br><br>
         <%
             // Lấy thông tin tài khoản từ session attribute
+            Account account = (Account) request.getAttribute("acc");
             Customer customer = (Customer) request.getAttribute("customer");
-            String status = (String) request.getAttribute("status");
+            String status = (String) request.getAttribute("alert");
+            Address address = (Address) request.getAttribute("address");
             if (customer == null) {
                 response.sendRedirect("logincus");
                 
@@ -120,21 +124,37 @@
                         <div class="bg-secondary-soft px-4 py-5 rounded">
                             <div class="row g-3">
                                 <h4 class="mb-4 mt-0">My Profile</h4>
+                                 <div class="col-md-6">
+                                    <label class="form-label">Name</label>
+                                    <input type="text" class="form-control" name="name" placeholder aria-label="name" value="<%= customer.getName() %>" readonly> 
+                                </div>
                                 <div class="col-md-6">
                                     <label class="form-label">Username</label>
-                                    <input type="text" class="form-control" name="username" placeholder aria-label="Username" value="<%= customer.getUserName() %>" readonly> 
+                                    <input type="text" class="form-control" name="username" placeholder aria-label="Username" value="<%= account.getUsername()%>" readonly> 
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">Email</label>
-                                    <input type="text" class="form-control" name="email" placeholder aria-label="Email" value="<%= customer.getEmail() %>" readonly>
+                                    <input type="text" class="form-control" name="email" placeholder aria-label="Email" value="<%= account.getEmail() %>" readonly>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">Phone number</label>
-                                    <input type="text" class="form-control" name="phonenumber" placeholder aria-label="Phonenumber" value="<%= customer.getPhoneNumber() %>" readonly>
+                                    <input type="text" class="form-control" name="phonenumber" placeholder aria-label="Phonenumber" value="<%= account.getPhonenumber() %>" readonly>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">Date of birth</label>
                                     <input type="date" class="form-control" name="dob" placeholder aria-label="Date of birth" value="<%= customer.getDob() != null ? customer.getDob() : "" %>" readonly>
+                                </div>
+                                 <div class="col-md-6">
+                                    <label class="form-label">Details</label>
+                                    <input type="text" class="form-control" name="details" placeholder aria-label=" Address details" value="<%= address.getDetails() %>" readonly>
+                                </div>
+                                 <div class="col-md-6">
+                                    <label class="form-label">state</label>
+                                    <input type="text" class="form-control" name="state" placeholder aria-label="Address state" value="<%=address.getState()%>" readonly>
+                                </div>
+                                 <div class="col-md-6">
+                                    <label class="form-label">street</label>
+                                    <input type="text" class="form-control" name="street" placeholder aria-label="Address street" value="<%= address.getStreet()%>" readonly>
                                 </div>
                                 <div class="gend">
                                     <a>Gender</a><br>
@@ -190,6 +210,7 @@
                                         }
 
 </script>
+<jsp:include page="Footer.jsp"></jsp:include>
 </body>
 </html>
 <!--                            <div class="col-xxl-4">

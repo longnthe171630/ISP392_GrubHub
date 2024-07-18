@@ -4,6 +4,8 @@
  */
 package model;
 
+import java.util.Date;
+
 /**
  *
  * @author Long1
@@ -12,6 +14,13 @@ public class Account {
     private int id;
     private String username, password, email, phonenumber;
     private int role;
+    // db mới 22/06------------------------ vupl
+    
+    private int addressID;
+    private int active;
+    private String img;
+    private Date createDate;
+    
 
     public Account() {
     }
@@ -32,6 +41,38 @@ public class Account {
         this.phonenumber = phonenumber;
         this.role = role;
     }
+    // contructor mới 22/06
+
+    public Account(int id, String username, String password, String email, String phonenumber, int role, int addressID, int active, String img, Date createDate) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.phonenumber = phonenumber;
+        this.role = role;
+        this.addressID = addressID;
+        this.active = active;
+        this.img = img;
+        this.createDate = createDate;
+    }
+
+    public Account(String username, String password, String email, String phonenumber, int role, int addressID, int active, String img ,Date createDate) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.phonenumber = phonenumber;
+        this.role = role;
+        this.addressID = addressID;
+        this.active = active;
+        this.img = img;
+        this.createDate = createDate;
+
+    }
+//
+//    public Account(String userName, String passWord, String email, String phoneNumber, int role, int idAddress, int i, Object object, Object object0) {
+//        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+//    }
+    
     
 
     public int getId() {
@@ -81,6 +122,45 @@ public class Account {
     public void setPhonenumber(String phonenumber) {
         this.phonenumber = phonenumber;
     }
+
+    public int getAddressID() {
+        return addressID;
+    }
+
+    public void setAddressID(int addressID) {
+        this.addressID = addressID;
+    }
+
+    public int getActive() {
+        return active;
+    }
+
+    public void setActive(int active) {
+        this.active = active;
+    }
+
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    @Override
+    public String toString() {
+        return "Account{" + "id=" + id + ", username=" + username + ", password=" + password + ", email=" + email + ", phonenumber=" + phonenumber + ", role=" + role + ", addressID=" + addressID + ", active=" + active + ", img=" + img + ", createDate=" + createDate + '}';
+    }
+    
+    
     
     
 }

@@ -23,8 +23,22 @@ public class Customer {
     private boolean gender;
     private int address_id;
     private Date createDate;
+    
+    //----- thêm mới  22/06
+    private int accountID;
 
     public Customer() {
+    }
+
+    public Customer(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+    public Customer(int id, String name, String dob, boolean gender) {
+        this.id = id;
+        this.name = name;
+        this.dob = dob;
+        this.gender = gender;
     }
 
     public Customer(String userName, String passWord) {
@@ -78,6 +92,37 @@ public class Customer {
         this.gender = gender;
         this.address_id = address_id;
     }
+
+    public Customer(String name, String userName, String passWord, String email, String phoneNumber, String dob, boolean gender) {
+        this.name = name;
+        this.userName = userName;
+        this.passWord = passWord;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.dob = dob;
+        this.gender = gender;
+    }
+    
+//    -----------------------DB mới--------22/06------------------------------------- vupl
+// contructor mới
+
+    public Customer(int id, String name, String dob, boolean gender, int accountID) {
+        this.id = id;
+        this.name = name;
+        this.dob = dob;
+        this.gender = gender;
+        this.accountID = accountID;
+    }
+
+    public Customer(String name, String dob, boolean gender, int accountID) {
+        this.name = name;
+        this.dob = dob;
+        this.gender = gender;
+        this.accountID = accountID;
+    }
+    
+    
+    
 
     public int getId() {
         return id;
@@ -159,9 +204,21 @@ public class Customer {
         this.createDate = createDate;
     }
 
+    public int getAccountID() {
+        return accountID;
+    }
+
+    public void setAccountID(int accountID) {
+        this.accountID = accountID;
+    }
+    
+    
+
     @Override
     public String toString() {
         return "Customer{" + "id=" + id + ", name=" + name + ", userName=" + userName + ", passWord=" + passWord + ", email=" + email + ", phoneNumber=" + phoneNumber + ", dob=" + dob + ", gender=" + gender + ", address_id=" + address_id + ", createDate=" + createDate + '}';
     }
+
+    
 
 }

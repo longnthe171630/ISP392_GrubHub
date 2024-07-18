@@ -64,7 +64,7 @@ public class RestaurantDetailsServlet extends HttpServlet {
             throws ServletException, IOException {
         RestaurantDAO dao = new RestaurantDAO();
         ProductDAO dao2 = new ProductDAO();
-        String restaurantId = request.getParameter("id");
+        String restaurantId = request.getParameter("restaurant_id");
         Restaurant restaurant = dao.getRestaurant(restaurantId);
         List<Product> productList = dao2.getProductByRID(restaurantId);
         request.setAttribute("restaurant", restaurant);

@@ -47,7 +47,6 @@ public class LogoutServlet extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession();
         session.removeAttribute("acc");
-        session.removeAttribute("customer");
         session.removeAttribute("account");
         String user = request.getParameter("username");
         String pass = request.getParameter("password");
@@ -62,7 +61,7 @@ public class LogoutServlet extends HttpServlet {
         p.setMaxAge(0);
         response.addCookie(u);
         response.addCookie(p);
-        response.sendRedirect("LoginCus.jsp");
+        response.sendRedirect("Login.jsp");
     }
 
     /**

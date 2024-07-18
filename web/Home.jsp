@@ -118,52 +118,60 @@
 
 
         <section class="dishes" id="dishes">
-    <h1 class="heading"> Categories </h1>
-    <div class="container">
-        <div class="row">
-            <!-- Category Section -->
-            <jsp:include page="Category.jsp"></jsp:include>
-            <form name="f" action="" method="post">
-                <!-- Product Section -->
-                <div class="col-sm-9">
-                    <div class="box-container">
-                        <jsp:useBean id="db" class="dao.ProductDAO"/>
-                        <c:forEach items="${requestScope.listPP}" var="o">
-                            <div class="box">
-                                <a href="#" class="fas fa-heart"></a>
-                                <a href="detail?product_id=${o.id}" class="fas fa-eye"></a>
-                                <img src="images/Product/${o.image}" alt="${o.name}">
-                                <h3>${o.name}</h3>
-                                <div class="stars">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star-half-alt"></i>
-                                </div>
-                                <p><span>${o.price} đ</span></p>
-                                <form action="cart" method="post">
-                                    <input type="hidden" name="id" value="${o.id}"/>
-                                    <input type="hidden" name="num" value="1"/>
-                                    <input type="button" onclick="buy('${o.id}')" class="btn" value="Add to cart" />
-                                </form>
+            <h1 class="heading"> Categories </h1>
+            <div class="container">
+                <div class="row">
+                    <!-- Category Section -->
+                    <jsp:include page="Category.jsp"></jsp:include>
+                        <form name="f" action="" method="post">
+                            <!-- Product Section -->
+                            <div class="col-sm-9">
+                                <div class="box-container">
+                                <c:forEach items="${requestScope.listP}" var="o">
+                                    <div class="box">
+                                        <a href="favorite?productId=${o.id}" class="fas fa-heart"></a>
+                                        <a href="detail?product_id=${o.id}&restaurant_id=${o.restaurant.id}" class="fas fa-eye"></a>
+                                        <img src="images/Product/${o.image}" alt="${o.name}">
+                                        <h3>${o.name}</h3>
+                                        <div class="stars">
+                                            <c:forEach var="i" begin="1" end="5">
+                                                <c:choose>
+                                                    <c:when test="${i <= o.rating}">
+                                                        <i class="fas fa-star"></i>
+                                                    </c:when>
+                                                    <c:when test="${i > o.rating and i <= o_rating + 0.5}">
+                                                        <i class="fas fa-star-half-alt"></i>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <i class="far fa-star"></i>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </c:forEach>
+                                        </div>
+                                        <p><span>${o.price} đ</span></p>
+                                        <form action="show" method="post">
+                                            <input type="hidden" name="id" value="${o.id}"/>
+                                            <input type="hidden" name="restaurantId" value="${o.restaurant.id}"/>
+                                            <input type="hidden" name="num" value="1"/>
+                                            <input type="button" onclick="buy('${o.id}')" class="btn" value="Add to cart" />
+                                        </form>
+                                    </div>
+                                </c:forEach>
                             </div>
-                        </c:forEach>
-                    </div>
+                        </div>
+                        <div class="pagination-container col-md-12">
+                            <ul class="pagination justify-content-center">
+                                <c:forEach begin="1" end="${endP}" var="i">
+                                    <li class="page-item ${param.index == i ? 'active' : ''}">
+                                        <a class="page-link" href="home?index=${i}">${i}</a>
+                                    </li>
+                                </c:forEach>
+                            </ul>
+                        </div>
+                    </form>   
                 </div>
-                <div class="pagination-container col-md-12">
-                    <ul class="pagination justify-content-center">
-                        <c:forEach begin="1" end="${endP}" var="i">
-                            <li class="page-item ${param.index == i ? 'active' : ''}">
-                                <a class="page-link" href="home?index=${i}">${i}</a>
-                            </li>
-                        </c:forEach>
-                    </ul>
-                </div>
-            </form>   
-        </div>
-    </div>
-</section>
+            </div>
+        </section>
 
 
         <!-- dishes section ends -->
@@ -171,33 +179,37 @@
 
         <!-- menu section starts  -->
 
-        <section class="menu" id="menu">
+        <section class="dishes" id="dishes">
 
             <h3 class="sub-heading"> our menu </h3>
             <h1 class="heading"> Những món ăn được ưa thích </h1>
 
-            <div class="box-container">
-
-                <div class="box">
-                    <div class="image">
-                        <img src="images/menu-1.jpg" alt="">
-                        <a href="#" class="fas fa-heart"></a>
-                    </div>
-                    <div class="content">
-                        <div class="stars">
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i>
-                            <i class="fas fa-star-half-alt"></i>
+            <div class="box-container">  
+                <c:forEach items="${requestScope.listTop5}" var="t">
+                    <div class="box">
+                        <div class="image">
+                            <img src="images/Product/${t.image}" alt="${t.name}">
                         </div>
-                        <h3>Pizza</h3>
-                        <!--                    <p>just come here and enjoy our food the test is so good.</p>-->
-                        <p><span class="price">150000đ</span></p>
-                        <a href="#" class="btn">add to cart</a>
-
+                        <div class="content">
+                            <div class="stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                            <h3>${t.name}</h3>
+                            <!--                    <p>just come here and enjoy our food the test is so good.</p>-->
+                            <p><span>${t.price} đ</span></p>
+                            <form action="buy" method="post">
+                                <input type="hidden" name="id" value="${t.id}"/>
+                                <input type="hidden" name="num" value="1"/>
+                                <input type="button" onclick="buy('${t.id}')" class="btn" value="Add to cart" />
+                            </form>
+                        </div>
                     </div>
-                </div>
+                </c:forEach>
+            </div>
 
         </section>
 

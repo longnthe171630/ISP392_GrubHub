@@ -28,7 +28,7 @@ public class RestaurantServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String resId = request.getParameter("id");
+        String resId = request.getParameter("restaurant_id");
         ProductDAO dao = new ProductDAO();
         RestaurantDAO dao2 = new RestaurantDAO();
         List<Restaurant> restaurantList = dao2.getRestaurants();

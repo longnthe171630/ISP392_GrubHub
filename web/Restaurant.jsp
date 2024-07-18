@@ -14,22 +14,7 @@
         <link rel="stylesheet" href="css/style.css">
     </head>
     <body>
-        <header>
-            <a href="home" class="logo"><i class="fas fa-utensils"></i>GrubHub</a>
-            <nav class="navbar">
-                <a class="active" href="home">Home</a>
-                <a href="restaurant">Restaurant</a>
-                <a href="About.jsp">About</a>
-                <a href="Contact.jsp">Contact</a>
-            </nav>
-            <div class="icons">
-                <i class="fas fa-bars" id="menu-bars"></i>
-                <i class="fas fa-search" id="search-icon"></i>
-                <a href="#" class="fas fa-heart"></a>
-                <a href="#" class="fas fa-shopping-cart"></a>
-                <a href="login" class="login-btn">login</a>
-            </div> 
-        </header>
+          <jsp:include page="Hearder.jsp"></jsp:include>
         <br><!-- comment -->
         <br><!-- comment -->
         <br><!-- comment -->
@@ -43,7 +28,7 @@
                 <c:forEach items="${requestScope.listR}" var="o">
                     <div class="box">
                         <a href="#" class="fas fa-heart"></a>
-                        <a href="restaurantDetails?id=${o.id}" >
+                        <a href="restaurantDetails?restaurant_id=${o.id}" >
                             <h3>${o.name}</h3>
 
                         </a>

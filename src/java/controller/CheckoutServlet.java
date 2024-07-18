@@ -4,6 +4,8 @@
  */
 package controller;
 
+import dao.CartDAO;
+import dao.CustomerDAO;
 import dao.OrderDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -14,10 +16,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import model.Account;
 import model.Cart;
 import model.Customer;
+import model.Order;
+import model.OrderDetails;
 
 /**
  *
@@ -86,18 +92,34 @@ public class CheckoutServlet extends HttpServlet {
         } else {
             cart = new Cart();
         }
-        Customer acount = null;
-        Object a = session.getAttribute("acc");
-        if (a != null) {
-            acount = (Customer) a;
-            OrderDAO odb = new OrderDAO();
-            odb.addOrder(acount, cart);
 
-            session.removeAttribute("cart");
-            session.setAttribute("size", 0);
-            response.sendRedirect("home");
+        Account account = (Account) session.getAttribute("acc");
+        if (account != null && account.getRole() == 2) { // Assuming role 2 is for customers
+            CustomerDAO customerDAO = new CustomerDAO();
+            Customer customer = customerDAO.getCustomerByAccID(account.getId());
+
+            if (customer != null) {
+                OrderDAO orderDAO = new OrderDAO();
+                Order order = orderDAO.addOrder(customer, cart);
+                // Add the order to the database (assuming this method returns the created order with an ID)
+                if (order != null) {
+                    // Redirect to OrderServlet to display order details
+                    response.sendRedirect("order?orderId=" + order.getId());
+                } else {
+                    response.sendRedirect("Login.jsp"); // Handle error scenario
+                }
+                // Clear the cart after successful order creation
+                CartDAO cartDAO = new CartDAO();
+                cartDAO.clearCart(customer.getId());
+
+                // Remove cart from session
+                session.removeAttribute("cart");
+                session.setAttribute("size", 0);
+            } else {
+                response.sendRedirect("Login.jsp");
+            }
         } else {
-            response.sendRedirect("LoginCus.jsp");
+            response.sendRedirect("Login.jsp");
         }
     }
 

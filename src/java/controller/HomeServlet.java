@@ -47,6 +47,7 @@ public class HomeServlet extends HttpServlet {
         List<Product> list = dao.getProducts();
         List<Category> listC = dao2.getCategorys();
         List<Product> listPC = dao.getProducts2();
+        List<Product> listTop5 = dao.listTop5();
         List<Product> listPP = dao.getProducTop9(index);
         int cnt = dao.getTotalProduct();
         int endPage = cnt / 9;
@@ -57,6 +58,7 @@ public class HomeServlet extends HttpServlet {
         //b2: set data to jsp
         request.setAttribute("listPP", listPP);
         request.setAttribute("listP", list);
+        request.setAttribute("listTop5", listTop5);
         request.setAttribute("listPC", listPC);
         request.setAttribute("listCC", listC);
         request.getRequestDispatcher("Home.jsp").forward(request, response);

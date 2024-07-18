@@ -4,7 +4,8 @@
  */
 package controller;
 
-
+import dao.AccountDAO;
+import dao.AddressDAO;
 import dao.CustomerDAO;
 import model.Customer;
 import java.io.IOException;
@@ -14,6 +15,9 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import model.Account;
+import model.Address;
+import utils.Validate;
 
 /**
  *
@@ -61,24 +65,87 @@ public class EditServlet extends HttpServlet {
             throws ServletException, IOException {
 
         HttpSession session = request.getSession();
+        String name = request.getParameter("name");
         String userNameSess = (String) session.getAttribute("username");
         String username = request.getParameter("username");
         String email = request.getParameter("email");
         String phonenumber = request.getParameter("phonenumber");
         String dob = request.getParameter("dob");
         String genderString = request.getParameter("gender");
+        String details = request.getParameter("details");
+        String state = request.getParameter("state");
+        String street = request.getParameter("street");
+        int idAddress = 0;
+        
         boolean gender = false;
+        Validate v = new Validate();
+        if (email == null || email.isEmpty() || phonenumber.isEmpty() || phonenumber == null || dob == null || details.isEmpty() ||details==null||state.isEmpty()||state==null|| street.isEmpty()|| street==null){
+            String msg = "All fields must be filled out completely";
+            request.setAttribute("alert", msg);
+            request.getRequestDispatcher("load").forward(request, response);
+            return;
+        } 
+        if (!v.isValidEmail(email)) {
+            String msg = "Email address has not been entered correctly";
+            request.setAttribute("alert", msg);
+            request.getRequestDispatcher("load").forward(request, response);
+            return;
+        } else if (!v.isValidPhone(phonenumber)) {
+            String msg = "Phone number must be number with 10 charactors";
+            request.setAttribute("alert", msg);
+            request.getRequestDispatcher("load").forward(request, response);
+            return;
+        }
 
         if (genderString != null) {
             gender = genderString.equalsIgnoreCase("Female");
             request.getRequestDispatcher("load").forward(request, response);
         }
+        AddressDAO ad = new AddressDAO();
+        Address add = new Address(details, state, street);
 
+// Kiểm tra xem địa chỉ đã tồn tại trong cơ sở dữ liệu chưa
+        Address existingAddress = ad.getAddress(add);
+        
+        if (existingAddress == null) {
+            // Nếu địa chỉ chưa tồn tại, tạo nó trong cơ sở dữ liệu
+            ad.createAddress(add);
+            idAddress = ad.getAddress(add).getId(); // Lấy ID của địa chỉ vừa tạo
+        } else {
+            // Nếu địa chỉ đã tồn tại, sử dụng ID hiện tại của nó
+            idAddress = existingAddress.getId();
+        }
         try {
+            //lấy ID acc
+             AccountDAO accdao = new AccountDAO();
+             int accID = accdao.getAccountID(userNameSess);
+            
+            Address newadd = ad.getAddressById(idAddress);
             CustomerDAO dao = new CustomerDAO();
-            Customer a = new Customer(userNameSess, email, phonenumber, dob, gender);
-            dao.updateUser(a);
-            request.setAttribute("customer", a);
+           
+            
+//            Customer c = dao.getCustomer(username);
+//            c.setEmail(email);
+//            c.setPhoneNumber(phonenumber);
+//            c.setDob(dob);
+//            c.setAddress_id(idAddress);
+//            c.setGender(gender);
+            
+            Account a = accdao.getAccountByID(accID);
+            a.setEmail(email);
+            a.setPhonenumber(phonenumber);
+            a.setAddressID(idAddress);
+            accdao.updateAccount(a);
+            
+            Customer c = dao.getCustomerByAccID(accID);
+            c.setName(name);
+            c.setDob(dob);
+            c.setGender(gender);
+            dao.updateCustomer(c);
+            
+            request.setAttribute("acc", a);
+            request.setAttribute("address", newadd);
+            request.setAttribute("customer", c);
             request.getRequestDispatcher("Showinfo.jsp").forward(request, response);
         } catch (Exception e) {
             e.printStackTrace();

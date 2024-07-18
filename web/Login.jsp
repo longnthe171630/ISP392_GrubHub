@@ -67,7 +67,7 @@
                                     </div>
                                 </div>
 
-                                <form action="login" method="POST" class="signin-form">
+                                <form id="login-form" action="login" method="POST" class="signin-form">
                                     <p class="text-danger " >
                                         ${requestScope.alert}
                                     </p>
@@ -80,7 +80,7 @@
                                         <input id="pass" type="password" name="password" value="${password}" class="form-control" placeholder="Password" required >
                                     </div>
                                     <div class="form-group">
-                                        <button type="submit"  class="form-control btn btn-primary rounded submit px-3">Sign In</button>
+                                        <button type="submit" onclick="checkCaptcha()" class="form-control btn btn-primary rounded submit px-3">Sign In</button>
                                     </div>
                                     <div class="form-group d-md-flex">
                                         <div class="w-50 text-left">
@@ -95,13 +95,16 @@
                                     </div>
                                 </form>
                                 <p class="text-center">Don't have a account? <a href="registercustomer.jsp">Sign Up</a></p>
+                                <p class="text-center">Sign up to join the system as a Restaurant or shipper <a href="RegisterAccount.jsp">Sign up to be one of us</a></p>
+                                <div class="g-recaptcha" data-sitekey="6LclNuwpAAAAAJ15fzuD-_YURoq0-XxvEub_ZkDF"></div>
+                                <div style="color: red" id="error"></div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
-
+        <script src="https://www.google.com/recaptcha/api.js" async defer></script>
         <script src="js/jquery.min.js"></script>
         <script src="js/popper.js"></script>
         <script src="js/bootstrap.min.js"></script>
@@ -109,6 +112,19 @@
         <script src="js/script.js"></script>
         <jsp:include page="Footer.jsp"></jsp:include>
         </body>
+        <script type="text/javascript">
+                                            function checkCaptcha() {
+                                                var form = document.getElementById("login-form");
+                                                var error = document.getElementById("error");
+                                                const response = grecaptcha.getResponse();
+//                                              console.log(response);
+                                                if (response) {
+                                                    form.submit();
+                                                }else{
+                                                    error.textContent ="Please verify that you not a robot!";
+                                                }
+                                            }
+        </script>
         <script type="text/javascript">
             window.onload = function () {
                 // Lấy thông điệp từ biến JavaScript
@@ -125,22 +141,4 @@
 </html>
 
 
-<!--<!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
-    </head>
-    <body>
-        <h1>Login form</h1>
-        <form action="login" method="post">
-            <p class="text-danger">${mess}</p>
-            username: <input type="text" name="username" value="${username}"/><br>
-            password: <input type="text" name="password" value="${password}"/><br>
-            remember <input type="checkbox" name="remember" value="1"> <a href=forgotpass.jsp">              forgot password?</a><br>
-            <input type="submit" value="Login"/><br>
-            <p> </p>
-            
-        </form>
-    </body>
-</html>-->
+
