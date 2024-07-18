@@ -134,12 +134,13 @@ public class NotificationDAO extends MyDAO {
         return x;
     }
 
-    public void InsertNotice(String des, int order_id) {
-        xSql = "insert into Notification (descripsion, order_id, notice_time) values(?,?, CONVERT(VARCHAR(19), GETDATE(), 120))";
+    public void InsertNotice(String des, int order_id, int account_id) {
+        xSql = "insert into Notification (descripsion, order_id, account_id, notice_time) values(?,?,?, CONVERT(VARCHAR(19), GETDATE(), 120))";
         try {
             ps = con.prepareStatement(xSql);
             ps.setString(1, des);
             ps.setInt(2, order_id);
+            ps.setInt(3, account_id);
             ps.executeUpdate();
             ps.close();
         } catch (SQLException e) {

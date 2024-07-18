@@ -63,7 +63,6 @@ public class DeliveryStatusServlet extends HttpServlet {
         Image image = new Image();
         switch (action) {
             case "accept":
-
                 Order o = order.getOrderById(order_id);
                 Delivery x = new Delivery();
                 x.setDelivery_person_id(id); // Thiết lập người giao hàng
@@ -120,7 +119,7 @@ public class DeliveryStatusServlet extends HttpServlet {
                         order.updateStatusOrder_2(order_id);
                         String err3 = "The order has been delivered successfully!";
                         request.getSession().setAttribute("err", err3);
-                        notice.InsertNotice("The order has been delivered successfully!", order_id);
+                        notice.InsertNotice("The order has been delivered successfully!",order_id,account.getId() );
                         response.sendRedirect("deliveryhistory");
                     } catch (Exception e) {
                         String err0 = "Lỗi catch rồi!";
@@ -146,7 +145,7 @@ public class DeliveryStatusServlet extends HttpServlet {
                         order.updateStatusOrder_3(order_id);
                         String err3 = "The order has been delivered failure!";
                         request.getSession().setAttribute("err", err3);
-                        notice.InsertNotice("The order has been delivered failure!<br>Reason: " + reason, order_id);
+                        notice.InsertNotice("The order has been delivered failure!<br>Reason: " + reason, order_id, account.getId());
                         response.sendRedirect("deliveryhistory");
                     } catch (Exception e) {
                         String err3 = "Lỗi catch rồi!";

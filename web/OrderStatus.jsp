@@ -170,41 +170,103 @@
                                 <strong>Total Amount:</strong> <br>
                                 <c:out value="${order.total_amount}" />đ
                             </div>
+                            <div class="col">
+                                <strong>Restaurant: </strong> <br>
+                                <c:out value="${order.restaurant_id}" />
+                            </div>
                         </div>
                     </article>
                     <div class="track">
-                        <div class="step ${order.status.equals('Đang xử lí') ? 'active' : ''}"> <span class="icon"> <i class="fa fa-check"></i> </span> <span class="text">Order confirmed</span> </div>
-                        <div class="step ${order.status.equals('Đang xử lí') ? 'active' : ''}"> <span class="icon"> <i class="fa fa-user"></i> </span> <span class="text"> Waiting restaurant </span> </div>
-                        <div class="step ${order.status.equals('Picked by Shipper') ? 'active' : ''}"> <span class="icon"> <i class="fa fa-user"></i> </span> <span class="text"> Picked by shipper </span> </div>
-                        <div class="step ${order.status.equals('On the way') ? 'active' : ''}"> <span class="icon"> <i class="fa fa-truck"></i> </span> <span class="text"> On the way </span> </div>
-                        <div class="step ${order.status.equals('Ready for Pickup') ? 'active' : ''}"> <span class="icon"> <i class="fa fa-box"></i> </span> <span class="text"> Ready for pickup </span> </div>
+                        <c:choose>
+                            <c:when test="${order.status == 'Success'}">
+                                <div class="step active"> 
+                                    <span class="icon"> <i class="fa fa-check"></i> </span> 
+                                    <span class="text">Order confirmed</span> 
+                                </div>
+                                <div class="step active"> 
+                                    <span class="icon"> <i class="fa fa-user"></i> </span> 
+                                    <span class="text"> Waiting restaurant </span> 
+                                </div>
+                                <div class="step active"> 
+                                    <span class="icon"> <i class="fa fa-user"></i> </span> 
+                                    <span class="text"> Waiting by shipper </span> 
+                                </div>
+                                <div class="step active"> 
+                                    <span class="icon"> <i class="fa fa-truck"></i> </span> 
+                                    <span class="text"> On the way </span> 
+                                </div>
+                                <div class="step active"> 
+                                    <span class="icon"> <i class="fa fa-box"></i> </span> 
+                                    <span class="text"> Ready for pickup </span> 
+                                </div>
+                                <div class="step active"> 
+                                    <span class="icon"> <i class="fa fa-check"></i> </span> 
+                                    <span class="text"> Success </span> 
+                                </div>
+                            </c:when>
+                            <c:otherwise>
+                                <div class="step ${order.status.compareTo('Waiting restaurant') <= 0? 'active' : ''}"> 
+                                    <span class="icon"> <i class="fa fa-check"></i> </span> 
+                                    <span class="text">Order confirmed</span> 
+                                </div>
+                                <div class="step ${order.status.compareTo('Waiting restaurant') <= 0? 'active' : ''}"> 
+                                    <span class="icon"> <i class="fa fa-user"></i> </span> 
+                                    <span class="text"> Waiting restaurant </span> 
+                                </div>
+                                <div class="step ${order.status.compareTo('Waiting delivery') <= 0? 'active' : ''}"> 
+                                    <span class="icon"> <i class="fa fa-user"></i> </span> 
+                                    <span class="text"> Waiting by shipper </span> 
+                                </div>
+                                <div class="step ${order.status.compareTo('Picking up') <= 0 ? 'active' : ''}"> 
+                                    <span class="icon"> <i class="fa fa-truck"></i> </span> 
+                                    <span class="text"> On the way </span> 
+                                </div>
+                                <div class="step ${order.status.compareTo('Delivering') <= 0 ? 'active' : ''}"> 
+                                    <span class="icon"> <i class="fa fa-box"></i> </span> 
+                                    <span class="text"> Ready for pickup </span> 
+                                </div>
+                                <div class="step ${order.status.compareTo('Success') == 0 ? 'active' : ''}"> 
+                                    <span class="icon"> <i class="fa fa-check"></i> </span> 
+                                    <span class="text"> Success </span> 
+                                </div>
+                            </c:otherwise>
+                        </c:choose>
                     </div>
-                    <hr>
-                    <ul class="row">
-                        <c:forEach var="orderDetail" items="${orderDetailsList}">
-                            <li class="col-md-4">
-                                <figure class="itemside mb-3">                    
-                                    <figcaption class="info align-self-center">
-                                        <div class="aside"><img src=images/Product/"<c:out value="${orderDetail.product.image}" />" class="img-sm border"></div>
-                                        <p class="title">Name:<c:out value="${orderDetail.product.name}" /></p>
-                                        <span class="text-muted">Giá :<c:out value="${orderDetail.price}" />đ</span>
-                                        <p><span class="text-muted">Số lượng: <c:out value="${orderDetail.quantity}" /></span>
-                                    </figcaption>
-                                </figure>
-                            </li>
-                        </c:forEach>
-                    </ul>
-                    <hr>
-                    <div style="float: right;">
-                        <form action="CancelOrder.jsp" method="POST">
-                            <input type="hidden" name="orderId" value="${order.id}" />
-                            <button type="submit" class="btn btn-danger">Cancel Order</button>
-                        </form>
-                    </div>
-                    <a href="home" class="btn btn-warning" data-abc="true"> <i class="fa fa-chevron-left"></i> Back to orders</a>
+
+                    <c:if test="${order.status == 'Cancelled'}">
+                        <div class="step active"> 
+                            <span class="icon"> <i class="fa fa-times"></i> </span> 
+                            <span class="text">Order Cancelled</span> 
+                        </div>
+                    </c:if>
                 </div>
-            </article>
+                <hr>
+                <ul class="row">
+                    <c:forEach var="orderDetail" items="${orderDetailsList}">
+                        <li class="col-md-4">
+                            <figure class="itemside mb-3">                    
+                                <figcaption class="info align-self-center">
+                                    <div class="aside"><img src=images/Product/"<c:out value="${orderDetail.product.image}" />" class="img-sm border"></div>
+                                    <p class="title">Name:<c:out value="${orderDetail.product.name}" /></p>
+                                    <span class="text-muted">Giá :<c:out value="${orderDetail.price}" />đ</span>
+                                    <p><span class="text-muted">Số lượng: <c:out value="${orderDetail.quantity}" /></span>
+                                </figcaption>
+                            </figure>
+                        </li>
+                    </c:forEach>
+                </ul>
+                <hr>
+                <div style="float: right;">
+                    <form action="cancelorder" method="GET">
+                        <input type="hidden" name="orderId" value="${order.id}" />
+                        <button type="submit" class="btn btn-danger">Cancel Order</button>
+                    </form>
+
+                </div>
+                <a href="home" class="btn btn-warning" data-abc="true"> <i class="fa fa-chevron-left"></i> Back to orders</a>
         </div>
-        <jsp:include page="Footer.jsp"></jsp:include>
-    </body>
+    </article>
+</div>
+<jsp:include page="Footer.jsp"></jsp:include>
+</body>
 </html>

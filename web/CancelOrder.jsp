@@ -30,7 +30,7 @@
                                 <label for="reason">Reason for Cancellation:</label>
                                 <textarea class="form-control" id="reason" name="reason" rows="3" required></textarea>
                             </div>
-                            <input type="hidden" name="orderId" value="${orderId}"> <!-- Replace ${orderId} with actual orderId -->
+                            <input type="hidden" name="orderId" value="${requestScope.orderId}"> <!-- Use orderId from request scope -->
                             <button type="submit" class="btn btn-danger">Cancel Order</button>
                         </form>
                     </div>

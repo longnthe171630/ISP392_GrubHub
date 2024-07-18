@@ -93,12 +93,12 @@ public class RestaurantOrderDetailServlet extends HttpServlet {
         Customer cus = cd.getCustomerByID_VuPL(o.getCustomer_id());
         String email = ad.getAccountByID(cus.getAccountID()).getEmail();
         if ("accept".equalsIgnoreCase(action)) {
-            o.setStatus("Đang chờ");
+            o.setStatus("Waiting delivery");
             od.updateStatusOrder(o);
             new Mail().sendEmail(email, "Cập nhật đơn hàng", "Đơn hàng của bạn được mua ngày: "+o.getOrder_date()+ " đang trong quá trình vận chuyển" );
             response.sendRedirect("restaurantdashboard");
         } else if ("reject".equalsIgnoreCase(action)) {
-            o.setStatus("Từ chối");
+            o.setStatus("Reject");
             od.updateStatusOrder(o);
             new Mail().sendEmail(email, "Cập nhật đơn hàng", "Đơn hàng của bạn được mua ngày: "+o.getOrder_date()+ 
                         ". Đã bị từ chối bởi cửa hàng "+ restaurant.getName()+" với lý do: " +reasonReject );

@@ -110,6 +110,27 @@ public class OrderDAO extends MyDAO {
         }
         return 1;
     }
+    
+        public void cancelOrder(int orderId) {
+        String sql = "UPDATE [Order] SET status = 'Cancelled' WHERE id = ?";
+        try {
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, orderId);
+            ps.executeUpdate();
+            System.out.println("Order with ID " + orderId + " has been cancelled.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            // Close resources
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     public List<Order> getListOrder2() {
         List<Order> list = new ArrayList<>();
@@ -220,20 +241,16 @@ public class OrderDAO extends MyDAO {
                 System.out.println("Total amount for restaurant ID " + restaurantId + ": " + totalAmount);
 
                 // Insert order into 'Order' table
-                // Lấy ngày hiện tại
                 LocalDate curDate = LocalDate.now();
-                // Chuyển đổi LocalDate thành LocalDateTime (thêm thời gian 00:00:00)
-                LocalDateTime dateTime = curDate.atStartOfDay();
-                // Chuyển đổi LocalDateTime thành Timestamp
-                java.sql.Timestamp date = java.sql.Timestamp.valueOf(dateTime); // Convert LocalDate to java.sql.Date
+                Date date = Date.valueOf(curDate); // Convert LocalDate to java.sql.Date
 
                 sql = "INSERT INTO [Order] (restaurant_id, customer_id, total_amount, status, order_date) VALUES (?, ?, ?, ?, ?)";
                 ps = con.prepareStatement(sql, ps.RETURN_GENERATED_KEYS);
                 ps.setInt(1, restaurantId);
                 ps.setInt(2, customer.getId());
                 ps.setDouble(3, totalAmount);
-                ps.setString(4, "Waiting Restaurant");
-                ps.setTimestamp(5, date);
+                ps.setString(4, "Waiting restaurant");
+                ps.setDate(5, date);
 
                 System.out.println("Executing query: " + ps.toString());
                 ps.executeUpdate();

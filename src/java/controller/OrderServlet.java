@@ -30,7 +30,7 @@ public class OrderServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String orderIdStr = request.getParameter("orderId");
 
-        // Ki?m tra xem orderIdStr có ph?i là null ho?c r?ng không
+        // Ki?m tra xem orderIdStr cï¿½ ph?i lï¿½ null ho?c r?ng khï¿½ng
         if (orderIdStr == null || orderIdStr.isEmpty()) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid Order ID");
             return;
@@ -39,24 +39,24 @@ public class OrderServlet extends HttpServlet {
         try {
             int orderId = Integer.parseInt(orderIdStr);
 
-            // Gi? s? b?n ?ã có mã ?? l?y Order và OrderDetails t? c? s? d? li?u
+            // Gi? s? b?n ?ï¿½ cï¿½ mï¿½ ?? l?y Order vï¿½ OrderDetails t? c? s? d? li?u
             Order order = orderDAO.getOrderById_VuPL(orderId);
             List<OrderDetails> orderDetailsList = orderDetailsDAO.getOrderDetailsByOrderId(orderId);
 
-            // Ki?m tra xem order và orderDetailsList có ph?i là null không
+            // Ki?m tra xem order vï¿½ orderDetailsList cï¿½ ph?i lï¿½ null khï¿½ng
             if (order == null || orderDetailsList == null) {
                 response.sendError(HttpServletResponse.SC_NOT_FOUND, "Order not found");
                 return;
             }
 
-            // Thi?t l?p các thu?c tính cho JSP
+            // Thi?t l?p cï¿½c thu?c tï¿½nh cho JSP
             request.setAttribute("order", order);
             request.setAttribute("orderDetailsList", orderDetailsList);
 
             // Chuy?n h??ng t?i JSP
             request.getRequestDispatcher("OrderStatus.jsp").forward(request, response);
         } catch (NumberFormatException e) {
-            // X? lý l?i n?u orderId không ph?i là s? nguyên h?p l?
+            // X? lï¿½ l?i n?u orderId khï¿½ng ph?i lï¿½ s? nguyï¿½n h?p l?
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid Order ID format");
         }
     }

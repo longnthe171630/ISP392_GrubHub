@@ -5,6 +5,8 @@
 package controller;
 
 import dao.AccountDAO;
+import dao.CartDAO;
+import dao.CustomerDAO;
 import model.Account;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -14,6 +16,11 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
+import model.Cart;
+import model.CartItem;
+import model.Customer;
 
 /**
  *
@@ -109,10 +116,20 @@ public class LoginServlet extends HttpServlet {
                     response.sendRedirect("admin?action=home");
                     break;
                 case 2: // Customer
+                     if (a.getRole() == 2) { // Assuming role 2 is for customers
+                        CustomerDAO customerDAO = new CustomerDAO();
+                        Customer customer = customerDAO.getCustomerByAccID(a.getId());
+                        CartDAO dao = new CartDAO();
+                        List<CartItem> cartItems = dao.getProductsInCart(customer.getId());
+                        Cart cart = new Cart(new ArrayList<>(cartItems)); // Initialize Cart with ArrayList
+
+                        session.setAttribute("cart", cart);
+
+                    }
                     response.sendRedirect("home");
                     break;
                 case 3: // Restaurant
-                    response.sendRedirect("RestaurantDashboard.jsp");
+                    response.sendRedirect("restaurantdashboard");
                     break;
                 case 4: // Shipper
                     response.sendRedirect("deliverydashboard");
