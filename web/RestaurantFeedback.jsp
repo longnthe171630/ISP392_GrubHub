@@ -189,7 +189,7 @@
                                     <br>
                                     <strong>Reviews: </strong>
                                     <p>${feedback.description}</p><br>      
-                                    <p>on product: ${feedback.productID}</p>
+                                    <p>on product: ${productNames[feedback.productID]}</p>
                                 </div>
                             </div>
                         </c:forEach>

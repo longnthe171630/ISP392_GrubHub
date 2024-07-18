@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="6.0" xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
+    <session-config>
+        <session-timeout>1440</session-timeout> <!-- Đơn vị là phút -->
+    </session-config>
     <filter>
         <filter-name>NotificationFilter</filter-name>
         <filter-class>filter.NotificationFilter</filter-class>
@@ -107,6 +110,10 @@
     <servlet>
         <servlet-name>AdminCusServlet</servlet-name>
         <servlet-class>controller.AdminCusServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SortProductServlet</servlet-name>
+        <servlet-class>controller.SortProductServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>ForgotPasswordServlet</servlet-name>
@@ -218,6 +225,10 @@
     <servlet-mapping>
         <servlet-name>AdminCusServlet</servlet-name>
         <url-pattern>/cus</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SortProductServlet</servlet-name>
+        <url-pattern>/sortProducts</url-pattern>
     </servlet-mapping>
     <welcome-file-list>
         <welcome-file>home</welcome-file>

@@ -123,6 +123,7 @@
                 <div class="row">
                     <!-- Category Section -->
                     <jsp:include page="Category.jsp"></jsp:include>
+                    
                         <form name="f" action="" method="post">
                             <!-- Product Section -->
                             <div class="col-sm-9">
