@@ -68,7 +68,7 @@ public class EditDeliveryServlet extends HttpServlet {
             throws ServletException, IOException {
 
         HttpSession session = request.getSession();
-        Part part = request.getPart("photo");
+        
         String name = request.getParameter("name");
         String userNameSess = (String) session.getAttribute("username");
         String username = request.getParameter("username");
@@ -141,7 +141,7 @@ public class EditDeliveryServlet extends HttpServlet {
             request.setAttribute("acc", a);
             request.setAttribute("address", newadd);
             request.setAttribute("deliver", d);
-            request.getRequestDispatcher("EditDeliveryPerson.jsp").forward(request, response);
+            request.getRequestDispatcher("loadingdeliveryprofile").forward(request, response);
         } catch (Exception e) {
             e.printStackTrace();
         }

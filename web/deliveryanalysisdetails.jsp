@@ -40,7 +40,7 @@
                                     <td>${d.order_id}</td>
                                     <td>
                                         <c:choose>
-                                            <c:when test="${d.status == 'Đã giao'}">
+                                            <c:when test="${d.status == 'Success'}">
                                                 <i class="fas fa-check-circle" style = "color: green;"></i> ${d.ship_price}
                                             </c:when>
                                             <c:otherwise>
@@ -52,9 +52,9 @@
                                     <td>${d.deliveryTime} minutes</td>
                                     <td>${d.start_time}</td>
                                     <td>${d.end_time}</td>
-                                    <td class="status ${d.status == 'Đã giao' ? 'Đã giao' : 'Không giao được'}">
+                                    <td class="status ${d.status == 'Success' ? 'Success' : 'Failure'}">
                                         <c:choose>
-                                            <c:when test="${d.status == 'Đã giao'}">
+                                            <c:when test="${d.status == 'Success'}">
                                                 <span class="status completed">${d.status}</span>
                                             </c:when>
                                             <c:otherwise>

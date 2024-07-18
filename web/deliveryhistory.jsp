@@ -181,11 +181,9 @@
                                                     <c:choose>
                                                         <c:when test="${d.status == 'Success'}">
                                                             <span class="status completed">${d.status}</span>
-
                                                         </c:when>
                                                         <c:when test="${d.status == 'Failure'}">
                                                             <span class="status pending">${d.status}</span>
-
                                                         </c:when>
                                                     </c:choose>
                                                 </td>

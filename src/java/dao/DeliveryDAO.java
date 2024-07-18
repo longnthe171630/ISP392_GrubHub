@@ -310,7 +310,7 @@ public class DeliveryDAO extends MyDAO {
 
     public void updateStatusDelivery(int id) {
         String xSql = "UPDATE [Delivery]\n"
-                + "SET [status] = N'Picking Up', delivery_date = CONVERT(VARCHAR(19), GETDATE(), 120), start_time = CONVERT(VARCHAR(19), GETDATE(), 120)\n"
+                + "SET [status] = N'Picking Up', delivery_date = CONVERT(VARCHAR(19), GETDATE(), 120)\n"
                 + "WHERE [status] = N'Waiting Delivery' AND [order_id] = ?;";
         try {
             ps = con.prepareStatement(xSql);
@@ -324,7 +324,7 @@ public class DeliveryDAO extends MyDAO {
 
     public void updateStatusDelivery_2(int id) {
         String xSql = "UPDATE [Delivery]\n"
-                + "SET [status] = N'Success'\n , delivery_date = CONVERT(VARCHAR(19), GETDATE(), 120), end_time = CONVERT(VARCHAR(19), GETDATE(), 120)\n"
+                + "SET [status] = N'Success' ,end_time = CONVERT(VARCHAR(19), GETDATE(), 120)\n"
                 + "WHERE [status] = N'Delivering' AND [order_id] = ?";
         try {
             ps = con.prepareStatement(xSql);
@@ -338,7 +338,7 @@ public class DeliveryDAO extends MyDAO {
 
     public void updateStatusDelivery_3(int id) {
         String xSql = "UPDATE [Delivery]\n"
-                + "SET [status] = N'Failure'\n , delivery_date = CONVERT(VARCHAR(19), GETDATE(), 120), end_time = CONVERT(VARCHAR(19), GETDATE(), 120)\n"
+                + "SET [status] = N'Failure'\n ,end_time = CONVERT(VARCHAR(19), GETDATE(), 120)\n"
                 + "WHERE [status] = N'Delivering' AND [order_id] = ?";
         try {
             ps = con.prepareStatement(xSql);
@@ -352,7 +352,7 @@ public class DeliveryDAO extends MyDAO {
 
     public void updateStatusDelivery_4(int id) {
         String xSql = "UPDATE [Delivery]\n"
-                + "SET [status] = N'Delivering' , delivery_date = CONVERT(VARCHAR(19), GETDATE(), 120)\n"
+                + "SET [status] = N'Delivering' , start_time = CONVERT(VARCHAR(19), GETDATE(), 120)\n"
                 + "WHERE [status] = N'Picking Up' AND [order_id] = ?";
         try {
             ps = con.prepareStatement(xSql);
