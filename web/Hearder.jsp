@@ -94,7 +94,14 @@
                 <a href="About.jsp">About</a>
                 <a href="Contact.jsp">Contact</a>
                 <c:if test="${sessionScope.acc != null}">
-                    <a class="" href="load">Hello ${sessionScope.acc.username}</a>
+                    <c:choose>
+                        <c:when test="${sessionScope.acc.role == 4}">
+                            <a class="" href="deliverydashboard">Dashboard</a>
+                        </c:when>
+                        <c:otherwise>
+                            <a class="" href="load">Hello ${sessionScope.acc.username}</a>
+                        </c:otherwise>
+                    </c:choose>
                 </c:if>
             </nav>
             <c:set var="size" value="${sessionScope.size}"/>

@@ -28,7 +28,7 @@ import model.Order;
  *
  * @author Long1
  */
-@WebServlet(name = "DeliveryOrdersServlet", urlPatterns = {"/deliverydashboard"})
+@WebServlet(name = "DeliveryDashboardServlet", urlPatterns = {"/deliverydashboard"})
 public class DeliveryDashboardServlet extends HttpServlet {
 
     @Override

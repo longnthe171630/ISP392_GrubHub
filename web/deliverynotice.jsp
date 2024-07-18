@@ -66,11 +66,11 @@
             <!-- NAVBAR -->
             <nav>
                 <i class='bx bx-menu' ></i>
-<!--                <a href="#" class="nav-link">Categories</a>-->
+                <!--                <a href="#" class="nav-link">Categories</a>-->
                 <form action="#">
                     <div class="form-input">
-<!--                        <input type="search" placeholder="Search...">
-                        <button type="submit" class="search-btn"><i class='bx bx-search' ></i></button>-->
+                        <!--                        <input type="search" placeholder="Search...">
+                                                <button type="submit" class="search-btn"><i class='bx bx-search' ></i></button>-->
                     </div>
                 </form>
                 <input type="checkbox" id="switch-mode" hidden>
@@ -100,7 +100,7 @@
                     <img src="images/icon/avatar1.jpg" alt="Avatar" class="avatar" onclick="toggleDropdown('dropdown1')">
                     <div id="dropdown1" class="dropdown-content-1">
                         <a href="Showinfo.jsp"><i class="fas fa-user"></i> Profile</a>
-                        <a href="settings"><i class="fas fa-cog"></i> Setting</a>
+                        <a href="#" role="button" onclick="openModalx();"><i class="fas fa-cog"></i> Settings</a>
                         <a id="logoutButton" href="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
                     </div>
                 </div>
@@ -122,10 +122,10 @@
                             </li>
                         </ul>
                     </div>
-<!--                    <a href="#" class="btn-download">
-                        <i class='bx bxs-cloud-download' ></i>
-                        <span class="text">Download PDF</span>
-                    </a>-->
+                    <!--                    <a href="#" class="btn-download">
+                                            <i class='bx bxs-cloud-download' ></i>
+                                            <span class="text">Download PDF</span>
+                                        </a>-->
                 </div>
                 <!-- ================ Order Details List ================= -->
                 <div class="table-data">
@@ -204,7 +204,15 @@
                                 </div>
                             </div>
                         </div>
-                        
+                        <!--Bảng modal cho settings-->
+                        <div id="myModalx" class="modal">
+                            <div class="modal-content">
+                                <span class="close" onclick="closeModalx();">&times;</span>
+                                <div id="modalContentx">
+                                    <!-- Nội dung chi tiết đơn hàng sẽ được tải vào đây -->
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </main>
@@ -239,6 +247,33 @@
                                     // Đóng modal
                                     function closeModal() {
                                         var modal = document.getElementById("myModal");
+                                        modal.style.display = "none";
+                                    }
+
+                                    //Mở modal                
+                                    function openModalx() {
+                                        fetch('deliverysettings', {
+                                            method: 'GET',
+                                            headers: {
+                                                'Content-Type': 'application/x-www-form-urlencoded',
+                                            },
+                                        })
+                                                .then(response => response.text())
+                                                .then(html => {
+                                                    document.getElementById('modalContentx').innerHTML = html;
+                                                    var modal = document.getElementById("myModalx");
+                                                    if (modal) {
+                                                        modal.style.display = "block";
+                                                    } else {
+                                                        console.error('Modal element not found');
+                                                    }
+                                                })
+                                                .catch(error => console.error('Error:', error));
+                                    }
+
+                                    // Hàm đóng modal
+                                    function closeModalx() {
+                                        const modal = document.getElementById("myModalx");
                                         modal.style.display = "none";
                                     }
         </script>

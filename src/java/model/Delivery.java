@@ -12,7 +12,6 @@ import java.util.Date;
  * @author Long1
  */
 public class Delivery {
-
     private int id, order_id, delivery_person_id;
     private int ship_price;
     private java.sql.Timestamp delivery_date;

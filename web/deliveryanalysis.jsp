@@ -75,11 +75,11 @@
             <!-- NAVBAR -->
             <nav>
                 <i class='bx bx-menu' ></i>
-<!--                <a href="#" class="nav-link">Categories</a>-->
+                <!--                <a href="#" class="nav-link">Categories</a>-->
                 <form action="#">
                     <div class="form-input">
-<!--                        <input type="search" placeholder="Search...">
-                        <button type="submit" class="search-btn"><i class='bx bx-search' ></i></button>-->
+                        <!--                        <input type="search" placeholder="Search...">
+                                                <button type="submit" class="search-btn"><i class='bx bx-search' ></i></button>-->
                     </div>
                 </form>
                 <input type="checkbox" id="switch-mode" hidden>
@@ -119,7 +119,7 @@
                     <img src="images/icon/avatar1.jpg" alt="Avatar" class="avatar" onclick="toggleDropdown('dropdown1')">
                     <div id="dropdown1" class="dropdown-content-1">
                         <a href="Showinfo.jsp"><i class="fas fa-user"></i> Profile</a>
-                        <a href="settings"><i class="fas fa-cog"></i> Setting</a>
+                        <a href="#" role="button" onclick="openModalx();"><i class="fas fa-cog"></i> Settings</a>
                         <a id="logoutButton" href="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
                     </div>
                 </div>
@@ -141,10 +141,10 @@
                             </li>
                         </ul>
                     </div>
-<!--                    <a href="#" class="btn-download">
-                        <i class='bx bxs-cloud-download' ></i>
-                        <span class="text">Download PDF</span>
-                    </a>-->
+                    <!--                    <a href="#" class="btn-download">
+                                            <i class='bx bxs-cloud-download' ></i>
+                                            <span class="text">Download PDF</span>
+                                        </a>-->
                 </div>
 
 
@@ -253,6 +253,15 @@
                         <p class="note" id="delivery" style="display: block;">*Detailed chart of orders received over time</p>
                     </div>
                 </div>
+                <!--Bảng modal cho settings-->
+                <div id="myModalx" class="modal">
+                    <div class="modal-content">
+                        <span class="close" onclick="closeModalx();">&times;</span>
+                        <div id="modalContentx">
+                            <!-- Nội dung chi tiết đơn hàng sẽ được tải vào đây -->
+                        </div>
+                    </div>
+                </div>
             </main>
             <!-- MAIN -->
         </section>
@@ -260,244 +269,273 @@
         <script src="js/delivery.js"></script>
 
         <script>
-                                                document.addEventListener("DOMContentLoaded", function () {
-                                                    const myChartElement = document.querySelector(".my-chart");
-                                                    const noDataMessage = document.getElementById('no-data-message');
-                                                    let myChart;
-                                                    let currentChartType = 'line'; // Biến lưu loại biểu đồ hiện tại, mặc định là line
+                            document.addEventListener("DOMContentLoaded", function () {
+                                const myChartElement = document.querySelector(".my-chart");
+                                const noDataMessage = document.getElementById('no-data-message');
+                                let myChart;
+                                let currentChartType = 'line'; // Biến lưu loại biểu đồ hiện tại, mặc định là line
 
-                                                    // Đặt kích thước của canvas
-                                                    myChartElement.width = 400; // Thay đổi chiều rộng
-                                                    myChartElement.height = 400; // Thay đổi chiều cao
+                                // Đặt kích thước của canvas
+                                myChartElement.width = 400; // Thay đổi chiều rộng
+                                myChartElement.height = 400; // Thay đổi chiều cao
 
-                                                    const chartData1 = {
-                                                        labels: ${labels1},
-                                                        data: ${data1},
-                                                    };
-                                                    const chartData2 = {
-                                                        labels: ${labels2},
-                                                        data: ${data2},
-                                                    };
+                                const chartData1 = {
+                                    labels: ${labels1},
+                                    data: ${data1},
+                                };
+                                const chartData2 = {
+                                    labels: ${labels2},
+                                    data: ${data2},
+                                };
 
-                                                    const chartData3 = {
-                                                        labels: ["Delivered", "Undelivered"],
-                                                        data: [${totaldone}, ${totalcancel}],
-                                                    };
+                                const chartData3 = {
+                                    labels: ["Delivered", "Undelivered"],
+                                    data: [${totaldone}, ${totalcancel}],
+                                };
 
-                                                    const filterDataByDate = (startDate, endDate, labels, data) => {
-                                                        const start = new Date(startDate);
-                                                        const end = new Date(endDate);
+                                const filterDataByDate = (startDate, endDate, labels, data) => {
+                                    const start = new Date(startDate);
+                                    const end = new Date(endDate);
 
-                                                        const filteredLabels = [];
-                                                        const filteredData = [];
+                                    const filteredLabels = [];
+                                    const filteredData = [];
 
-                                                        for (let i = 0; i < labels.length; i++) {
-                                                            const currentDate = new Date(labels[i]);
-                                                            if (currentDate >= start && currentDate <= end) {
-                                                                filteredLabels.push(labels[i]);
-                                                                filteredData.push(data[i]);
-                                                            }
+                                    for (let i = 0; i < labels.length; i++) {
+                                        const currentDate = new Date(labels[i]);
+                                        if (currentDate >= start && currentDate <= end) {
+                                            filteredLabels.push(labels[i]);
+                                            filteredData.push(data[i]);
+                                        }
+                                    }
+
+                                    return {labels: filteredLabels, data: filteredData};
+                                };
+
+                                const updateChart = (chartType, startDate, endDate) => {
+                                    let data, options;
+
+                                    switch (chartType) {
+                                        case 'line':
+                                            const filteredData1 = filterDataByDate(startDate, endDate, chartData1.labels, chartData1.data);
+                                            const filteredData2 = filterDataByDate(startDate, endDate, chartData2.labels, chartData2.data);
+
+                                            if (filteredData1.data.length === 0 && filteredData2.data.length === 0) {
+                                                myChartElement.style.display = 'none';
+                                                noDataMessage.style.display = 'block';
+                                                return;
+                                            }
+
+                                            const allLabels = Array.from(new Set([...filteredData1.labels, ...filteredData2.labels])).sort((a, b) => new Date(a) - new Date(b));
+                                            const dataset1Data = allLabels.map(label => {
+                                                const index = filteredData1.labels.indexOf(label);
+                                                return index !== -1 ? filteredData1.data[index] : null;
+                                            });
+                                            const dataset2Data = allLabels.map(label => {
+                                                const index = filteredData2.labels.indexOf(label);
+                                                return index !== -1 ? filteredData2.data[index] : null;
+                                            });
+
+                                            data = {
+                                                labels: allLabels,
+                                                datasets: [{
+                                                        label: 'Success',
+                                                        data: dataset1Data,
+                                                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                                        borderColor: 'rgba(75, 192, 192, 1)',
+                                                        borderWidth: 2,
+                                                        fill: false,
+                                                        tension: 0.1,
+                                                        spanGaps: true // Thêm thuộc tính này để nối các điểm dữ liệu
+                                                    }, {
+                                                        label: 'Failed',
+                                                        data: dataset2Data,
+                                                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                                                        borderColor: 'rgba(255, 99, 132, 1)',
+                                                        borderWidth: 2,
+                                                        fill: false,
+                                                        borderDash: [5, 5],
+                                                        tension: 0.1,
+                                                        spanGaps: true // Thêm thuộc tính này để nối các điểm dữ liệu
+                                                    }]
+                                            };
+                                            options = {
+                                                scales: {
+                                                    x: {
+                                                        type: 'time',
+                                                        time: {
+                                                            unit: 'day'
+                                                        },
+                                                        title: {
+                                                            display: true,
+                                                            text: 'Time (Day)'
                                                         }
-
-                                                        return {labels: filteredLabels, data: filteredData};
-                                                    };
-
-                                                    const updateChart = (chartType, startDate, endDate) => {
-                                                        let data, options;
-
-                                                        switch (chartType) {
-                                                            case 'line':
-                                                                const filteredData1 = filterDataByDate(startDate, endDate, chartData1.labels, chartData1.data);
-                                                                const filteredData2 = filterDataByDate(startDate, endDate, chartData2.labels, chartData2.data);
-
-                                                                if (filteredData1.data.length === 0 && filteredData2.data.length === 0) {
-                                                                    myChartElement.style.display = 'none';
-                                                                    noDataMessage.style.display = 'block';
-                                                                    return;
-                                                                }
-
-                                                                const allLabels = Array.from(new Set([...filteredData1.labels, ...filteredData2.labels])).sort((a, b) => new Date(a) - new Date(b));
-                                                                const dataset1Data = allLabels.map(label => {
-                                                                    const index = filteredData1.labels.indexOf(label);
-                                                                    return index !== -1 ? filteredData1.data[index] : null;
-                                                                });
-                                                                const dataset2Data = allLabels.map(label => {
-                                                                    const index = filteredData2.labels.indexOf(label);
-                                                                    return index !== -1 ? filteredData2.data[index] : null;
-                                                                });
-
-                                                                data = {
-                                                                    labels: allLabels,
-                                                                    datasets: [{
-                                                                            label: 'Success',
-                                                                            data: dataset1Data,
-                                                                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                                                                            borderColor: 'rgba(75, 192, 192, 1)',
-                                                                            borderWidth: 2,
-                                                                            fill: false,
-                                                                            tension: 0.1,
-                                                                            spanGaps: true // Thêm thuộc tính này để nối các điểm dữ liệu
-                                                                        }, {
-                                                                            label: 'Failed',
-                                                                            data: dataset2Data,
-                                                                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                                                                            borderColor: 'rgba(255, 99, 132, 1)',
-                                                                            borderWidth: 2,
-                                                                            fill: false,
-                                                                            borderDash: [5, 5],
-                                                                            tension: 0.1,
-                                                                            spanGaps: true // Thêm thuộc tính này để nối các điểm dữ liệu
-                                                                        }]
-                                                                };
-                                                                options = {
-                                                                    scales: {
-                                                                        x: {
-                                                                            type: 'time',
-                                                                            time: {
-                                                                                unit: 'day'
-                                                                            },
-                                                                            title: {
-                                                                                display: true,
-                                                                                text: 'Time (Day)'
-                                                                            }
-                                                                        },
-                                                                        y: {
-                                                                            title: {
-                                                                                display: true,
-                                                                                text: 'Order (Quantity)'
-                                                                            },
-                                                                            beginAtZero: true
-                                                                        }
-                                                                    },
-                                                                    plugins: {
-                                                                        legend: {
-                                                                            display: true,
-                                                                        },
-                                                                        datalabels: {
-                                                                            display: true,
-                                                                            formatter: (value) => {
-                                                                                return value;
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                };
-                                                                break;
-                                                            case 'doughnut':
-                                                                if (chartData3.data.reduce((a, b) => a + b, 0) === 0) {
-                                                                    myChartElement.style.display = 'none';
-                                                                    noDataMessage.style.display = 'block';
-                                                                    return;
-                                                                }
-                                                                data = {
-                                                                    labels: chartData3.labels,
-                                                                    datasets: [{
-                                                                            label: 'Order Status',
-                                                                            data: chartData3.data,
-                                                                            backgroundColor: ['#7CB342', '#C62828'],
-                                                                            borderColor: ['#7CB342', '#C62828'],
-                                                                            borderWidth: 1,
-                                                                        }],
-                                                                };
-                                                                options = {
-                                                                    plugins: {
-                                                                        legend: {
-                                                                            display: false,
-                                                                        },
-                                                                        datalabels: {
-                                                                            color: 'black',
-                                                                            formatter: (value, context) => {
-                                                                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                                                                                const percentage = ((value / total) * 100).toFixed(1) + '%';
-                                                                                return percentage; // Hiển thị phần trăm
-                                                                            },
-                                                                            font: {
-                                                                                weight: 'bold',
-                                                                                size: function (context) {
-                                                                                    const width = context.chart.width;
-                                                                                    const size = Math.round(width / 15);
-                                                                                    return size > 20 ? 20 : size;
-                                                                                }
-                                                                            },
-                                                                            textStrokeWidth: 2,
-                                                                            textStrokeColor: 'rgba(255, 255, 255, 0.5)',
-                                                                        }
-                                                                    }
-                                                                };
-                                                                break;
-                                                            default:
-                                                                console.error('Unknown chart type');
-                                                                return;
-                                                        }
-
-                                                        if (myChart) {
-                                                            myChart.destroy();
-                                                        }
-                                                        const ctx = myChartElement.getContext('2d');
-
-                                                        myChart = new Chart(ctx, {
-                                                            type: chartType === 'line' ? 'line' : 'doughnut',
-                                                            data: data,
-                                                            options: options
-                                                        });
-
-                                                        myChartElement.style.display = 'block';
-                                                        noDataMessage.style.display = 'none';
-                                                    };
-
-                                                    document.getElementById('submit-btn').addEventListener('click', function () {
-                                                        const startDate = document.getElementById('start-date').value;
-                                                        const endDate = document.getElementById('end-date').value;
-
-                                                        if (startDate && endDate) {
-                                                            // Lưu các giá trị ngày tháng vào URL
-                                                            const url = new URL(window.location.href);
-                                                            url.searchParams.set('start-date', startDate);
-                                                            url.searchParams.set('end-date', endDate);
-                                                            window.location.href = url.toString(); // Tải lại trang với các tham số mới
-                                                        } else {
-                                                            alert('Please select both start and end dates.');
-                                                        }
-                                                    });
-
-                                                    // Hàm hiển thị biểu đồ tương ứng khi click vào các liên kết Delivery hoặc Order
-                                                    window.showChart = function (chartType) {
-                                                        currentChartType = chartType; // Cập nhật loại biểu đồ hiện tại
-                                                        const statusContainer = document.getElementById('status-container');
-
-                                                        switch (chartType) {
-                                                            case 'delivery':
-                                                                const startDate = document.getElementById('start-date').value;
-                                                                const endDate = document.getElementById('end-date').value;
-                                                                updateChart('line', startDate, endDate); // Hiển thị biểu đồ dạng đường
-                                                                statusContainer.style.display = 'none'; // Ẩn phần trạng thái
-                                                                document.getElementById('delivery').style.display = 'block'; // Hiển thị ghi chú
-                                                                document.querySelector('.date-picker-container').style.display = 'block'; // Luôn hiển thị phần chọn ngày
-                                                                break;
-                                                            case 'order':
-                                                                updateChart('doughnut'); // Hiển thị biểu đồ doughnut
-                                                                statusContainer.style.display = 'block'; // Hiển thị phần trạng thái
-                                                                document.getElementById('delivery').style.display = 'none'; // Ẩn ghi chú
-                                                                document.querySelector('.date-picker-container').style.display = 'none';
-                                                                break;
-                                                            default:
-                                                                console.error('Unknown chart type');
-                                                        }
-                                                    };
-
-                                                    // Khởi tạo biểu đồ ban đầu với toàn bộ dữ liệu
-                                                    updateChart('line', chartData1.labels[0], chartData1.labels[chartData1.labels.length - 1]);
-
-                                                    // Kiểm tra và khôi phục các giá trị ngày tháng từ URL nếu có
-                                                    const urlParams = new URLSearchParams(window.location.search);
-                                                    const startDateParam = urlParams.get('start-date');
-                                                    const endDateParam = urlParams.get('end-date');
-
-                                                    if (startDateParam && endDateParam) {
-                                                        document.getElementById('start-date').value = startDateParam;
-                                                        document.getElementById('end-date').value = endDateParam;
-                                                        updateChart(currentChartType, startDateParam, endDateParam); // Cập nhật biểu đồ với các giá trị ngày tháng từ URL
+                                                    },
+                                                    y: {
+                                                        title: {
+                                                            display: true,
+                                                            text: 'Order (Quantity)'
+                                                        },
+                                                        beginAtZero: true
                                                     }
-                                                });
+                                                },
+                                                plugins: {
+                                                    legend: {
+                                                        display: true,
+                                                    },
+                                                    datalabels: {
+                                                        display: true,
+                                                        formatter: (value) => {
+                                                            return value;
+                                                        }
+                                                    }
+                                                }
+                                            };
+                                            break;
+                                        case 'doughnut':
+                                            if (chartData3.data.reduce((a, b) => a + b, 0) === 0) {
+                                                myChartElement.style.display = 'none';
+                                                noDataMessage.style.display = 'block';
+                                                return;
+                                            }
+                                            data = {
+                                                labels: chartData3.labels,
+                                                datasets: [{
+                                                        label: 'Order Status',
+                                                        data: chartData3.data,
+                                                        backgroundColor: ['#7CB342', '#C62828'],
+                                                        borderColor: ['#7CB342', '#C62828'],
+                                                        borderWidth: 1,
+                                                    }],
+                                            };
+                                            options = {
+                                                plugins: {
+                                                    legend: {
+                                                        display: false,
+                                                    },
+                                                    datalabels: {
+                                                        color: 'black',
+                                                        formatter: (value, context) => {
+                                                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                                            const percentage = ((value / total) * 100).toFixed(1) + '%';
+                                                            return percentage; // Hiển thị phần trăm
+                                                        },
+                                                        font: {
+                                                            weight: 'bold',
+                                                            size: function (context) {
+                                                                const width = context.chart.width;
+                                                                const size = Math.round(width / 15);
+                                                                return size > 20 ? 20 : size;
+                                                            }
+                                                        },
+                                                        textStrokeWidth: 2,
+                                                        textStrokeColor: 'rgba(255, 255, 255, 0.5)',
+                                                    }
+                                                }
+                                            };
+                                            break;
+                                        default:
+                                            console.error('Unknown chart type');
+                                            return;
+                                    }
+
+                                    if (myChart) {
+                                        myChart.destroy();
+                                    }
+                                    const ctx = myChartElement.getContext('2d');
+
+                                    myChart = new Chart(ctx, {
+                                        type: chartType === 'line' ? 'line' : 'doughnut',
+                                        data: data,
+                                        options: options
+                                    });
+
+                                    myChartElement.style.display = 'block';
+                                    noDataMessage.style.display = 'none';
+                                };
+
+                                document.getElementById('submit-btn').addEventListener('click', function () {
+                                    const startDate = document.getElementById('start-date').value;
+                                    const endDate = document.getElementById('end-date').value;
+
+                                    if (startDate && endDate) {
+                                        // Lưu các giá trị ngày tháng vào URL
+                                        const url = new URL(window.location.href);
+                                        url.searchParams.set('start-date', startDate);
+                                        url.searchParams.set('end-date', endDate);
+                                        window.location.href = url.toString(); // Tải lại trang với các tham số mới
+                                    } else {
+                                        alert('Please select both start and end dates.');
+                                    }
+                                });
+
+                                // Hàm hiển thị biểu đồ tương ứng khi click vào các liên kết Delivery hoặc Order
+                                window.showChart = function (chartType) {
+                                    currentChartType = chartType; // Cập nhật loại biểu đồ hiện tại
+                                    const statusContainer = document.getElementById('status-container');
+
+                                    switch (chartType) {
+                                        case 'delivery':
+                                            const startDate = document.getElementById('start-date').value;
+                                            const endDate = document.getElementById('end-date').value;
+                                            updateChart('line', startDate, endDate); // Hiển thị biểu đồ dạng đường
+                                            statusContainer.style.display = 'none'; // Ẩn phần trạng thái
+                                            document.getElementById('delivery').style.display = 'block'; // Hiển thị ghi chú
+                                            document.querySelector('.date-picker-container').style.display = 'block'; // Luôn hiển thị phần chọn ngày
+                                            break;
+                                        case 'order':
+                                            updateChart('doughnut'); // Hiển thị biểu đồ doughnut
+                                            statusContainer.style.display = 'block'; // Hiển thị phần trạng thái
+                                            document.getElementById('delivery').style.display = 'none'; // Ẩn ghi chú
+                                            document.querySelector('.date-picker-container').style.display = 'none';
+                                            break;
+                                        default:
+                                            console.error('Unknown chart type');
+                                    }
+                                };
+
+                                // Khởi tạo biểu đồ ban đầu với toàn bộ dữ liệu
+                                updateChart('line', chartData1.labels[0], chartData1.labels[chartData1.labels.length - 1]);
+
+                                // Kiểm tra và khôi phục các giá trị ngày tháng từ URL nếu có
+                                const urlParams = new URLSearchParams(window.location.search);
+                                const startDateParam = urlParams.get('start-date');
+                                const endDateParam = urlParams.get('end-date');
+
+                                if (startDateParam && endDateParam) {
+                                    document.getElementById('start-date').value = startDateParam;
+                                    document.getElementById('end-date').value = endDateParam;
+                                    updateChart(currentChartType, startDateParam, endDateParam); // Cập nhật biểu đồ với các giá trị ngày tháng từ URL
+                                }
+                            });
+        </script>
+        <script>
+            //Mở modal                
+            function openModalx() {
+                fetch('deliverysettings', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                })
+                        .then(response => response.text())
+                        .then(html => {
+                            document.getElementById('modalContentx').innerHTML = html;
+                            var modal = document.getElementById("myModalx");
+                            if (modal) {
+                                modal.style.display = "block";
+                            } else {
+                                console.error('Modal element not found');
+                            }
+                        })
+                        .catch(error => console.error('Error:', error));
+            }
+
+            // Hàm đóng modal
+            function closeModalx() {
+                const modal = document.getElementById("myModalx");
+                modal.style.display = "none";
+            }
+
         </script>
     </body>
 </html>

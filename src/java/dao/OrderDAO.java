@@ -385,8 +385,12 @@ public class OrderDAO extends MyDAO {
     public Order getOrderById(int id) {
         xSql = "SELECT \n"
                 + "    o.id, \n"
-                + "    r_address.details AS from_details, r_address.street AS from_street, r_address.state AS from_state,\n"
-                + "    c_address.details AS to_details, c_address.street AS to_street, c_address.state AS to_state,\n"
+                + "    r_address.details AS from_details, \n"
+                + "    r_address.street AS from_street, \n"
+                + "    r_address.state AS from_state, \n"
+                + "    c_address.details AS to_details, \n"
+                + "    c_address.street AS to_street, \n"
+                + "    c_address.state AS to_state,\n"
                 + "    o.total_amount, \n"
                 + "    o.status, \n"
                 + "    o.order_date\n"
@@ -395,12 +399,17 @@ public class OrderDAO extends MyDAO {
                 + "JOIN \n"
                 + "    customer c ON o.customer_id = c.id\n"
                 + "JOIN \n"
-                + "    address c_address ON c.address_id = c_address.id\n"
+                + "    account c_account ON c.account_id = c_account.id\n"
+                + "JOIN \n"
+                + "    address c_address ON c_account.address_id = c_address.id\n"
                 + "JOIN \n"
                 + "    restaurant r ON o.restaurant_id = r.id\n"
                 + "JOIN \n"
-                + "    address r_address ON r.address_id = r_address.id\n"
-                + "where o.id = ?";
+                + "    account r_account ON r.account_id = r_account.id\n"
+                + "JOIN \n"
+                + "    address r_address ON r_account.address_id = r_address.id\n"
+                + "WHERE \n"
+                + "    o.id = ?;";
         Order x = null;
         try {
             ps = con.prepareStatement(xSql);
@@ -797,10 +806,10 @@ public class OrderDAO extends MyDAO {
     public static void main(String[] args) {
         OrderDAO od = new OrderDAO();
 //        List<Order> list = od.getAllOrderOf1Customer(2);
-        Map<String, Integer> map = od.getRevenueForPeriod(1, 6, 2024, 1);
-        for (Map.Entry<String, Integer> entry : map.entrySet()) {
-            System.out.println(entry.getKey() + ": " + entry.getValue());
-        }
-
+//        Map<String, Integer> map = od.getRevenueForPeriod(1, 6, 2024, 1);
+//        for (Map.Entry<String, Integer> entry : map.entrySet()) {
+//            System.out.println(entry.getKey() + ": " + entry.getValue());
+//        }
+        System.out.println(od.getRestaurant_Customer_ByOrderId(1));
     }
 }

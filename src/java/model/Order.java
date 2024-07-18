@@ -127,6 +127,40 @@ public class Order {
         this.toAddress = toAddress;
     }
 
+    public String getRes_name() {
+        return res_name;
+    }
+
+    public void setRes_name(String res_name) {
+        this.res_name = res_name;
+    }
+
+    public String getRes_phone() {
+        return res_phone;
+    }
+
+    public void setRes_phone(String res_phone) {
+        this.res_phone = res_phone;
+    }
+
+    public String getCus_name() {
+        return cus_name;
+    }
+
+    public void setCus_name(String cus_name) {
+        this.cus_name = cus_name;
+    }
+
+    public String getCus_phone() {
+        return cus_phone;
+    }
+
+    public void setCus_phone(String cus_phone) {
+        this.cus_phone = cus_phone;
+    }
+
+    
+    
     public Customer getCustomer() {
         return customer;
     }
@@ -135,12 +169,9 @@ public class Order {
         this.customer = customer;
     }
 
-
-    
-
     @Override
     public String toString() {
-        return "Order{" + "id=" + id + ", restaurant_id=" + restaurant_id + ", customer_id=" + customer_id + ", total_amount=" + total_amount + ", status=" + status + ", order_date=" + order_date + ", fromAddress=" + fromAddress + ", toAddress=" + toAddress + '}';
+        return "Order{" + "id=" + id + ", restaurant_id=" + restaurant_id + ", customer_id=" + customer_id + ", total_amount=" + total_amount + ", status=" + status + ", order_date=" + order_date + ", fromAddress=" + fromAddress + ", toAddress=" + toAddress + ", customer=" + customer + ", res_name=" + res_name + ", res_phone=" + res_phone + ", cus_name=" + cus_name + ", cus_phone=" + cus_phone + '}';
     }
 
 }

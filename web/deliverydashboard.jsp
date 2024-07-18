@@ -1,6 +1,7 @@
 <%@page language="java" contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -18,7 +19,6 @@
         <title>Dashboard</title>
     </head>
     <body>
-
         <!-- SIDEBAR -->
         <section id="sidebar">
             <a href="home" class="brand">
@@ -117,7 +117,7 @@
                 <div class="dropdown-container">
                     <img src="images/icon/avatar1.jpg" alt="Avatar" class="avatar" onclick="toggleDropdown('dropdown1')">
                     <div id="dropdown1" class="dropdown-content-1">
-                        <a href="Showinfo.jsp"><i class="fas fa-user"></i> Profile</a>
+                        <a href="loadingdeliveryprofile"><i class="fas fa-user"></i> Profile</a>
                         <a href="#" role="button" onclick="openModalx();"><i class="fas fa-cog"></i> Settings</a>
                         <a id="logoutButton" href="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
                     </div>
@@ -247,7 +247,7 @@
                                 <a href="?page=${i}" class="${i == currentPage ? 'active' : ''}">${i}</a>
                             </c:forEach>
                         </div>
-                        
+
                         <!--Bảng modal cho dashboard-->
                         <div id="myModal" class="modal">
                             <div class="modal-content">
@@ -257,7 +257,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <!--Bảng modal cho settings-->
                         <div id="myModalx" class="modal">
                             <div class="modal-content">
@@ -268,8 +268,8 @@
                             </div>
                         </div>
                     </div>
-                        
-<!--                    Map bên phải-->
+
+                    <!--                    Map bên phải-->
                     <div class="todo">
                         <div class="head">
                             <h3>Maps</h3>
@@ -310,7 +310,7 @@
                                                 })
                                                 .catch(error => console.error('Error:', error));
                                     }
-//                                    //Mở modal                
+                                    //Mở modal                
                                     function openModalx() {
                                         fetch('deliverysettings', {
                                             method: 'GET',
