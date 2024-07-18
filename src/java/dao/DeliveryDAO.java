@@ -29,7 +29,7 @@ public class DeliveryDAO extends MyDAO {
 
     public List<Delivery> getDeliverySuccess(int id) {
         List<Delivery> list = new ArrayList<>();
-        xSql = "select * from Delivery where status = N'Đã giao' and delivery_person_id = ?";
+        xSql = "select * from Delivery where status = N'Success' and delivery_person_id = ?";
         try {
             ps = con.prepareStatement(xSql);
             ps.setInt(1, id);
@@ -62,7 +62,7 @@ public class DeliveryDAO extends MyDAO {
 
     public List<Delivery> getDeliveryFailure(int id) {
         List<Delivery> list = new ArrayList<>();
-        xSql = "select * from Delivery where status = N'Không giao được' and delivery_person_id = ?";
+        xSql = "select * from Delivery where status = N'Failure' and delivery_person_id = ?";
         try {
             ps = con.prepareStatement(xSql);
             ps.setInt(1, id);
@@ -95,7 +95,7 @@ public class DeliveryDAO extends MyDAO {
 
     public List<Integer> getDeliveryTimesSuccess(int id) {
         Map<String, Integer> deliveryCountPerDay = new HashMap<>();
-        String xSql = "SELECT delivery_person_id, delivery_date FROM Delivery WHERE status = N'Đã giao' and delivery_person_id = ?";
+        String xSql = "SELECT delivery_person_id, delivery_date FROM Delivery WHERE status = N'Success' and delivery_person_id = ?";
 
         try {
             ps = con.prepareStatement(xSql);
@@ -130,7 +130,7 @@ public class DeliveryDAO extends MyDAO {
 
     public List<Integer> getDeliveryTimesFailure(int id) {
         Map<String, Integer> deliveryCountPerDay = new HashMap<>();
-        String xSql = "SELECT delivery_person_id, delivery_date FROM Delivery WHERE status = N'Không giao được' and delivery_person_id = ?";
+        String xSql = "SELECT delivery_person_id, delivery_date FROM Delivery WHERE status = N'Failure' and delivery_person_id = ?";
 
         try {
             ps = con.prepareStatement(xSql);
@@ -187,7 +187,7 @@ public class DeliveryDAO extends MyDAO {
         xSql = "SELECT d.*\n"
                 + "FROM Delivery d\n"
                 + "JOIN Delivery_person dp ON d.delivery_person_id = dp.id\n"
-                + "WHERE (d.status = 'Đang giao' OR d.status = N'Đang lấy hàng')\n"
+                + "WHERE (d.status = 'Delivering' OR d.status = N'Picking Up')\n"
                 + "AND dp.id = ? ";
 
         if (sortList != null) {
@@ -224,7 +224,7 @@ public class DeliveryDAO extends MyDAO {
         xSql = "SELECT d.*\n"
                 + "FROM Delivery d\n"
                 + "JOIN Delivery_person dp ON d.delivery_person_id = dp.id\n"
-                + "WHERE (d.status = N'Đã giao' OR d.status = N'Không giao được')\n"
+                + "WHERE (d.status = N'Success' OR d.status = N'Failure')\n"
                 + "AND dp.id = ? ";
         if (sortList != null) {
             String time = sortList ? "ASC" : "DESC";
@@ -285,8 +285,8 @@ public class DeliveryDAO extends MyDAO {
 
     public void updateStatusDelivery(int id) {
         String xSql = "UPDATE [Delivery]\n"
-                + "SET [status] = N'Đang lấy hàng', delivery_date = CONVERT(VARCHAR(19), GETDATE(), 120), start_time = CONVERT(VARCHAR(19), GETDATE(), 120)\n"
-                + "WHERE [status] = N'Đang chờ' AND [order_id] = ?;";
+                + "SET [status] = N'Picking Up', delivery_date = CONVERT(VARCHAR(19), GETDATE(), 120), start_time = CONVERT(VARCHAR(19), GETDATE(), 120)\n"
+                + "WHERE [status] = N'Waiting delivery' AND [order_id] = ?;";
         try {
             ps = con.prepareStatement(xSql);
             ps.setInt(1, id);
@@ -299,8 +299,8 @@ public class DeliveryDAO extends MyDAO {
 
     public void updateStatusDelivery_2(int id) {
         String xSql = "UPDATE [Delivery]\n"
-                + "SET [status] = N'Đã giao'\n , delivery_date = CONVERT(VARCHAR(19), GETDATE(), 120), end_time = CONVERT(VARCHAR(19), GETDATE(), 120)\n"
-                + "WHERE [status] = N'Đang giao' AND [order_id] = ?";
+                + "SET [status] = N'Success'\n , delivery_date = CONVERT(VARCHAR(19), GETDATE(), 120), end_time = CONVERT(VARCHAR(19), GETDATE(), 120)\n"
+                + "WHERE [status] = N'Delivering' AND [order_id] = ?";
         try {
             ps = con.prepareStatement(xSql);
             ps.setInt(1, id);
@@ -313,8 +313,8 @@ public class DeliveryDAO extends MyDAO {
 
     public void updateStatusDelivery_3(int id) {
         String xSql = "UPDATE [Delivery]\n"
-                + "SET [status] = N'Không giao được'\n , delivery_date = CONVERT(VARCHAR(19), GETDATE(), 120), end_time = CONVERT(VARCHAR(19), GETDATE(), 120)\n"
-                + "WHERE [status] = N'Đang giao' AND [order_id] = ?";
+                + "SET [status] = N'Failure'\n , delivery_date = CONVERT(VARCHAR(19), GETDATE(), 120), end_time = CONVERT(VARCHAR(19), GETDATE(), 120)\n"
+                + "WHERE [status] = N'Delivering' AND [order_id] = ?";
         try {
             ps = con.prepareStatement(xSql);
             ps.setInt(1, id);
@@ -327,8 +327,8 @@ public class DeliveryDAO extends MyDAO {
 
     public void updateStatusDelivery_4(int id) {
         String xSql = "UPDATE [Delivery]\n"
-                + "SET [status] = N'Đang giao' , delivery_date = CONVERT(VARCHAR(19), GETDATE(), 120)\n"
-                + "WHERE [status] = N'Đang lấy hàng' AND [order_id] = ?";
+                + "SET [status] = N'Delivering' , delivery_date = CONVERT(VARCHAR(19), GETDATE(), 120)\n"
+                + "WHERE [status] = N'Picking Up' AND [order_id] = ?";
         try {
             ps = con.prepareStatement(xSql);
             ps.setInt(1, id);
@@ -342,7 +342,7 @@ public class DeliveryDAO extends MyDAO {
     public int totalShipPriceByDeliveryPersonId(int id) {
         String xSql = "SELECT SUM(ship_price) AS total_SP\n"
                 + "FROM [Delivery]\n"
-                + "WHERE status = N'Đã giao' and delivery_person_id = ?";
+                + "WHERE status = N'Success' and delivery_person_id = ?";
         int total_SP = 0;
         try {
             ps = con.prepareStatement(xSql);
@@ -360,7 +360,7 @@ public class DeliveryDAO extends MyDAO {
     public int totalDeliveryByDeliveryPersonId(int id) {
         String xSql = "SELECT COUNT(*) AS total_delivery\n"
                 + "FROM [Delivery]\n"
-                + "WHERE status = N'Đang giao' and delivery_person_id = ?";
+                + "WHERE status = N'Delivering' and delivery_person_id = ?";
         int total_D = 0;
         try {
             ps = con.prepareStatement(xSql);
@@ -378,7 +378,7 @@ public class DeliveryDAO extends MyDAO {
     public int totalDoneByDeliveryPersonId(int id) {
         String xSql = "SELECT COUNT(*) AS total_done\n"
                 + "FROM [Delivery]\n"
-                + "WHERE status = N'Đã giao' and delivery_person_id = ?";
+                + "WHERE status = N'Success' and delivery_person_id = ?";
         int total_D = 0;
         try {
             ps = con.prepareStatement(xSql);
@@ -396,7 +396,7 @@ public class DeliveryDAO extends MyDAO {
     public int totalCancelByDeliveryPersonId(int id) {
         String xSql = "SELECT COUNT(*) AS total_cancel\n"
                 + "FROM [Delivery]\n"
-                + "WHERE status = N'Không giao được' and delivery_person_id = ?";
+                + "WHERE status = N'Failure' and delivery_person_id = ?";
         int total_D = 0;
         try {
             ps = con.prepareStatement(xSql);
@@ -504,7 +504,7 @@ public class DeliveryDAO extends MyDAO {
         xSql = "SELECT d.*\n"
                 + "FROM Delivery d\n"
                 + "JOIN Delivery_person dp ON d.delivery_person_id = dp.id\n"
-                + "WHERE (d.status = 'Đang giao' OR d.status = N'Đang lấy hàng')\n"
+                + "WHERE (d.status = 'Delivering' OR d.status = N'Picking Up')\n"
                 + "AND dp.id = ?";
 
         // Thêm điều kiện tìm kiếm nếu từ khóa tìm kiếm không rỗng
@@ -548,7 +548,7 @@ public class DeliveryDAO extends MyDAO {
         xSql = "SELECT d.*\n"
                 + "FROM Delivery d\n"
                 + "JOIN Delivery_person dp ON d.delivery_person_id = dp.id\n"
-                + "WHERE d.status IN (N'Đã giao', N'Không giao được') AND dp.id = ?";
+                + "WHERE d.status IN (N'Success', N'Failure') AND dp.id = ?";
         // Thêm điều kiện tìm kiếm nếu từ khóa tìm kiếm không rỗng
         if (code != null && !code.trim().isEmpty()) {
             xSql += " AND d.order_id LIKE ?";
@@ -586,7 +586,7 @@ public class DeliveryDAO extends MyDAO {
 
     public int getTotalDeliveryTimeSuccess(int id) {
         int totalDeliveryTime = 0;
-        xSql = "SELECT delivery_person_id, start_time, end_time FROM Delivery WHERE status = N'Đã giao' and delivery_person_id = ?";
+        xSql = "SELECT delivery_person_id, start_time, end_time FROM Delivery WHERE status = N'Success' and delivery_person_id = ?";
         try {
             ps = con.prepareStatement(xSql);
             ps.setInt(1, id);
@@ -610,7 +610,7 @@ public class DeliveryDAO extends MyDAO {
 
     public int getTotalDeliveryTimeFailed(int id) {
         int totalDeliveryTime = 0;
-        xSql = "SELECT delivery_person_id, start_time, end_time FROM Delivery WHERE status = N'Không giao được' and delivery_person_id = ?";
+        xSql = "SELECT delivery_person_id, start_time, end_time FROM Delivery WHERE status = N'Failure' and delivery_person_id = ?";
         try {
             ps = con.prepareStatement(xSql);
             ps.setInt(1, id);
@@ -635,7 +635,7 @@ public class DeliveryDAO extends MyDAO {
     public String getDeliveryDatesSuccess(int id) {
         Set<String> deliveryDatesSet = new LinkedHashSet<>(); // Sử dụng LinkedHashSet để giữ thứ tự sắp xếp
         List<String> deliveryDates = new ArrayList<>();
-        xSql = "SELECT DISTINCT delivery_person_id, delivery_date FROM Delivery WHERE delivery_date IS NOT NULL AND status = N'Đã giao' and delivery_person_id = ? ORDER BY delivery_date ASC;"; // Sử dụng DISTINCT để loại bỏ các giá trị trùng lặp
+        xSql = "SELECT DISTINCT delivery_person_id, delivery_date FROM Delivery WHERE delivery_date IS NOT NULL AND status = N'Success' and delivery_person_id = ? ORDER BY delivery_date ASC;"; // Sử dụng DISTINCT để loại bỏ các giá trị trùng lặp
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
         try {
@@ -673,7 +673,7 @@ public class DeliveryDAO extends MyDAO {
     public String getDeliveryDatesFailure(int id) {
         Set<String> deliveryDatesSet = new LinkedHashSet<>(); // Sử dụng LinkedHashSet để giữ thứ tự sắp xếp
         List<String> deliveryDates = new ArrayList<>();
-        xSql = "SELECT DISTINCT delivery_person_id, delivery_date FROM Delivery WHERE delivery_date IS NOT NULL AND status = N'Không giao được' and delivery_person_id = ? ORDER BY delivery_date ASC;"; // Sử dụng DISTINCT để loại bỏ các giá trị trùng lặp
+        xSql = "SELECT DISTINCT delivery_person_id, delivery_date FROM Delivery WHERE delivery_date IS NOT NULL AND status = N'Failure' and delivery_person_id = ? ORDER BY delivery_date ASC;"; // Sử dụng DISTINCT để loại bỏ các giá trị trùng lặp
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
         try {

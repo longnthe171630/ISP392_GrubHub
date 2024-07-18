@@ -1,7 +1,9 @@
 <%@page language="java" contentType="text/html" pageEncoding="UTF-8"%>
+<%@ include file="deliverychange.jsp" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -16,7 +18,7 @@
         <!-- Thư viện SweetAlert -->
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="https://cdn.jsdelivr.net/gh/somanchiu/Keyless-Google-Maps-API@v6.6/mapsJavaScriptAPI.js" async defer></script>
-        <title>Dashboard</title>
+        <title><fmt:message key="delivery_dashboard" bundle="${lang}"/></title>
     </head>
     <body>
         <!-- SIDEBAR -->
@@ -29,37 +31,37 @@
                 <li class="active">
                     <a href="deliverydashboard">
                         <i class='bx bxs-dashboard'></i>
-                        <span class="text">Dashboard</span>
+                        <span class="text"><fmt:message key="dashboard" bundle="${lang}" /></span>
                     </a>
                 </li>
                 <li>
                     <a href="deliveryorder">
                         <i class='bx bxs-shopping-bag-alt'></i>
-                        <span class="text">Order</span>
+                        <span class="text"><fmt:message key="order" bundle="${lang}" /></span>
                     </a>
                 </li>
                 <li>
                     <a href="deliveryhistory">
                         <i class='bx bxs-doughnut-chart' ></i>
-                        <span class="text">History</span>
+                        <span class="text"><fmt:message key="history" bundle="${lang}" /></span>
                     </a>
                 </li>
                 <li>
                     <a href="deliverynotice">
                         <i class='bx bxs-message-dots' ></i>
-                        <span class="text">Notification</span>
+                        <span class="text"><fmt:message key="notification" bundle="${lang}" /></span>
                     </a>
                 </li>
                 <li>
                     <a href="deliveryanalysis">
                         <i class="bx bxs-data"></i>
-                        <span class="text">Analysis</span>
+                        <span class="text"><fmt:message key="analysis" bundle="${lang}" /></span>
                     </a>
                 </li>
                 <li>
                     <a href="#">
                         <i class='bx bxs-group' ></i>
-                        <span class="text">Help</span>
+                        <span class="text"><fmt:message key="help" bundle="${lang}" /></span>
                     </a>
                 </li>
             </ul>
@@ -129,14 +131,14 @@
             <main>
                 <div class="head-title">
                     <div class="left">
-                        <h1>Delivery Dashboard</h1>
+                        <h1><fmt:message key="delivery_dashboard" bundle="${lang}" /></h1>
                         <ul class="breadcrumb">
                             <li>
-                                <a href="home">Home</a>
+                                <a href="home"><fmt:message key="home" bundle="${lang}" /></a>
                             </li>
                             <li><i class='bx bx-chevron-right' ></i></li>
                             <li>
-                                <a class="active" href="deliverydashboard">Dashboard</a>
+                                <a class="active" href="deliverydashboard"><fmt:message key="dashboard" bundle="${lang}" /></a>
                             </li>
                         </ul>
                     </div>
@@ -152,7 +154,7 @@
                         <a href="deliveryanalysis">
                             <span class="text">
                                 <h3>${totaldone}</h3>
-                                <p>Success</p>
+                                <p><fmt:message key="success" bundle="${lang}" /></p>
                             </span>
                         </a>
                     </li>
@@ -161,7 +163,7 @@
                         <a href="deliveryanalysis">
                             <span class="text">
                                 <h3>${totaldelivery}</h3>
-                                <p>Processing</p>
+                                <p><fmt:message key="processing" bundle="${lang}" /></p>
                             </span>
                         </a>
                     </li>
@@ -170,7 +172,7 @@
                         <a href="deliveryanalysis">
                             <span class="text">
                                 <h3>${totalcancel}</h3>
-                                <p>Canceled</p>
+                                <p><fmt:message key="canceled" bundle="${lang}" /></p>
                             </span>
                         </a>
                     </li>
@@ -179,7 +181,7 @@
                         <a href="deliveryanalysis">
                             <span class="text">
                                 <h3>${totalship}</h3>
-                                <p>Earning</p>
+                                <p><fmt:message key="earning" bundle="${lang}" /></p>
                             </span>
                         </a>
                     </li>
@@ -190,16 +192,16 @@
                     <div class="order">
                         <form action="deliverydashboard" method = "GET">
                             <div class="head">
-                                <h3>Your Order</h3>
+                                <h3><fmt:message key="your_order" bundle="${lang}" /></h3>
                                 <div class="form-input">
-                                    <input style ="border-radius: 5px; font-size: 100%;" type="search" name="search" placeholder="Search by code">
+                                    <input style ="border-radius: 5px; font-size: 100%;" type="search" name="search" placeholder="<fmt:message key="search_by_code" bundle="${lang}" />">
                                     <i type="submit" class="search-btn"><button class='bx bx-search' ></button></i>
                                 </div>
                                 <div class="dropdown-container">
                                     <i class='bx bx-filter' onclick="toggleDropdown('dropdown2')"></i>
                                     <div id="dropdown2" class="dropdown-content-1">
-                                        <a href="?sort=false"><i class="fas fa-calendar-alt"></i> Newest</a>
-                                        <a href="?sort=true"><i class="fas fa-calendar-minus"></i> Oldest</a>
+                                        <a href="?sort=false"><i class="fas fa-calendar-alt"></i><fmt:message key="newest" bundle="${lang}" /></a>
+                                        <a href="?sort=true"><i class="fas fa-calendar-minus"></i><fmt:message key="oldest" bundle="${lang}" /></a>
                                     </div>
                                 </div>
                             </div>
@@ -208,7 +210,7 @@
                         <table>
                             <c:choose>
                                 <c:when test="${fn:length(list) == 0}">
-                                    <p class="empty-message">Let's start receiving your orders!</p>
+                                    <p class="empty-message"><fmt:message key="notice_dashboard" bundle="${lang}" /></p>
                                 </c:when>
                                 <c:otherwise>
                                     <thead>
@@ -227,10 +229,10 @@
                                                 <td class="notification-time" data-time="${d.delivery_date}"></td>
                                                 <td>
                                                     <c:choose>
-                                                        <c:when test="${d.status == 'Đang giao'}">
+                                                        <c:when test="${d.status == 'Delivering'}">
                                                             <span class="status process">${d.status}</span>
                                                         </c:when>
-                                                        <c:when test="${d.status == 'Đang lấy hàng'}">
+                                                        <c:when test="${d.status == 'Picking Up'}">
                                                             <span class="status take">${d.status}</span>
                                                         </c:when>
                                                     </c:choose>
@@ -275,7 +277,7 @@
                             <h3>Maps</h3>
                             <div class="form-input">
                                 <input style="border-radius: 5px; font-size: 100%;" 
-                                       type="search" name="search" placeholder="Tìm kiếm địa chỉ" id="addressInput">
+                                       type="search" name="search" placeholder="<fmt:message key="search_location" bundle="${lang}" />" id="addressInput">
                                 <button class="search-btn" onclick="searchAddress()">
                                     <i class="bx bx-search"></i>
                                 </button>

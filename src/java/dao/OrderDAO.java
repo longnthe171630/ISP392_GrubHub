@@ -352,7 +352,7 @@ public class OrderDAO extends MyDAO {
                 + "JOIN \n"
                 + "restaurant r ON o.restaurant_id = r.id\n"
                 + "JOIN\n"
-                + "address r_address ON r.address_id = r_address.id where o.status = N'Đang chờ'";
+                + "address r_address ON r.address_id = r_address.id where o.status = N'Waiting delivery'";
 
         try {
             ps = con.prepareStatement(xSql);
@@ -585,7 +585,7 @@ public class OrderDAO extends MyDAO {
                 + "JOIN restaurant r ON o.restaurant_id = r.id\n"
                 + "JOIN account r_account ON r.account_id = r_account.id\n"
                 + "JOIN address r_address ON r_account.address_id = r_address.id\n"
-                + "WHERE o.status = N'Đang chờ' ";
+                + "WHERE o.status = N'Waiting delivery' ";
 
         if (sortList != null) {
             String time = sortList ? "ASC" : "DESC";
@@ -621,7 +621,7 @@ public class OrderDAO extends MyDAO {
 
     public List<Order> getOrderByStatus() {
         List<Order> t = new ArrayList<>();
-        xSql = "SELECT * FROM [Order] WHERE [status] IN (N'Đang chờ');";
+        xSql = "SELECT * FROM [Order] WHERE [status] IN (N'Waiting delivery');";
         Order x;
         try {
             ps = con.prepareStatement(xSql);
@@ -647,7 +647,7 @@ public class OrderDAO extends MyDAO {
 
     public void updateStatusOrder(int id) {
         String xSql = "UPDATE [Order]\n"
-                + "SET [status] = N'Đang lấy hàng'\n"
+                + "SET [status] = N'Picking Up'\n"
                 + "WHERE [id] = ?";
         try {
             ps = con.prepareStatement(xSql);
@@ -661,7 +661,7 @@ public class OrderDAO extends MyDAO {
 
     public void updateStatusOrder_1(int id) {
         String xSql = "UPDATE [Order]\n"
-                + "SET [status] = N'Đang giao'\n"
+                + "SET [status] = N'Delivering'\n"
                 + "WHERE id = ?;";
         try {
             ps = con.prepareStatement(xSql);
@@ -675,7 +675,7 @@ public class OrderDAO extends MyDAO {
 
     public void updateStatusOrder_2(int id) {
         String xSql = "UPDATE [Order]\n"
-                + "SET [status] = N'Đã giao'\n"
+                + "SET [status] = N'Success'\n"
                 + "WHERE id = ?;";
         try {
             ps = con.prepareStatement(xSql);
@@ -689,7 +689,7 @@ public class OrderDAO extends MyDAO {
 
     public void updateStatusOrder_3(int id) {
         String xSql = "UPDATE [Order]\n"
-                + "SET [status] = N'Không giao được'\n"
+                + "SET [status] = N'Failure'\n"
                 + "WHERE id = ?;";
         try {
             ps = con.prepareStatement(xSql);
@@ -762,7 +762,7 @@ public class OrderDAO extends MyDAO {
                 + "JOIN restaurant r ON o.restaurant_id = r.id\n"
                 + "JOIN account r_account ON r.account_id = r_account.id\n"
                 + "JOIN address r_address ON r_account.address_id = r_address.id\n"
-                + "WHERE o.status = N'Đang chờ'  ";
+                + "WHERE o.status = N'Waiting delivery'  ";
 
         // Thêm điều kiện tìm kiếm nếu từ khóa tìm kiếm không rỗng
         if (from != null && !from.trim().isEmpty()) {

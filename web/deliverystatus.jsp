@@ -34,7 +34,7 @@
                 <form action="deliverystatus" method="post" enctype="multipart/form-data">
                     <input type="hidden" name="id" value="${order1.id}">
                     <c:choose>
-                        <c:when test="${delivery1.status == 'Đang giao'}">
+                        <c:when test="${delivery1.status == 'Delivering'}">
                             <div class="upload-container">
                                 <p><strong>Image: </strong></p>
                                 <input type="file" id="fileInput" name="photo" placeholder="Upload">
@@ -43,17 +43,17 @@
                             <button type="submit" name="action" value="success">Yes</button>
                             <button type="button" onclick="openReasonModal(${order1.id})">No</button>
                         </c:when>
-                        <c:when test="${delivery1.status == 'Đã giao'}">
+                        <c:when test="${delivery1.status == 'Success'}">
                             <img src="${delivery1.image}" alt="Confirmation Image">
                             <p class="status-message-success">The order has been delivered successfully!</p>
                         </c:when>
-                        <c:when test="${delivery1.status == 'Không giao được'}">
+                        <c:when test="${delivery1.status == 'Failure'}">
                             <img src="${delivery1.image}" alt="Confirmation Image">
                             <div class="reason">
                                 <p>${des.descripsion}</p>
                             </div>
                         </c:when>
-                        <c:when test="${delivery1.status == 'Đang lấy hàng'}">
+                        <c:when test="${delivery1.status == 'Picking Up'}">
                             <h3>Are you ready?</h3>
                             <button type="submit" name="action" value="start">Start</button>
                             <button type="submit" name="action" value="wait">Wait</button>

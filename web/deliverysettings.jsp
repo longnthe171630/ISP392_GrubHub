@@ -15,16 +15,6 @@
         <title>Settings</title>
     </head>
     <body>
-        <% 
-    String lang = request.getParameter("lang");
-    if (lang != null) {
-        session.setAttribute("lang", lang);
-    }
-        %>
-
-    <fmt:setLocale value="${sessionScope.lang != null ? sessionScope.lang : 'en'}" />
-    <fmt:setBundle basename="vn.aptech.lang.create_vi_VN" var="lang"/>
-
     <div class="settings-container">
         <div class="content">
             <div class="header">
