@@ -37,6 +37,10 @@ public class EditProductServlet extends HttpServlet {
         CategoryDAO cd = new CategoryDAO();
         List<Category> lc = cd.getCategorys();
         Product p = pd.getProduct(idProduct);
+        for (Category category : lc) {
+            System.out.println(category);
+            System.out.println("---------------------------------------------");
+        }
         request.setAttribute("product", p);
         request.setAttribute("lc", lc);
         request.getRequestDispatcher("editproduct.jsp").forward(request, response);

@@ -127,8 +127,11 @@
                     <div class="form-group">
                         <label for="category">Phân loại:</label>
                         <select id="category" name="category">
-                            <% for (Category category : lc) { %>
-                            <option value="<%= category.getId() %>" <%= p.getCategory().getId() == category.getId() ? "selected" : "" %>>
+                            <% 
+                                Integer selectedCategoryId = p.getCategory() != null ? p.getCategory().getId() : null;
+                                for (Category category : lc) { 
+                            %>
+                            <option value="<%= category.getId() %>" <%= selectedCategoryId != null && selectedCategoryId.equals(category.getId()) ? "selected" : "" %>>
                                 <%= category.getName() %>
                             </option>
                             <% } %>
@@ -136,19 +139,19 @@
                     </div>
                     <div class="form-group">
                         <label for="price">Giá:</label>
-                        <input type="text" id="price" name="price" value="<%= p.getPrice() %>" required="">
+                        <input type="text" id="price" name="price" value="<%= p.getPrice() %>" required>
                     </div>
                     <div class="form-group">
                         <label for="quantity">Số lượng:</label>
-                        <input type="text" id="quantity" name="quantity" value="<%= p.getQuantity() %>" required="">
+                        <input type="text" id="quantity" name="quantity" value="<%= p.getQuantity() %>" required>
                     </div>
                     <div class="form-group">
                         <label for="description">Mô tả:</label>
-                        <textarea id="description" name="description" required="" value="<%= p.getDescription() %>"><%= p.getDescription() %></textarea>
+                        <textarea id="description" name="description" required><%= p.getDescription() %></textarea>
                     </div>
                     <div class="form-group">
                         <label for="img">Ảnh sản phẩm:</label>
-                        <input type="file" id="img" name="img" accept=".jpg, .jpeg, .png, .gif" value="<%= p.getImage() %>">
+                        <input type="file" id="img" name="img" accept=".jpg, .jpeg, .png, .gif">
                     </div>
                 </div>
                 <div class="buttons">
@@ -172,7 +175,6 @@
                 var confirmResult = confirm(message);
                 return confirmResult; // Trả về kết quả xác nhận
             }
-
         </script>
         <script type="text/javascript">
             window.onload = function () {
@@ -184,7 +186,5 @@
                 }
             };
         </script>
-        
     </body>
-
 </html>
