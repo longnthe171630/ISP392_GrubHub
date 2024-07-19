@@ -6,6 +6,7 @@ package controller;
 
 import dao.AccountDAO;
 import dao.AdminDAO;
+import dao.CategoryDAO;
 import dao.CustomerDAO;
 import dao.DeliveryDAO;
 import dao.FeedbackDAO;
@@ -27,6 +28,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import model.Account;
+import model.Category;
 import model.Customer;
 import model.Delivery;
 import model.Feedback;
@@ -182,7 +184,10 @@ public class AdminServlet extends HttpServlet {
             throws ServletException, IOException {
         int resId = Integer.parseInt(request.getParameter("id"));
         ProductDAO dao = new ProductDAO();
+        CategoryDAO cd= new CategoryDAO();
+        List<Category> listC= cd.getCategorys();
         List<Product> list = dao.getProductByResID(resId);
+        request.setAttribute("categories", listC);
         request.setAttribute("productList", list);
         request.getRequestDispatcher("ProductList.jsp").forward(request, response);
 

@@ -652,3 +652,16 @@ body {
     height: 220px;
     box-shadow: 0 0 20px rgba(0,0,0,0.3);
 }
+.btn-download {
+    height: 36px;
+    padding: 0 16px;
+    border-radius: 36px;
+    background: var(--blue);
+    color: var(--green);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    grid-gap: 10px;
+    font-weight: 500;
+}
+
