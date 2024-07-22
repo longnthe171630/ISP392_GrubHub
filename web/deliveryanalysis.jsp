@@ -1,4 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ include file="deliverychange.jsp" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
@@ -19,7 +20,7 @@
         <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
         <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-labels"></script>
 
-        <title>Analysis</title>
+        <title><fmt:message key="analysis" bundle="${lang}"/></title>
     </head>
     <body>
         <!-- SIDEBAR -->
@@ -32,37 +33,37 @@
                 <li class="active">
                     <a href="deliverydashboard">
                         <i class='bx bxs-dashboard'></i>
-                        <span class="text">Dashboard</span>
+                        <span class="text"><fmt:message key="dashboard" bundle="${lang}"/></span>
                     </a>
                 </li>
                 <li>
                     <a href="deliveryorder">
                         <i class='bx bxs-shopping-bag-alt'></i>
-                        <span class="text">Order</span>
+                        <span class="text"><fmt:message key="order" bundle="${lang}"/></span>
                     </a>
                 </li>
                 <li>
                     <a href="deliveryhistory">
                         <i class='bx bxs-doughnut-chart' ></i>
-                        <span class="text">History</span>
+                        <span class="text"><fmt:message key="history" bundle="${lang}"/></span>
                     </a>
                 </li>
                 <li>
                     <a href="deliverynotice">
                         <i class='bx bxs-message-dots' ></i>
-                        <span class="text">Notification</span>
+                        <span class="text"><fmt:message key="notification" bundle="${lang}"/></span>
                     </a>
                 </li>
                 <li>
                     <a href="deliveryanalysis">
                         <i class="bx bxs-data"></i>
-                        <span class="text">Analysis</span>
+                        <span class="text"><fmt:message key="analysis" bundle="${lang}"/></span>
                     </a>
                 </li>
                 <li>
                     <a href="#">
                         <i class='bx bxs-group' ></i>
-                        <span class="text">Help</span>
+                        <span class="text"><fmt:message key="help" bundle="${lang}"/></span>
                     </a>
                 </li>
             </ul>
@@ -90,12 +91,12 @@
                     </div>
                     <div id="dropdown3" class="dropdown-content">
                         <div class="notification-header">
-                            <h4>Notifications</h4>
+                            <h4><fmt:message key="notifications" bundle="${lang}"/></h4>
                         </div>
                         <div class="notification-body">
                             <c:choose>
                                 <c:when test="${empty notice}">
-                                    <div class="no-notifications">You don't have any notification!</div>
+                                    <div class="no-notifications"><fmt:message key="notice_notification" bundle="${lang}"/></div>
                                 </c:when>
                                 <c:otherwise>
                                     <c:forEach var="n" items="${notice}">
@@ -106,7 +107,7 @@
                                         </div>
                                     </c:forEach>
                                     <div class="notification-footer">
-                                        <a href="deliverynotice">See All</a>
+                                        <a href="deliverynotice"><fmt:message key="see_all" bundle="${lang}"/> </a>
                                     </div>
                                 </c:otherwise>
                             </c:choose>
@@ -118,9 +119,9 @@
                 <div class="dropdown-container">
                     <img src="images/icon/avatar1.jpg" alt="Avatar" class="avatar" onclick="toggleDropdown('dropdown1')">
                     <div id="dropdown1" class="dropdown-content-1">
-                        <a href="Showinfo.jsp"><i class="fas fa-user"></i> Profile</a>
-                        <a href="#" role="button" onclick="openModalx();"><i class="fas fa-cog"></i> Settings</a>
-                        <a id="logoutButton" href="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                        <a href="Showinfo.jsp"><i class="fas fa-user"></i><fmt:message key="profile" bundle="${lang}"/></a>
+                        <a href="#" role="button" onclick="openModalx();"><i class="fas fa-cog"></i><fmt:message key="settings" bundle="${lang}"/></a>
+                        <a id="logoutButton" href="logout"><i class="fas fa-sign-out-alt"></i><fmt:message key="logout" bundle="${lang}"/></a>
                     </div>
                 </div>
             </nav>
@@ -130,14 +131,14 @@
             <main>
                 <div class="head-title">
                     <div class="left">
-                        <h1>Delivery Analysis</h1>
+                        <h1><fmt:message key="delivery_analysis" bundle="${lang}"/> </h1>
                         <ul class="breadcrumb">
                             <li>
-                                <a href="home">Home</a>
+                                <a href="home"><fmt:message key="home" bundle="${lang}"/></a>
                             </li>
                             <li><i class='bx bx-chevron-right' ></i></li>
                             <li>
-                                <a class="active" href="deliveryanalysis">Analysis</a>
+                                <a class="active" href="deliveryanalysis"><fmt:message key="analysis" bundle="${lang}"/></a>
                             </li>
                         </ul>
                     </div>
@@ -152,30 +153,30 @@
                 <div class="table-data">
                     <div class="order">
                         <div class="head">
-                            <h3>Analysis Board</h3>
+                            <h3><fmt:message key="analysis_board" bundle="${lang}"/></h3>
                         </div>
                         <div id="notice" class="notice">${err}</div>
                         <table>
                             <thead>
                                 <tr>
-                                    <th>Status</th>
-                                    <th>Quantity <br>(Order)</th>
-                                    <th>Total Time<br> (Minutes)</th>
+                                    <th><fmt:message key="status" bundle="${lang}"/></th>
+                                    <th><fmt:message key="quantity" bundle="${lang}"/> <br> (<fmt:message key="order" bundle="${lang}"/>) </th>
+                                    <th><fmt:message key="total_time" bundle="${lang}"/> <br> (<fmt:message key="minutes" bundle="${lang}"/>) </th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr onclick="openModal('success');">
-                                    <td>Success</td>
+                                    <td><fmt:message key="success" bundle="${lang}"/></td>
                                     <td>${totaldone}</td>
                                     <td>${time1}</td>
                                 </tr>
                                 <tr onclick="openModal('failure');">
-                                    <td>Failure</td>
+                                    <td><fmt:message key="failure" bundle="${lang}"/></td>
                                     <td>${totalcancel}</td>
                                     <td>${time2}</td>
                                 </tr>
                                 <tr class="total-orders">
-                                    <td>Total Orders</td>
+                                    <td><fmt:message key="total_orders" bundle="${lang}"/></td>
                                     <td>${totaldone+totalcancel}</td>
                                     <td>${time1+time2}</td>
 
@@ -191,36 +192,36 @@
                             </div>
                         </div>
                         <div class="highlight-box">
-                            <span class="highlight-label">The average time for successful delivery:</span>
-                            <span class="highlight-value">${avgTimeSuccess} minutes</span>
+                            <span class="highlight-label"><fmt:message key="avg1" bundle="${lang}"/></span>
+                            <span class="highlight-value">${avgTimeSuccess} <fmt:message key="minutes" bundle="${lang}"/></span>
                         </div>   
                         <div class="highlight-box">
-                            <span class="highlight-label">The average time for failure delivery:</span>
-                            <span class="highlight-value">${avgTimeFailure} minutes</span>
+                            <span class="highlight-label"><fmt:message key="avg2" bundle="${lang}"/></span>
+                            <span class="highlight-value">${avgTimeFailure} <fmt:message key="minutes" bundle="${lang}"/></span>
                         </div>
                         <div class="highlight-box">
-                            <span class="highlight-label">The average time to deliver an order:</span>
-                            <span class="highlight-value">${avgTimeAll} minutes</span>
+                            <span class="highlight-label"><fmt:message key="avg3" bundle="${lang}"/></span>
+                            <span class="highlight-value">${avgTimeAll} <fmt:message key="minutes" bundle="${lang}"/></span>
                         </div>
                         <div class="highlight-box">
-                            <span class="highlight-label">Fastest delivery time:</span>
-                            <span class="highlight-value">${maxDeliveryTime} minutes</span>
+                            <span class="highlight-label"><fmt:message key="avg4" bundle="${lang}"/></span>
+                            <span class="highlight-value">${maxDeliveryTime} <fmt:message key="minutes" bundle="${lang}"/></span>
                         </div>
                         <div class="highlight-box">
-                            <span class="highlight-label">Slowest delivery time is:</span>
-                            <span class="highlight-value">${minDeliveryTime} minutes</span>
+                            <span class="highlight-label"><fmt:message key="avg5" bundle="${lang}"/></span>
+                            <span class="highlight-value">${minDeliveryTime} <fmt:message key="minutes" bundle="${lang}"/></span>
                         </div>
                     </div>              
                     <div class="todo">   
                         <div class="head">
                             <form action="deliveryanalysis" method = "GET">
                                 <div class="head">
-                                    <h3>Chart</h3>
+                                    <h3><fmt:message key="chart" bundle="${lang}"/></h3>
                                     <div class="dropdown-container">
                                         <i class='bx bx-filter' onclick="toggleDropdown('dropdown2')"></i>
                                         <div id="dropdown2" class="dropdown-content-1" style = "margin-top: -25px; margin-right: -30px;">
-                                            <span onclick="showChart('delivery')"><i class="fas fa-truck"></i> Details</span>
-                                            <span onclick="showChart('order')"><i class="fas fa-star"></i> Rate</span>
+                                            <span onclick="showChart('delivery')"><i class="fas fa-truck"></i><fmt:message key="details" bundle="${lang}"/></span>
+                                            <span onclick="showChart('order')"><i class="fas fa-star"></i><fmt:message key="rate" bundle="${lang}"/></span>
                                         </div>
                                     </div>
                                 </div>
@@ -228,29 +229,29 @@
                         </div>
 
                         <div class="date-picker-container">
-                            <p class="note1">*The time is set as default, you can change it here!</p>
-                            <label for="start-date">From:</label>
+                            <p class="note1"><fmt:message key="note1" bundle="${lang}"/></p>
+                            <label for="start-date"><fmt:message key="from" bundle="${lang}"/></label>
                             <input type="date" id="start-date" name="start-date" value = '2024-01-01'>
-                            <label for="end-date">To:</label>
+                            <label for="end-date"><fmt:message key="to" bundle="${lang}"/></label>
                             <input type="date" id="end-date" name="end-date" value = '2024-12-31'>
-                            <button id="submit-btn">Search</button>
+                            <button id="submit-btn"><fmt:message key="search" bundle="${lang}"/></button>
                         </div>
 
                         <div class="programming-stats">
                             <canvas class="my-chart"></canvas>
-                            <div id="no-data-message" class="no-data-message">No any data!</div>
+                            <div id="no-data-message" class="no-data-message"><fmt:message key="no_any_data" bundle="${lang}"/></div>
                             <div class="status-container" id="status-container" style="display: none;">
                                 <div class="status success">
-                                    <p>Success: ${formattedSuccessRate}%</p>
+                                    <p><fmt:message key="success" bundle="${lang}"/>${formattedSuccessRate}%</p>
                                 </div>
                                 <div class="status failure">
-                                    <p>Failure: ${formattedFailureRate}%</p>
+                                    <p><fmt:message key="failure" bundle="${lang}"/>${formattedFailureRate}%</p>
                                 </div>
-                                <p class="note">*Order status summary chart</p>
+                                <p class="note"><fmt:message key="note2" bundle="${lang}"/></p>
                             </div>
 
                         </div>
-                        <p class="note" id="delivery" style="display: block;">*Detailed chart of orders received over time</p>
+                        <p class="note" id="delivery" style="display: block;"><fmt:message key="note3" bundle="${lang}"/></p>
                     </div>
                 </div>
                 <!--Bảng modal cho settings-->

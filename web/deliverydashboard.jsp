@@ -59,7 +59,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="deliveryhelp">
                         <i class='bx bxs-group' ></i>
                         <span class="text"><fmt:message key="help" bundle="${lang}" /></span>
                     </a>
@@ -91,12 +91,12 @@
                     </div>
                     <div id="dropdown3" class="dropdown-content">
                         <div class="notification-header">
-                            <h4>Notifications</h4>
+                            <h4><fmt:message key="notification" bundle="${lang}"/></h4>
                         </div>
                         <div class="notification-body">
                             <c:choose>
                                 <c:when test="${empty notice}">
-                                    <div class="no-notifications">You don't have any notification!</div>
+                                    <div class="no-notifications"><fmt:message key="notice_notification" bundle="${lang}"/></div>
                                 </c:when>
                                 <c:otherwise>
                                     <c:forEach var="n" items="${notice}">
@@ -107,7 +107,7 @@
                                         </div>
                                     </c:forEach>
                                     <div class="notification-footer">
-                                        <a href="deliverynotice">See All</a>
+                                        <a href="deliverynotice"></i><fmt:message key="see_all" bundle="${lang}"/></a>
                                     </div>
                                 </c:otherwise>
                             </c:choose>
@@ -119,9 +119,9 @@
                 <div class="dropdown-container">
                     <img src="images/icon/avatar1.jpg" alt="Avatar" class="avatar" onclick="toggleDropdown('dropdown1')">
                     <div id="dropdown1" class="dropdown-content-1">
-                        <a href="loadingdeliveryprofile"><i class="fas fa-user"></i> Profile</a>
-                        <a href="#" role="button" onclick="openModalx();"><i class="fas fa-cog"></i> Settings</a>
-                        <a id="logoutButton" href="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                        <a href="loadingdeliveryprofile"><i class="fas fa-user"></i><fmt:message key="profile" bundle="${lang}"/></a>
+                        <a href="#" role="button" onclick="openModalx();"><i class="fas fa-cog"></i><fmt:message key="settings" bundle="${lang}" /></a>
+                        <a id="logoutButton" href="logout"><i class="fas fa-sign-out-alt"></i><fmt:message key="logout" bundle="${lang}" /></a>
                     </div>
                 </div>
             </nav>
@@ -163,7 +163,7 @@
                         <a href="deliveryanalysis">
                             <span class="text">
                                 <h3>${totaldelivery}</h3>
-                                <p><fmt:message key="processing" bundle="${lang}" /></p>
+                                <p><fmt:message key="delivering" bundle="${lang}" /></p>
                             </span>
                         </a>
                     </li>
@@ -172,7 +172,7 @@
                         <a href="deliveryanalysis">
                             <span class="text">
                                 <h3>${totalcancel}</h3>
-                                <p><fmt:message key="canceled" bundle="${lang}" /></p>
+                                <p><fmt:message key="failure" bundle="${lang}" /></p>
                             </span>
                         </a>
                     </li>
@@ -206,7 +206,31 @@
                                 </div>
                             </div>
                         </form>
-                        <div id="notice" class="notice">${err}</div>
+                        <!-- Thông báo-->
+
+                        <c:if test="${not empty err}">
+                            <c:set var="err1" value="" />
+                            <c:choose>
+                                <c:when test="${err == 'You have successfully received this order!'}">
+                                    <c:set var="err1" value="note12" />
+                                </c:when>
+                                <c:when test="${err == 'The order was just received by someone else!'}">
+                                    <c:set var="err1" value="note13" />
+                                </c:when>
+                                <c:when test="${err == 'Okay, lets look at the other orders!'}">
+                                    <c:set var="err1" value="note14" />
+                                </c:when>
+                                <c:when test="${err == 'Lets complete this order!'}">
+                                    <c:set var="err1" value="note15" />
+                                </c:when>
+                                <c:when test="${err == 'Okay, wait a minute!'}">
+                                    <c:set var="err1" value="note16" />
+                                </c:when>
+                            </c:choose>
+                            <div id="notice" class="notice"><fmt:message key="${err1}" bundle="${lang}"/></div>
+                        </c:if>
+
+                        <!--Thông báo-->
                         <table>
                             <c:choose>
                                 <c:when test="${fn:length(list) == 0}">
@@ -215,10 +239,10 @@
                                 <c:otherwise>
                                     <thead>
                                         <tr>
-                                            <th>Code</th>
-                                            <th>Ship Price</th>
-                                            <th>Receiving Time</th>
-                                            <th>Status</th>
+                                            <th><fmt:message key="code" bundle="${lang}" /></th>
+                                            <th><fmt:message key="ship_price" bundle="${lang}" /></th>
+                                            <th><fmt:message key="time" bundle="${lang}" /></th>
+                                            <th><fmt:message key="status" bundle="${lang}" /></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -230,10 +254,12 @@
                                                 <td>
                                                     <c:choose>
                                                         <c:when test="${d.status == 'Delivering'}">
-                                                            <span class="status process">${d.status}</span>
+                                                            <c:set var="delivering" value="${d.status eq 'Delivering' ? 'delivering' : ''}" />
+                                                            <span class="status process"><fmt:message key="${delivering}" bundle="${lang}"/></span>
                                                         </c:when>
                                                         <c:when test="${d.status == 'Picking Up'}">
-                                                            <span class="status take">${d.status}</span>
+                                                            <c:set var="pickup" value="${d.status eq 'Picking Up' ? 'pickup' : ''}" />
+                                                            <span class="status take"><fmt:message key="${pickup}" bundle="${lang}"/></span>
                                                         </c:when>
                                                     </c:choose>
                                                 </td>
@@ -274,7 +300,7 @@
                     <!--                    Map bên phải-->
                     <div class="todo">
                         <div class="head">
-                            <h3>Maps</h3>
+                            <h3><fmt:message key="maps" bundle="${lang}"/></h3>
                             <div class="form-input">
                                 <input style="border-radius: 5px; font-size: 100%;" 
                                        type="search" name="search" placeholder="<fmt:message key="search_location" bundle="${lang}" />" id="addressInput">

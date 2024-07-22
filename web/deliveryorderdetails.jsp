@@ -1,4 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ include file="deliverychange.jsp" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -15,14 +16,16 @@
 
     <body>
         <form action = "deliverystatus" method = "POST">
-            <h2>Chi tiết đơn hàng</h2><br>
-            <p><strong>Mã đơn: </strong> ${order1.id}</p>
+            <h2><fmt:message key="order_details" bundle="${lang}"/></h2><br>
+            <p><strong><fmt:message key="code" bundle="${lang}"/>: </strong> ${order1.id}</p>
             <input type="hidden" name="id" value="${order1.id}">
-            <p><strong>Tên sản phẩm:</strong> ${productname}</p>
-            <p><strong>Số lượng:</strong> ${orderdetails.quantity}</p>
-            <p><strong>Giá sản phẩm:</strong> ${orderdetails.price}</p>
-            <p><strong>Cước vận chuyển:</strong> ${ship_price}</p><br>
-            <p><strong>Trạng thái:</strong> ${order1.status}</p>
+            <p><strong><fmt:message key="product" bundle="${lang}"/>:</strong> ${productname}</p>
+            <p><strong><fmt:message key="quantity" bundle="${lang}"/>:</strong> ${orderdetails.quantity}</p>
+            <p><strong><fmt:message key="price" bundle="${lang}"/>:</strong> ${orderdetails.price}</p>
+            <p><strong><fmt:message key="ship_price" bundle="${lang}"/>:</strong> ${ship_price}</p><br>
+
+            <c:set var="waitingdelevery" value="${order1.status eq 'Waiting delivery' ? 'waitingdelivery' : ''}" />
+            <p><strong><fmt:message key="status" bundle="${lang}"/>: </strong><fmt:message key="${waitingdelevery}" bundle="${lang}"/></p>
 
             <iframe 
                 src="${directionsURL}"
@@ -34,9 +37,9 @@
             </iframe>
 
             <div class="order-details" style = "margin-top: -20px;">    
-                <h3>Do you want to receive this order?</h3>
-                <button type = "submit" name = "action" value = "accept">Yes</button>
-                <button type = "submit" name = "action" value = "reject">No</button>
+                <h3><fmt:message key="note7" bundle="${lang}"/></h3>
+                <button type = "submit" name = "action" value = "accept"><fmt:message key="yes" bundle="${lang}"/></button>
+                <button type = "submit" name = "action" value = "reject"><fmt:message key="no" bundle="${lang}"/></button>
             </div>
         </form>
     </body>

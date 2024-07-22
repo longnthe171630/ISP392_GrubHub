@@ -106,7 +106,6 @@ public class DeliveryDashboardServlet extends HttpServlet {
         Order order1 = orderDAO.getRestaurant_Customer_ByOrderId(order_id);
         Order order2 = orderDAO.getOrderById(order_id);
         
-        
         request.setAttribute("delivery1", delivery1);
         request.setAttribute("order1", order1);
         request.setAttribute("order2", order2);

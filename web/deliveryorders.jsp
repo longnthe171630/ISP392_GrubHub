@@ -1,4 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ include file="deliverychange.jsp" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
@@ -13,7 +14,7 @@
         <!-- My CSS -->
         <link rel="stylesheet" href="css/style_ship.css">
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <title>Order</title>
+        <title><fmt:message key="order" bundle="${lang}"/></title>
     </head>
 
     <body>
@@ -27,37 +28,37 @@
                 <li class="active">
                     <a href="deliverydashboard">
                         <i class='bx bxs-dashboard'></i>
-                        <span class="text">Dashboard</span>
+                        <span class="text"><fmt:message key="dashboard" bundle="${lang}" /></span>
                     </a>
                 </li>
                 <li>
                     <a href="deliveryorder">
                         <i class='bx bxs-shopping-bag-alt'></i>
-                        <span class="text">Order</span>
+                        <span class="text"><fmt:message key="order" bundle="${lang}" /></span>
                     </a>
                 </li>
                 <li>
                     <a href="deliveryhistory">
                         <i class='bx bxs-doughnut-chart' ></i>
-                        <span class="text">History</span>
+                        <span class="text"><fmt:message key="history" bundle="${lang}" /></span>
                     </a>
                 </li>
                 <li>
                     <a href="deliverynotice">
                         <i class='bx bxs-message-dots' ></i>
-                        <span class="text">Notification</span>
+                        <span class="text"><fmt:message key="notification" bundle="${lang}" /></span>
                     </a>
                 </li>
                 <li>
                     <a href="deliveryanalysis">
                         <i class="bx bxs-data"></i>
-                        <span class="text">Analysis</span>
+                        <span class="text"><fmt:message key="analysis" bundle="${lang}" /></span>
                     </a>
                 </li>
                 <li>
                     <a href="#">
                         <i class='bx bxs-group' ></i>
-                        <span class="text">Help</span>
+                        <span class="text"><fmt:message key="help" bundle="${lang}" /></span>
                     </a>
                 </li>
             </ul>
@@ -68,14 +69,17 @@
             <!-- NAVBAR -->
             <nav>
                 <i class='bx bx-menu' ></i>
-                <!--                <a href="#" class="nav-link">Categories</a>-->
+                <a href="#" class="nav-link"></a>
                 <form action="#">
                     <div class="form-input">
                         <!--                        <input type="search" placeholder="Search...">
                                                 <button type="submit" class="search-btn"><i class='bx bx-search' ></i></button>-->
                     </div>
                 </form>
-                <input type="checkbox" id="switch-mode" hidden>
+
+                <!--                <input type="checkbox" id="switch-mode" hidden>
+                                <label for="switch-mode" class="switch-mode"></label>-->
+
                 <div class="dropdown-container">
                     <div class="notification">
                         <i class='bx bxs-bell' onclick="toggleDropdown('dropdown3')"></i>
@@ -83,36 +87,37 @@
                     </div>
                     <div id="dropdown3" class="dropdown-content">
                         <div class="notification-header">
-                            <h4>Notifications</h4>
+                            <h4><fmt:message key="notification" bundle="${lang}"/></h4>
                         </div>
                         <div class="notification-body">
                             <c:choose>
                                 <c:when test="${empty notice}">
-                                    <div class="no-notifications">You don't have any notification!</div>
+                                    <div class="no-notifications"><fmt:message key="notice_notification" bundle="${lang}"/></div>
                                 </c:when>
                                 <c:otherwise>
                                     <c:forEach var="n" items="${notice}">
-                                        <div class="notification-item">
+                                        <div class="notification-item" data-id="${n.id}">
                                             <img src="${n.image}" alt="Ex" class="notification-avatar">
                                             <span class="notification-content">${n.descripsion}</span>
                                             <span class="notification-time" data-time="${n.notice_time}"></span>
                                         </div>
                                     </c:forEach>
                                     <div class="notification-footer">
-                                        <a href="deliverynotice">See All</a>
+                                        <a href="deliverynotice"></i><fmt:message key="see_all" bundle="${lang}"/></a>
                                     </div>
                                 </c:otherwise>
                             </c:choose>
                         </div>
-
                     </div>
                 </div>
+
+
                 <div class="dropdown-container">
                     <img src="images/icon/avatar1.jpg" alt="Avatar" class="avatar" onclick="toggleDropdown('dropdown1')">
                     <div id="dropdown1" class="dropdown-content-1">
-                        <a href="Showinfo.jsp"><i class="fas fa-user"></i> Profile</a>
-                        <a href="#" role="button" onclick="openModalx();"><i class="fas fa-cog"></i> Settings</a>
-                        <a id="logoutButton" href="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                        <a href="loadingdeliveryprofile"><i class="fas fa-user"></i><fmt:message key="profile" bundle="${lang}"/></a>
+                        <a href="#" role="button" onclick="openModalx();"><i class="fas fa-cog"></i><fmt:message key="settings" bundle="${lang}" /></a>
+                        <a id="logoutButton" href="logout"><i class="fas fa-sign-out-alt"></i><fmt:message key="logout" bundle="${lang}" /></a>
                     </div>
                 </div>
             </nav>
@@ -122,14 +127,14 @@
             <main>
                 <div class="head-title">
                     <div class="left">
-                        <h1>Delivery Dashboard</h1>
+                        <h1><fmt:message key="order" bundle="${lang}" /></h1>
                         <ul class="breadcrumb">
                             <li>
-                                <a href="home">Home</a>
+                                <a href="home"><fmt:message key="home" bundle="${lang}" /></a>
                             </li>
                             <li><i class='bx bx-chevron-right' ></i></li>
                             <li>
-                                <a class="active" href="deliveryorder">Order</a>
+                                <a class="active" href="deliveryorder"><fmt:message key="order" bundle="${lang}" /></a>
                             </li>
                         </ul>
                     </div>
@@ -144,16 +149,16 @@
                     <div class="order">
                         <form action="deliveryorder" method = "GET">
                             <div class="head">
-                                <h3>Order</h3>
+                                <h3><fmt:message key="order" bundle="${lang}"/></h3>
                                 <div class="form-input">
-                                    <input style ="border-radius: 5px; font-size: 100%;" type="search" name="search" placeholder="Search by zone">
+                                    <input style ="border-radius: 5px; font-size: 100%;" type="search" name="search" placeholder="<fmt:message key="search_by_zone" bundle="${lang}"/>">
                                     <i type="submit" class="search-btn"><button class='bx bx-search' ></button></i>
                                 </div>
                                 <div class="dropdown-container">
                                     <i class='bx bx-filter' onclick="toggleDropdown('dropdown2')"></i>
                                     <div id="dropdown2" class="dropdown-content-1">
-                                        <a href="?sort=false"><i class="fas fa-calendar-alt"></i> Newest</a>
-                                        <a href="?sort=true"><i class="fas fa-calendar-minus"></i> Oldest</a>
+                                        <a href="?sort=false"><i class="fas fa-calendar-alt"></i> <fmt:message key="newest" bundle="${lang}"/></a>
+                                        <a href="?sort=true"><i class="fas fa-calendar-minus"></i> <fmt:message key="oldest" bundle="${lang}"/></a>
                                     </div>
                                 </div>
                             </div>
@@ -162,17 +167,17 @@
                         <table>
                             <c:choose>
                                 <c:when test="${fn:length(order) == 0}">
-                                    <p class="empty-message">There are no orders around here!</p>
+                                    <p class="empty-message"><fmt:message key="note8" bundle="${lang}"/></p>
                                 </c:when>
                                 <c:otherwise>
                                     <thead>
                                         <tr>
-                                            <th>Code</th>
-                                            <th>From</th>
-                                            <th>To</th>
-                                            <th>Total</th>
-                                            <th>Status</th>
-                                            <th>Order Date</th>
+                                            <th><fmt:message key="code" bundle="${lang}"/></th>
+                                            <th><fmt:message key="from" bundle="${lang}"/></th>
+                                            <th><fmt:message key="to" bundle="${lang}"/></th>
+                                            <th><fmt:message key="total" bundle="${lang}"/></th>
+                                            <th><fmt:message key="status" bundle="${lang}"/></th>
+                                            <th><fmt:message key="order_date" bundle="${lang}"/> </th>
                                         </tr>
                                     </thead>
                                     <tbody>  
@@ -182,8 +187,9 @@
                                                 <td>${o.fromAddress}</td>
                                                 <td>${o.toAddress}</td>
                                                 <td>${o.total_amount}</td>
+                                                <c:set var="waitingdelivery" value="${o.status eq 'Waiting delivery' ? 'waitingdelivery' : ''}" />                                                    
                                                 <td>
-                                                    <span class="status waiting">${o.status}</span>
+                                                    <span class="status waiting"><fmt:message key="${waitingdelivery}" bundle="${lang}"/></span>
                                                 </td>
                                                 <td class="notification-time" data-time="${o.order_date}"></td>
                                             </tr>
@@ -198,7 +204,7 @@
                             <c:choose>
                                 <c:when test="${totalPages > 1}">
                                     <c:if test="${currentPage > 1}">
-                                        <a href="?page=${currentPage - 1}">&laquo; Previous</a>
+                                        <a href="?page=${currentPage - 1}">&laquo; <fmt:message key="pre" bundle="${lang}"/></a>
                                     </c:if>
                                     <c:forEach begin="1" end="${totalPages}" var="i">
                                         <c:choose>
@@ -221,7 +227,7 @@
                                     </c:forEach>
 
                                     <c:if test="${currentPage < totalPages}">
-                                        <a href="?page=${currentPage + 1}">Next &raquo;</a>
+                                        <a href="?page=${currentPage + 1}"><fmt:message key="next" bundle="${lang}"/> &raquo;</a>
                                     </c:if>
                                 </c:when>
                             </c:choose>
@@ -310,5 +316,5 @@
                                         modal.style.display = "none";
                                     }
         </script>
-</body>
+    </body>
 </html>

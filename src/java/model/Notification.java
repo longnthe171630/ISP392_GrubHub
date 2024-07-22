@@ -72,7 +72,7 @@ public class Notification {
     public void setImage(String image) {
         this.image = image;
     }
-
+    
     @Override
     public String toString() {
         return "Notification{" + "id=" + id + ", description=" + descripsion + ", order_id=" + order_id + '}';

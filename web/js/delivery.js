@@ -249,6 +249,7 @@ document.addEventListener("DOMContentLoaded", function () {
         showNotification(err); // Hiển thị thông báo
     }
 });
+
 function showNotification(message) {
     let icon = getNotificationIcon(message); // Lấy icon dựa trên nội dung của thông báo
 
@@ -264,22 +265,25 @@ function showNotification(message) {
 
 // Hàm để xác định icon dựa trên nội dung của thông báo
 function getNotificationIcon(message) {
+    // Kiểm tra xem message có phải là chuỗi trống hay không
+    if (!message || message.trim() === '') {
+        return null; // Không hiển thị thông báo nếu message trống
+    }
 // Đặt các điều kiện hoặc logic dựa trên nội dung của message
 // Ví dụ đơn giản:
-    if (message.includes('someone') || message.includes('blank')) {
+    if (message.includes('someone') || message.includes('blank') || message.includes('người khác')) {
         return 'error';
-    } else if (message.includes('success') || message.includes('complete') || message.includes('successfully')) {
+    } else if (message.includes('success') || message.includes('complete') || message.includes('successfully') || message.includes('thành công') || message.includes('hoàn thành')) {
         return 'success';
-    } else if (message.includes('wait')) {
+    } else if (message.includes('wait') || message.includes('đợi')) {
         return 'info';
-    } else if (message.includes('other')) {
+    } else if (message.includes('other') || message.includes('khác')) {
         return 'question';
     } else {
-        return 'warning'; // Mặc định là info nếu không phù hợp với các điều kiện trên
+        return null;
     }
 }
 ;
-
 
 // Hàm mở modal
 function openModal(status) {

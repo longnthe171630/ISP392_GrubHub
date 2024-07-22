@@ -63,7 +63,6 @@ public class DeliveryStatusServlet extends HttpServlet {
         Image image = new Image();
         switch (action) {
             case "accept":
-
                 Order o = order.getOrderById(order_id);
                 Delivery x = new Delivery();
                 x.setDelivery_person_id(id); // Thiết lập người giao hàng
@@ -89,14 +88,14 @@ public class DeliveryStatusServlet extends HttpServlet {
 
                 }
             case "reject":
-                String err2 = "Okay, let's look at the other orders";
+                String err2 = "Okay, lets look at the other orders!";
                 request.getSession().setAttribute("err", err2);
                 response.sendRedirect("deliveryorder");
                 break;
             case "start":
                 delivery.updateStatusDelivery_4(order_id);
                 order.updateStatusOrder_1(order_id);
-                String err = "Let's complete this order!";
+                String err = "Lets complete this order!";
                 request.getSession().setAttribute("err", err);
                 response.sendRedirect("deliverydashboard");
                 break;

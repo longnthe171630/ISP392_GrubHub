@@ -1,4 +1,5 @@
 <%@page language="java" contentType="text/html" pageEncoding="UTF-8"%>
+<%@ include file="deliverychange.jsp" %>
 <!DOCTYPE html>
 <html lang="en">
 

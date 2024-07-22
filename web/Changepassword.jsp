@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
     <%@page contentType="text/html" pageEncoding="UTF-8"%>
+    <%@ include file="deliverychange.jsp" %>
     <!doctype html>
     <head>
         <title>Reset Password</title>
@@ -34,7 +35,7 @@
                                 </button>
                                 <div class="d-flex">
                                     <div class="w-100">
-                                        <h3 class="mb-4">Change Password</h3>
+                                        <h3 class="mb-4"><fmt:message key="changepass" bundle="${lang}"/></h3>
                                     </div>
                                     <div class="w-100">
                                         </p>
@@ -45,22 +46,22 @@
                                         ${requestScope.alert}
                                     </p>
                                     <div class="form-group mb-3">
-                                        <label class="label" for="name">Current Password</label>
+                                        <label class="label" for="name"><fmt:message key="currentpass" bundle="${lang}"/></label>
                                         <input type="password" name="currentPassword" class="form-control" placeholder="Current Password" required>
                                     </div>
 
                                     <div class="form-group mb-3">
-                                        <label class="label" for="password">New Password</label>
+                                        <label class="label" for="password"><fmt:message key="newpass" bundle="${lang}"/></label>
                                         <input id="pass" type="password" name="newPassword" class="form-control" placeholder="New Password" required >
                                     </div>
 
                                     <div class="form-group mb-3">
-                                        <label class="label" for="password">Confirm New Password</label>
+                                        <label class="label" for="password"><fmt:message key="confirmpass" bundle="${lang}"/></label>
                                         <input id="pass" type="password" name="confirmPassword" class="form-control" placeholder="Confirm New Password" required >
                                     </div>
 
                                     <div class="form-group">
-                                        <button type="submit" class="form-control btn btn-primary rounded submit px-3">Change Password</button>
+                                        <button type="submit" class="form-control btn btn-primary rounded submit px-3"><fmt:message key="change" bundle="${lang}"/></button>
                                     </div>
                                 </form>
 

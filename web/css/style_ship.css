@@ -469,12 +469,16 @@ body {
 }
 #content main .table-data .order table tr td .status {
     font-size: 12px;
-    padding: 8px 16px;
+/*    padding: 8px 16px;*/
     color: var(--light);
     border-radius: 20px;
     font-weight: 700;
     text-transform: uppercase;
     display: inline-block;
+    width: 110px;  /* Thay đổi giá trị theo kích thước mong muốn */
+    height: 50px;  /* Thay đổi giá trị theo kích thước mong muốn */
+    text-align: center;
+    line-height: 50px;  /* Đảm bảo văn bản nằm giữa chiều cao */
 }
 #content main .table-data .order table tr td .status.completed {
     background: var(--blue);
@@ -832,7 +836,7 @@ body {
     text-align: center;
     border-bottom-left-radius: 8px;
     border-bottom-right-radius: 8px;
-/*    position: absolute;  Đặt footer ở vị trí tuyệt đối */
+    /*    position: absolute;  Đặt footer ở vị trí tuyệt đối */
     position: sticky;
     bottom: 0; /* Căn chỉnh ở dưới cùng */
     left: 0; /* Căn chỉnh bên trái */
@@ -1255,82 +1259,15 @@ button:active {
     flex: 1;
 }
 
-.setting-item select,
-.setting-item .switch,
-.setting-item .manage-btn,
-.setting-item .save-all-btn,
-.setting-item .delete-all-btn {
+.setting-item .manage-btn{
     background-color: #333;
     border: none;
     color: #fff;
     padding: 5px 10px;
     border-radius: 5px;
     cursor: pointer;
+    width: 150px; /* Đặt kích thước cố định, bạn có thể thay đổi số liệu này */
+    display: inline-block; /* Để nút chiếm cùng một hàng */
+    text-align: center; /* Căn giữa nội dung trong nút */
 }
 
-.setting-item .switch {
-    position: relative;
-    display: inline-block;
-    width: 34px;
-    height: 20px;
-}
-
-.setting-item .switch input {
-    display: none;
-}
-
-.setting-item .slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
-    transition: .4s;
-    border-radius: 20px;
-}
-
-.setting-item .slider:before {
-    position: absolute;
-    content: "";
-    height: 14px;
-    width: 14px;
-    left: 3px;
-    bottom: 3px;
-    background-color: white;
-    transition: .4s;
-    border-radius: 50%;
-}
-
-.setting-item input:checked + .slider {
-    background-color: #2196F3;
-}
-
-.setting-item input:checked + .slider:before {
-    transform: translateX(14px);
-}
-
-.setting-item input {
-    flex: 1;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
-    transition: border-color 0.3s, box-shadow 0.3s;
-}
-
-.setting-item input:focus {
-    border-color: #007bff;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-    outline: none;
-}
-
-.setting-item input::placeholder {
-    color: #999;
-    opacity: 1; /* For older browsers */
-}
-
-.setting-item input:hover {
-    border-color: #0056b3;
-}
